@@ -1,0 +1,10 @@
+{
+  "company": "Spectrum IT Solutions GmbH",
+  "apikey": "XdTPxXdTPxXqR4vrCmISaXqR4vrCmISa",
+
+  "load": "load.coffee",
+  "scenes": [
+    "begin.coffee",
+    "end.coffee"
+  ]
+}

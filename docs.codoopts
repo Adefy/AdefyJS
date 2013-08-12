@@ -1,0 +1,7 @@
+--name    "AdefyJS"
+--readme  Readme.md
+--title   "AdefyJS Documentation"
+--private
+--quiet
+--output-dir ./doc
+./lib
