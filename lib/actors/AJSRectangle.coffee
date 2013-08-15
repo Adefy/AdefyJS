@@ -19,8 +19,8 @@ class AJSRectangle extends AJSBaseActor
 
     if options == undefined then throw "No params provided"
 
-    if options.w is not instanceof Number then throw "Width must be provided"
-    if options.h is not instanceof Number then throw "Height must be provided"
+    if options.w not instanceof Number then throw "Width must be provided"
+    if options.h not instanceof Number then throw "Height must be provided"
 
     if options.w <= 0 then throw "Width must be greater than 0"
     if options.h <= 0 then throw "Height must be greater than 0"
@@ -30,7 +30,7 @@ class AJSRectangle extends AJSBaseActor
     @_h = options.height
 
     # Color
-    if options.color is not instanceof AJSColor3
+    if options.color not instanceof AJSColor3
       @_color = new AJSColor3()
     else
       @_color = options.color
@@ -56,8 +56,8 @@ class AJSRectangle extends AJSBaseActor
     super verts
 
     # Position and rotation
-    if options.position is instanceof AJSVec2 then @setPosition options.position
-    if options.rotation is instanceof Number then @setRotation options.rotation
+    if options.position instanceof AJSVec2 then @setPosition options.position
+    if options.rotation instanceof Number then @setRotation options.rotation
 
   # Returns width
   #
