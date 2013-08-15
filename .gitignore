@@ -1,1 +1,4 @@
 doc/*
+dev/*
+build/*
+node_modules/*
