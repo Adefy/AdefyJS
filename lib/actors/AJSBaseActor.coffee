@@ -2,9 +2,27 @@
 # with the native engine. This merely represents a handle on an internal actor
 class AJSBaseActor
 
+  # Actor handle
+  _id: -1
+
+  _color: null
+  _psyx: false
 
   # Instantiates the actor in the engine, gets a handle for it
-  constructor: ->
+  constructor: (@_verts) ->
+
+    # Sanity checks
+    if @_verts == null or @_verts == undefined
+      throw "No vertices provided!"
+
+    if @_verts.length < 3
+      throw "At least three vertices must be provided"
+
+    # Actual actor creation
+    @_id = window.AWGLI.Actors().createActor @_verts
+
+    if @_id == -1
+      throw "Failed to create actor!"
 
     @setPosition new AJSVector2()
     @setRotation 0
@@ -34,3 +52,18 @@ class AJSBaseActor
   #
   # @return [Number] Angle in degrees
   getRotation: -> @_rotation
+
+  # Enable psyx simulation
+  #
+  # @return [Boolean] success
+  enablePsyx: -> false
+
+  # Disable psyx simulation
+  #
+  # @return [Boolean] success
+  disablePsyx: -> false
+
+  # Check if psyx simulation is enabled
+  #
+  # @return [Boolean] psyx psyx enabled status
+  hasPsyx: -> return @_psyx
