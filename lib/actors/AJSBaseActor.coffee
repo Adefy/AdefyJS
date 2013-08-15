@@ -2,8 +2,6 @@
 # with the native engine. This merely represents a handle on an internal actor
 class AJSBaseActor
 
-  # @property [Number] Simple private var obfuscator
-  @_acc = Math.floor(Math.random() * 100)
 
   # Instantiates the actor in the engine, gets a handle for it
   constructor: ->
@@ -16,21 +14,23 @@ class AJSBaseActor
   #
   # @param [AJSVector2] position New position
   setPosition: (v) ->
-    @["#{@_acc}position"] = v
+    @_position = v
+    window.AWGLI.Actors().setActorPosition v, @_id
 
   # Modifies the rotation of the native object, and stores
   # a local copy of it
   #
   # @param [Number] angle New angle in degrees
   setRotation: (a) ->
-    @["#{@_acc}rotation"] = a
+    @_rotation = a
+    window.AWGLI.Actors().setActorRotation a, @_id
 
   # Returns the position of the object, as stored locally
   #
   # @return [AJSVector2] Position
-  getPosition: -> @["#{@_acc}position"]
+  getPosition: -> @_position
 
   # Returns the rotation of the native object, as stored locally
   #
   # @return [Number] Angle in degrees
-  getRotation: -> @["#{@_acc}rotation"]
+  getRotation: -> @_rotation
