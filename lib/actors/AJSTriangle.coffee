@@ -1,15 +1,14 @@
-# Implements a rectangular actor
+# Implements a triangular actor
 #
 # @depend AJSBaseActor.coffee
 # @depend ../util/AJSVector2.coffee
 # @depend ../util/AJSColor3.coffee
-class AJSRectangle extends AJSBaseActor
+class AJSTriangle extends AJSBaseActor
 
-  # Dimensions, not modifyable
-  _w: null
-  _h: null
+  _base: null
+  _height: null
 
-  # Set up vertices, with the resulting rectangle centered around its position
+  # Set up vertices, with the resulting triangle centered around its position
   #
   # @param [Object] options instantiation options
   # @option options [Number] width
@@ -20,40 +19,37 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
 
+    # Sanity checks
     if options == undefined then throw "No params provided"
 
-    if options.w not instanceof Number then throw "Width must be provided"
-    if options.h not instanceof Number then throw "Height must be provided"
+    if options.base not instanceof Number then throw "Base must be provided"
+    if options.height not instanceof Number then throw "Height must be provided"
 
-    if options.w <= 0 then throw "Width must be greater than 0"
-    if options.h <= 0 then throw "Height must be greater than 0"
+    if options.base <= 0 then throw "Base must be wider than 0"
+    if options.height <= 0 then throw "Height must be greater than 0"
 
-    # Set up properties using options object
-    @_w = options.width
-    @_h = options.height
+    # Set up properties
+    @_base = options.base
+    @_height = options.height
 
-    # Color
     if options.color not instanceof AJSColor3
       @_color = new AJSColor3()
     else
       @_color = options.color
 
     # Build vertices
-    hW = @_w / 2.0
-    hH = @_h / 2.0
+    hB = @_base / 2.0
+    hH = @_height / 2.0
 
     verts = [
-      x: -hW
+      x: -hB
       y: -hH
     ,
-      x: -hW
+      x: 0
       y: hH
     ,
-      x: hW
+      x: hB
       y: -hH
-    ,
-      x: hW
-      y: hH
     ]
 
     super verts
@@ -68,12 +64,12 @@ class AJSRectangle extends AJSBaseActor
       else
         @disablePsyx()
 
-  # Returns width
+  # Returns base width
   #
-  # @return [Number] width
-  getWidth: -> @_w
+  # @return [Number] base
+  getBase: -> @_base
 
   # Returns height
   #
   # @return [Number] height
-  getHeight: -> @_h
+  getHeight: -> @_height
