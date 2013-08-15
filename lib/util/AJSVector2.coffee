@@ -52,7 +52,7 @@ class AJSVector2
     if v instanceof AJSVector2
       return new AJSVector2 @x / v.x, @y / v.y
     else
-      return new AJSVector2 @x / v, @x / y
+      return new AJSVector2 @x / v, @y / v
 
   # Checks the equality of this vector and one other
   #
@@ -74,9 +74,8 @@ class AJSVector2
 
   # Returns a new vector orthogonal to this one
   #
-  # @param [AJSVector2] v
   # @return [AJSVector2] unit
-  ortho: (v) -> new AJSVector2 @y, -@x
+  ortho: -> new AJSVector2 @y, -@x
 
   # Returns the length of this vector
   #
@@ -87,3 +86,8 @@ class AJSVector2
   #
   # @return [AJSVector2] normalized
   normalize: -> @divide @length()
+
+  # Returns the vector in string double format
+  #
+  # @return [String] str
+  toString: -> "(#{@x}, #{@y})"

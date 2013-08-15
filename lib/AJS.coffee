@@ -5,3 +5,5 @@
 # essentially serving as the root node in the dep tree.
 #
 # @depend actors/AJSRectangle.coffee
+# @depend actors/AJSTriangle.coffee
+# @depend actors/AJSNGon.coffee
