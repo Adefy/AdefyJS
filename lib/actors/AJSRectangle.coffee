@@ -1,4 +1,8 @@
 # Implements a rectangular actor
+#
+# @depend AJSBaseActor.coffee
+# @depend ../util/AJSVector2.coffee
+# @depend ../util/AJSColor3.coffee
 class AJSRectangle extends AJSBaseActor
 
   # Dimensions, not modifyable

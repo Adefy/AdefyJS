@@ -4,4 +4,4 @@
 # dependency-aware manner. Deps are described at the top of each file, with this
 # essentially serving as the root node in the dep tree.
 #
-# @depend AJSEngine.coffee
+# @depend actors/AJSRectangle.coffee

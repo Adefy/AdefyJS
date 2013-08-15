@@ -1,5 +1,7 @@
 # Base actor class, defines all primitive methods and handles interactions
 # with the native engine. This merely represents a handle on an internal actor
+#
+# @depend ../util/AJSVector2.coffee
 class AJSBaseActor
 
   # Actor handle
