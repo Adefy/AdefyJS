@@ -2,7 +2,7 @@
 #
 # All coordinates are from the top-left corners!
 
-main = (engine) ->
+window.currentScene = (engine) ->
 
   # APIKey, Physics active, duration
   engine.init "6nbzUrui13whi5P18JPKAnhBMqXciN4", true, 5000
