@@ -11,7 +11,7 @@ class AJSTriangle extends AJSBaseActor
   # Set up vertices, with the resulting triangle centered around its position
   #
   # @param [Object] options instantiation options
-  # @option options [Number] width
+  # @option options [Number] base
   # @option options [Number] height
   # @option options [AJSColor3] color
   # @option options [AJSVec2] position
