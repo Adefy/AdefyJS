@@ -22,8 +22,8 @@ class AJSTriangle extends AJSBaseActor
     # Sanity checks
     if options == undefined then throw "No params provided"
 
-    if options.base not instanceof Number then throw "Base must be provided"
-    if options.height not instanceof Number then throw "Height must be provided"
+    if options.base != "number" then throw "Base must be provided"
+    if options.height != "number" then throw "Height must be provided"
 
     if options.base <= 0 then throw "Base must be wider than 0"
     if options.height <= 0 then throw "Height must be greater than 0"
@@ -59,7 +59,7 @@ class AJSTriangle extends AJSBaseActor
 
     # Position and rotation
     if options.position instanceof AJSVec2 then @setPosition options.position
-    if options.rotation instanceof Number then @setRotation options.rotation
+    if typeof options.rotation == "number" then @setRotation options.rotation
 
     if typeof options.psyx == "boolean"
       if options.psyx

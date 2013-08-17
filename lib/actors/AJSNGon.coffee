@@ -22,9 +22,8 @@ class AJSNGon extends AJSBaseActor
     # Sanity checks
     if options == undefined then throw "No params provided"
 
-    if options.radius not instanceof Number then throw "Radius must be provided"
-    if options.segments not instanceof Number
-      throw "Segments must be provided"
+    if typeof options.radius != "number" then throw "Radius must be provided"
+    if typeof options.segments != "number" then throw "Segments must be provided"
 
     if options.radius <= 0 then throw "Radius must be larger than 0"
     if options.segments <= 0
@@ -70,9 +69,9 @@ class AJSNGon extends AJSBaseActor
 
     # Position and rotation
     if options.position instanceof AJSVec2 then @setPosition options.position
-    if options.rotation instanceof Number then @setRotation options.rotation
+    if typeof options.rotation == "number" then @setRotation options.rotation
 
-    if options.psyx instanceof Boolean
+    if typeof options.psyx == "boolean"
       if options.psyx
         @enablePsyx()
       else

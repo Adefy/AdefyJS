@@ -22,15 +22,15 @@ class AJSRectangle extends AJSBaseActor
 
     if options == undefined then throw "No params provided"
 
-    if options.w not instanceof Number then throw "Width must be provided"
-    if options.h not instanceof Number then throw "Height must be provided"
+    if typeof options.w != "number" then throw "Width must be provided"
+    if typeof options.h != "number" then throw "Height must be provided"
 
     if options.w <= 0 then throw "Width must be greater than 0"
     if options.h <= 0 then throw "Height must be greater than 0"
 
     # Set up properties using options object
-    @_w = options.width
-    @_h = options.height
+    @_w = options.w
+    @_h = options.h
 
     # Color
     if options.color not instanceof AJSColor3
