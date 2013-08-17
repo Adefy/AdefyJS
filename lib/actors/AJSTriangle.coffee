@@ -41,16 +41,19 @@ class AJSTriangle extends AJSBaseActor
     hB = @_base / 2.0
     hH = @_height / 2.0
 
-    verts = [
-      x: -hB
-      y: -hH
-    ,
-      x: 0
-      y: hH
-    ,
-      x: hB
-      y: -hH
-    ]
+    verts = [8]
+
+    verts[0] = -hB
+    verts[1] = -hH
+
+    verts[2] =   0
+    verts[3] =  hH
+
+    verts[4] =  hB
+    verts[5] = -hH
+
+    verts[6] = -hB
+    verts[7] = -hH
 
     super verts
 

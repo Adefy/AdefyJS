@@ -62,6 +62,10 @@ class AJSNGon extends AJSBaseActor
       x *= radFactor
       y *= radFactor
 
+    # Cap the shape
+    verts.push verts[0]
+    verts.push verts[1]
+
     super verts
 
     # Position and rotation

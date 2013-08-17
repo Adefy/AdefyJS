@@ -17,7 +17,7 @@ class AJSBaseActor
     if @_verts == null or @_verts == undefined
       throw "No vertices provided!"
 
-    if @_verts.length < 3
+    if @_verts.length < 6
       throw "At least three vertices must be provided"
 
     # Actual actor creation
