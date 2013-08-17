@@ -33,7 +33,7 @@ class AJSTriangle extends AJSBaseActor
     @_height = options.height
 
     if options.color not instanceof AJSColor3
-      @_color = new AJSColor3()
+      @_color = new AJSColor3(255, 255, 255)
     else
       @_color = options.color
 

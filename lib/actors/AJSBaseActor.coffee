@@ -28,6 +28,7 @@ class AJSBaseActor
 
     @setPosition new AJSVector2()
     @setRotation 0
+    @setColor @_color
 
   # Modifies the position of the native object, and stores
   # a local copy of it
@@ -56,14 +57,22 @@ class AJSBaseActor
   getRotation: -> @_rotation
 
   # Enable psyx simulation
+  # Set actor color
   #
   # @return [Boolean] success
   enablePsyx: -> false
+  # @param [AJSColor3] color
+  setColor: (col) ->
+    window.AWGLI.Actors().setActorColor col._r, col._g, col._b, @_id
 
   # Disable psyx simulation
+  # Get actor color
   #
   # @return [Boolean] success
   disablePsyx: -> false
+  # @return [AJSColor2] color
+  getColor: ->
+    return window.AWGLI.Actors().getActorColor @_id
 
   # Check if psyx simulation is enabled
   #
