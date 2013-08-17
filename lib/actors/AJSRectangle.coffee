@@ -43,22 +43,22 @@ class AJSRectangle extends AJSBaseActor
     hH = @_h / 2.0
 
     # Extra vert caps the shape
-    verts = [10]
+    verts = []
 
-    verts[0] = -hW
-    verts[1] = -hH
+    verts.push -hW
+    verts.push -hH
 
-    verts[2] = -hW
-    verts[3] =  hH
+    verts.push -hW
+    verts.push  hH
 
-    verts[4] =  hW
-    verts[5] = -hH
+    verts.push  hW
+    verts.push  hH
 
-    verts[6] =  hW
-    verts[7] =  hH
+    verts.push  hW
+    verts.push -hH
 
-    verts[8] = -hW
-    verts[9] = -hH
+    verts.push -hW
+    verts.push -hH
 
     super verts
 
