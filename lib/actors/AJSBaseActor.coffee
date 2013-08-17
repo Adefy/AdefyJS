@@ -42,19 +42,25 @@ class AJSBaseActor
   # a local copy of it
   #
   # @param [Number] angle New angle in degrees
-  setRotation: (a) ->
+  # @param [Boolean] radians set in radians, defaults to false
+  setRotation: (a, radians) ->
+    if radians != true then radians = false
     @_rotation = a
-    window.AWGLI.Actors().setActorRotation a, @_id
+    window.AWGLI.Actors().setActorRotation a, @_id, radians
 
   # Returns the position of the object, as stored locally
   #
   # @return [AJSVector2] Position
-  getPosition: -> @_position
+  getPosition: ->
+    return window.AWGLI.Actors().getActorPosition @_id
 
   # Returns the rotation of the native object, as stored locally
   #
+  # @param [Boolean] radians return in radians, defaults to false
   # @return [Number] Angle in degrees
-  getRotation: -> @_rotation
+  getRotation: (radians) ->
+    if radians != true then radians = false
+    return window.AWGLI.Actors().getActorRotation radians, @_id
 
   # Enable psyx simulation
   # Set actor color
