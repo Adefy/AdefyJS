@@ -63,12 +63,26 @@ class AJSRectangle extends AJSBaseActor
     super verts
 
     # Position and rotation
-    if options.position instanceof AJSVec2 then @setPosition options.position
-    if options.rotation instanceof Number then @setRotation options.rotation
+    if options.position instanceof AJSVector2 then @setPosition options.position
+    if typeof options.rotation == "number" then @setRotation options.rotation
 
-    if options.psyx instanceof Boolean
+    if typeof options.psyx == "boolean"
+
+      if options.mass == undefined or options.mass < 0
+        throw "Mass must be set and >= 0: #{options.mass}"
+
+      if options.friction == undefined or options.friction < 0
+        throw "Friction must be set and >= 0: #{options.friction}"
+
+      if options.elasticity == undefined or options.elasticity < 0
+        throw "Elasticity must be set and >= 0: #{options.elasticity}"
+
+      if typeof options.mass != "number" then throw "Mass must be a number"
+      if typeof options.friction != "number" then throw "Friction must be a number"
+      if typeof options.elasticity != "number" then throw "Elasticity must be a number"
+
       if options.psyx
-        @enablePsyx()
+        @enablePsyx(options.mass, options.friction, options.elasticity)
       else
         @disablePsyx()
 

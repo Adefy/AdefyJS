@@ -61,7 +61,7 @@ class AJSTriangle extends AJSBaseActor
     if options.position instanceof AJSVec2 then @setPosition options.position
     if options.rotation instanceof Number then @setRotation options.rotation
 
-    if options.psyx instanceof Boolean
+    if typeof options.psyx == "boolean"
       if options.psyx
         @enablePsyx()
       else

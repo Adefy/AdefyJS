@@ -62,20 +62,14 @@ class AJSBaseActor
     if radians != true then radians = false
     return window.AWGLI.Actors().getActorRotation radians, @_id
 
-  # Enable psyx simulation
   # Set actor color
   #
-  # @return [Boolean] success
-  enablePsyx: -> false
   # @param [AJSColor3] color
   setColor: (col) ->
     window.AWGLI.Actors().setActorColor col._r, col._g, col._b, @_id
 
-  # Disable psyx simulation
   # Get actor color
   #
-  # @return [Boolean] success
-  disablePsyx: -> false
   # @return [AJSColor2] color
   getColor: ->
     return window.AWGLI.Actors().getActorColor @_id
@@ -84,3 +78,15 @@ class AJSBaseActor
   #
   # @return [Boolean] psyx psyx enabled status
   hasPsyx: -> return @_psyx
+
+  # Creates the internal physics body, if one does not already exist
+  #
+  # @param [Number] mass 0.0 - unbound
+  # @param [Number] friction 0.0 - 1.0
+  # @param [Number] elasticity 0.0 - 1.0
+  enablePsyx: (@_m, @_f, @_e) ->
+    @_psyx = window.AWGLI.Actors().enableActorPhysics @_m, @_f, @_e, @_id
+
+  # Destroys the physics body if one exists
+  disablePsyx: ->
+    @_psyx = !(window.AWGLI.Actors().disableActorPhysics @_id)
