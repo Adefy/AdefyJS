@@ -21,7 +21,7 @@ class AJSBaseActor
       throw "At least three vertices must be provided"
 
     # Actual actor creation
-    @_id = window.AWGLI.Actors().createActor @_verts
+    @_id = window.AdefyGLI.Actors().createActor @_verts
 
     if @_id == -1
       throw "Failed to create actor!"
@@ -36,7 +36,7 @@ class AJSBaseActor
   # @param [AJSVector2] position New position
   setPosition: (v) ->
     @_position = v
-    window.AWGLI.Actors().setActorPosition v, @_id
+    window.AdefyGLI.Actors().setActorPosition v, @_id
 
   # Modifies the rotation of the native object, and stores
   # a local copy of it
@@ -46,13 +46,13 @@ class AJSBaseActor
   setRotation: (a, radians) ->
     if radians != true then radians = false
     @_rotation = a
-    window.AWGLI.Actors().setActorRotation a, @_id, radians
+    window.AdefyGLI.Actors().setActorRotation a, @_id, radians
 
   # Returns the position of the object, as stored locally
   #
   # @return [AJSVector2] Position
   getPosition: ->
-    return window.AWGLI.Actors().getActorPosition @_id
+    return window.AdefyGLI.Actors().getActorPosition @_id
 
   # Returns the rotation of the native object, as stored locally
   #
@@ -60,19 +60,19 @@ class AJSBaseActor
   # @return [Number] Angle in degrees
   getRotation: (radians) ->
     if radians != true then radians = false
-    return window.AWGLI.Actors().getActorRotation radians, @_id
+    return window.AdefyGLI.Actors().getActorRotation radians, @_id
 
   # Set actor color
   #
   # @param [AJSColor3] color
   setColor: (col) ->
-    window.AWGLI.Actors().setActorColor col._r, col._g, col._b, @_id
+    window.AdefyGLI.Actors().setActorColor col._r, col._g, col._b, @_id
 
   # Get actor color
   #
   # @return [AJSColor2] color
   getColor: ->
-    return window.AWGLI.Actors().getActorColor @_id
+    return window.AdefyGLI.Actors().getActorColor @_id
 
   # Check if psyx simulation is enabled
   #
@@ -85,8 +85,8 @@ class AJSBaseActor
   # @param [Number] friction 0.0 - 1.0
   # @param [Number] elasticity 0.0 - 1.0
   enablePsyx: (@_m, @_f, @_e) ->
-    @_psyx = window.AWGLI.Actors().enableActorPhysics @_m, @_f, @_e, @_id
+    @_psyx = window.AdefyGLI.Actors().enableActorPhysics @_m, @_f, @_e, @_id
 
   # Destroys the physics body if one exists
   disablePsyx: ->
-    @_psyx = !(window.AWGLI.Actors().disableActorPhysics @_id)
+    @_psyx = !(window.AdefyGLI.Actors().disableActorPhysics @_id)
