@@ -1,6 +1,6 @@
 doc/*
 dev/adefy.js
-dev/adefy.map
+dev/adefy.js.map
 dev/build-concat.coffee
 build/*
 node_modules/*

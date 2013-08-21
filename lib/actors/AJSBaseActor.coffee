@@ -21,7 +21,9 @@ class AJSBaseActor
       throw "At least three vertices must be provided"
 
     # Actual actor creation
-    @_id = window.AdefyGLI.Actors().createActor @_verts
+    # convert vertices to string form
+    jsonVerts = JSON.stringify(@_verts).replace("[", "").replace "]", ""
+    @_id = window.AdefyGLI.Actors().createActor jsonVerts
 
     if @_id == -1
       throw "Failed to create actor!"
@@ -36,7 +38,7 @@ class AJSBaseActor
   # @param [AJSVector2] position New position
   setPosition: (v) ->
     @_position = v
-    window.AdefyGLI.Actors().setActorPosition v, @_id
+    window.AdefyGLI.Actors().setActorPosition v.x, v.y, @_id
 
   # Modifies the rotation of the native object, and stores
   # a local copy of it
