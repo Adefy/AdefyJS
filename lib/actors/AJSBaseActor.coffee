@@ -52,7 +52,8 @@ class AJSBaseActor
   #
   # @return [AJSVector2] Position
   getPosition: ->
-    return window.AdefyGLI.Actors().getActorPosition @_id
+    raw = JSON.parse window.AdefyGLI.Actors().getActorPosition @_id
+    return new AJSVector2 raw.x, raw.y
 
   # Returns the rotation of the native object, as stored locally
   #
@@ -70,9 +71,10 @@ class AJSBaseActor
 
   # Get actor color
   #
-  # @return [AJSColor2] color
+  # @return [AJSColor3] color
   getColor: ->
-    return window.AdefyGLI.Actors().getActorColor @_id
+    raw = JSON.parse window.AdefyGLI.Actors().getActorColor @_id
+    return new AJSColor3 raw.r, raw.g, raw.b
 
   # Check if psyx simulation is enabled
   #
