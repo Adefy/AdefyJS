@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AdefyWebGL Test</title>
+
+  <script type="text/javascript" src="./vendor/mjax.min.js"></script>
+  <script type="text/javascript" src="./vendor/underscore.min.js"></script>
+  <script type="text/javascript" src="./vendor/cp.min.js"></script>
+  <script type="text/javascript" src="./vendor/sylvester.js"></script>
+  <script type="text/javascript" src="./vendor/glUtils.js"></script>
+
+  <script type="text/javascript" src="../awgl/build/awgl.js"></script>
+  <script type="text/javascript" src="./adefy.js"></script>
+</head>
+
+<body>
+  <script>
+
+    window.ajax = microAjax
+    var testAd = new AWGLEngine("./ad/", 4, function() {
+
+      var a = new AJSRectangle({
+        psyx: true,
+        mass: 0,
+        friction: 0.3,
+        elasticity: 0.4,
+        w: 100,
+        h: 100,
+        position: new AJSVector2(100, 300),
+        color: new AJSColor3(255, 0, 0)
+      });
+
+      var b = new AJSRectangle({
+        psyx: true,
+        mass: 5,
+        friction: 0.3,
+        elasticity: 0.4,
+        w: 100,
+        h: 100,
+        position: new AJSVector2(100, 600)
+      });
+    });
+
+  </script>
+</body>
+</html>
