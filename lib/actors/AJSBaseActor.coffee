@@ -4,14 +4,14 @@
 # @depend ../util/AJSVector2.coffee
 class AJSBaseActor
 
-  # Actor handle
-  _id: -1
-
-  _color: null
-  _psyx: false
-
   # Instantiates the actor in the engine, gets a handle for it
   constructor: (@_verts) ->
+
+    @_psyx = false
+    @_color =
+      r: 255
+      g: 255
+      b: 255
 
     # Sanity checks
     if @_verts == null or @_verts == undefined

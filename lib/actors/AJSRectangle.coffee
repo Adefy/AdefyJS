@@ -5,10 +5,6 @@
 # @depend ../util/AJSColor3.coffee
 class AJSRectangle extends AJSBaseActor
 
-  # Dimensions, not modifyable
-  _w: null
-  _h: null
-
   # Set up vertices, with the resulting rectangle centered around its position
   #
   # @param [Object] options instantiation options
