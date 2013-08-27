@@ -5,9 +5,6 @@
 # @depend ../util/AJSColor3.coffee
 class AJSTriangle extends AJSBaseActor
 
-  _base: null
-  _height: null
-
   # Set up vertices, with the resulting triangle centered around its position
   #
   # @param [Object] options instantiation options

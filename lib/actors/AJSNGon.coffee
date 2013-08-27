@@ -5,9 +5,6 @@
 # @depend ../util/AJSColor3.coffee
 class AJSNGon extends AJSBaseActor
 
-  _radius: null
-  _segments: null
-
   # Set up vertices, with the resulting nGon centered around its position
   #
   # @param [Object] options instantiation options

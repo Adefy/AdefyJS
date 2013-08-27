@@ -4,14 +4,14 @@
 # @depend ../util/AJSVector2.coffee
 class AJSBaseActor
 
-  # Actor handle
-  _id: -1
-
-  _color: null
-  _psyx: false
-
   # Instantiates the actor in the engine, gets a handle for it
   constructor: (@_verts) ->
+
+    @_psyx = false
+    @_color =
+      r: 255
+      g: 255
+      b: 255
 
     # Sanity checks
     if @_verts == null or @_verts == undefined
@@ -21,7 +21,9 @@ class AJSBaseActor
       throw "At least three vertices must be provided"
 
     # Actual actor creation
-    @_id = window.AdefyGLI.Actors().createActor @_verts
+    # convert vertices to string form
+    jsonVerts = JSON.stringify(@_verts).replace("[", "").replace "]", ""
+    @_id = window.AdefyGLI.Actors().createActor jsonVerts
 
     if @_id == -1
       throw "Failed to create actor!"
@@ -36,7 +38,7 @@ class AJSBaseActor
   # @param [AJSVector2] position New position
   setPosition: (v) ->
     @_position = v
-    window.AdefyGLI.Actors().setActorPosition v, @_id
+    window.AdefyGLI.Actors().setActorPosition v.x, v.y, @_id
 
   # Modifies the rotation of the native object, and stores
   # a local copy of it
@@ -52,7 +54,8 @@ class AJSBaseActor
   #
   # @return [AJSVector2] Position
   getPosition: ->
-    return window.AdefyGLI.Actors().getActorPosition @_id
+    raw = JSON.parse window.AdefyGLI.Actors().getActorPosition @_id
+    return new AJSVector2 raw.x, raw.y
 
   # Returns the rotation of the native object, as stored locally
   #
@@ -70,9 +73,10 @@ class AJSBaseActor
 
   # Get actor color
   #
-  # @return [AJSColor2] color
+  # @return [AJSColor3] color
   getColor: ->
-    return window.AdefyGLI.Actors().getActorColor @_id
+    raw = JSON.parse window.AdefyGLI.Actors().getActorColor @_id
+    return new AJSColor3 raw.r, raw.g, raw.b
 
   # Check if psyx simulation is enabled
   #
