@@ -17,7 +17,7 @@ class AJSNGon extends AJSBaseActor
   constructor: (options) ->
 
     # Sanity checks
-    if options == undefined then throw "No params provided"
+    options = param.required options
 
     if typeof options.radius != "number" then throw "Radius must be provided"
     if typeof options.segments != "number" then throw "Segments must be provided"

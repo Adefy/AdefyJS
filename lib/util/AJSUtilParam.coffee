@@ -33,7 +33,9 @@ class AJSUtilParam
   # @param [Object] def default value to use if necessary
   # @param [Array] valid optional array of valid values the param can have
   @optional: (p, def, valid) ->
-    if p == undefined then p = def
+    if p == undefined
+      p = def
+      return p
 
     # Check for validity if required
     if valid instanceof Array

@@ -16,7 +16,7 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
 
-    if options == undefined then throw "No params provided"
+    options = param.required options
 
     if typeof options.w != "number" then throw "Width must be provided"
     if typeof options.h != "number" then throw "Height must be provided"
