@@ -12,13 +12,9 @@ class AJSColor3
   constructor: (r, g, b) ->
 
     # @todo Check to see if this is necessary
-    if r == undefined then r = 0
-    if g == undefined then g = 0
-    if b == undefined then b = 0
-
-    @_r = r
-    @_g = g
-    @_b = b
+    @_r = param.optional r, 0
+    @_g = param.optional g, 0
+    @_b = param.optional b, 0
 
   # Returns the red component as either an int or float
   #

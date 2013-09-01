@@ -17,7 +17,7 @@ class AJSTriangle extends AJSBaseActor
   constructor: (options) ->
 
     # Sanity checks
-    if options == undefined then throw "No params provided"
+    options = param.required options
 
     if options.base != "number" then throw "Base must be provided"
     if options.height != "number" then throw "Height must be provided"
