@@ -8,10 +8,6 @@ class AJSBaseActor
   constructor: (@_verts) ->
 
     @_psyx = false
-    @_color =
-      r: 255
-      g: 255
-      b: 255
 
     # Sanity checks
     if @_verts == null or @_verts == undefined
@@ -22,15 +18,14 @@ class AJSBaseActor
 
     # Actual actor creation
     # convert vertices to string form
-    jsonVerts = JSON.stringify(@_verts).replace("[", "").replace "]", ""
-    @_id = window.AdefyGLI.Actors().createActor jsonVerts
+    @_id = window.AdefyGLI.Actors().createActor JSON.stringify @_verts
 
     if @_id == -1
       throw "Failed to create actor!"
 
     @setPosition new AJSVector2()
     @setRotation 0
-    @setColor @_color
+    @setColor new AJSColor3 255, 255, 255
 
   # Modifies the position of the native object, and stores
   # a local copy of it
