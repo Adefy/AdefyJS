@@ -93,4 +93,4 @@ class AJSBaseActor
 
   # Destroys the physics body if one exists
   disablePsyx: ->
-    @_psyx = !(window.AdefyGLI.Actors().disableActorPhysics @_id)
+    @_psyx = !(window.AdefyGLI.Actors().destroyPhysicsBody @_id)
