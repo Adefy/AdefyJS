@@ -12,16 +12,16 @@ module.exports = (grunt) ->
 
   # Intermediate vars
   __adefyOut = {}
-  __adefyOut["#{buildDir}/build-concat.coffee"] = [ "#{libDir}/AJS.coffee" ]
-  __adefyOut["#{devDir}/build-concat.coffee"] = [ "#{libDir}/AJS.coffee" ]
+  __adefyOut["#{buildDir}/ajs-concat.coffee"] = [ "#{libDir}/AJS.coffee" ]
+  __adefyOut["#{devDir}/ajs-concat.coffee"] = [ "#{libDir}/AJS.coffee" ]
 
   __coffeeConcatFiles = {}
 
   # Build concat output
-  __coffeeConcatFiles["#{buildDir}/#{libName}"] = "#{buildDir}/build-concat.coffee";
+  __coffeeConcatFiles["#{buildDir}/#{libName}"] = "#{buildDir}/ajs-concat.coffee";
 
   # Dev concat output, used for browser testing
-  __coffeeConcatFiles["#{devDir}/#{libName}"] = "#{buildDir}/build-concat.coffee";
+  __coffeeConcatFiles["#{devDir}/#{libName}"] = "#{buildDir}/ajs-concat.coffee";
 
   # 1 to 1 compiled files, for unit tests
   __coffeeFiles = [
