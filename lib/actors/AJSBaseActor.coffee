@@ -32,6 +32,11 @@ class AJSBaseActor
     @setRotation 0
     @setColor new AJSColor3 255, 255, 255
 
+  # De-registers the actor, clearing the physics and visual bodies.
+  # Note that the instance in question should not be used after this is called!
+  destroy: ->
+    window.AdefyGLI.Actors().destroyActor @_id
+
   # Private method that rebuilds our vertex array. Called without application
   # in the constructor, with applicatio any other time.
   #
