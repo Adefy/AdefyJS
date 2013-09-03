@@ -27,6 +27,11 @@ class AJSBaseActor
     @setRotation 0
     @setColor new AJSColor3 255, 255, 255
 
+  # Return actor id
+  #
+  # @return [Number] id
+  getId: -> @_id
+
   # Modifies the position of the native object, and stores
   # a local copy of it
   #
