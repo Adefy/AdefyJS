@@ -23,6 +23,7 @@ class AJSNGon extends AJSBaseActor
     if @_radius <= 0 then throw "Radius must be larger than 0"
     if @_segments < 3 then throw "Shape must consist of at least 3 segments"
 
+    @_rebuildVerts true
 
     # Creates and registers our actor, valides physics properties
     super @_verts, options.mass, options.friction, options.elasticity
@@ -37,8 +38,17 @@ class AJSNGon extends AJSBaseActor
 
     if options.psyx then @enablePsyx @_mass, @_friction, @_elasticity
 
+    _tempVerts = @_verts
+    _tempVerts.length -= 2
+    @_setPhysicsVertices _tempVerts
+
     @_setRenderMode 2
 
+  # Private method that rebuilds our vertex array.
+  #
+  # @param [Boolean] ignorePsyx defaults to false, only true in constructor
+  _rebuildVerts: (ignorePsyx) ->
+    ignorePsyx = param.optional ignorePsyx, false
 
     # Build vertices
     # Uses algo from http://slabode.exofire.net/circle_draw.shtml
@@ -76,17 +86,14 @@ class AJSNGon extends AJSBaseActor
 
     @_verts = _tv
 
-    super verts
+    if !ignorePsyx
 
-    # Position and rotation
-    if options.position instanceof AJSVec2 then @setPosition options.position
-    if typeof options.rotation == "number" then @setRotation options.rotation
+      # NOTE: We need to prepend ourselves with (0, 0) for rendering, but pass
+      #       the original vert array as our physical representation!
+      @_setPhysicsVertices @_verts
 
-    if typeof options.psyx == "boolean"
-      if options.psyx
-        @enablePsyx()
-      else
-        @disablePsyx()
+    @_verts.push 0
+    @_verts.push 0
 
   # Returns radius
   #

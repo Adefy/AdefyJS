@@ -32,6 +32,26 @@ class AJSBaseActor
     @setRotation 0
     @setColor new AJSColor3 255, 255, 255
 
+  # Private method that rebuilds our vertex array. Called without application
+  # in the constructor, with applicatio any other time.
+  #
+  # @param [Boolean] apply defaults to false
+  _rebuildVerts: (apply) ->
+    apply = param.optional apply, false
+    @_verts = []
+
+  # Provide an alternate set of vertices for our physics body.
+  #
+  # @param [Array<Number>] verts
+  _setPhysicsVertices: (verts) ->
+    window.AdefyGLI.Actors().setPhysicsVertices JSON.stringify(verts), @_id
+
+  # Set render mode, documented on the interface
+  #
+  # @param [Number] mode
+  _setRenderMode: (mode) ->
+    window.AdefyGLI.Actors().setRenderMode param.required(mode, [1, 2]), @_id
+
   # Return actor id
   #
   # @return [Number] id
