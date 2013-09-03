@@ -15,72 +15,50 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Number] angle rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-
     options = param.required options
+    @_w = param.required options.w
+    @_h = param.required options.h
 
-    if typeof options.w != "number" then throw "Width must be provided"
-    if typeof options.h != "number" then throw "Height must be provided"
+    if @_w <= 0 then throw "Width must be greater than 0"
+    if @_h <= 0 then throw "Height must be greater than 0"
 
-    if options.w <= 0 then throw "Width must be greater than 0"
-    if options.h <= 0 then throw "Height must be greater than 0"
+    @_rebuildVerts()
+    super @_verts, options.mass, options.friction, options.elasticity
 
-    # Set up properties using options object
-    @_w = options.w
-    @_h = options.h
+    if options.color instanceof AJSColor3
+      @setColor options.color
+    if options.position instanceof AJSVector2
+      @setPosition options.position
+    if typeof options.rotation == "number"
+      @setRotation options.rotation
 
-    # Color
-    if options.color not instanceof AJSColor3
-      @_color = new AJSColor3(255, 255, 255)
-    else
-      @_color = options.color
+    if options.psyx then @enablePsyx @_mass, @_friction, @_elasticity
+
+  # Private method that rebuilds our vertex array, allows us to modify our
+  # dimensions
+  _rebuildVerts: ->
 
     # Build vertices
     hW = @_w / 2.0
     hH = @_h / 2.0
 
     # Extra vert caps the shape
-    verts = []
+    @_verts = []
 
-    verts.push -hW
-    verts.push -hH
+    @_verts.push -hW
+    @_verts.push -hH
 
-    verts.push -hW
-    verts.push  hH
+    @_verts.push -hW
+    @_verts.push  hH
 
-    verts.push  hW
-    verts.push  hH
+    @_verts.push  hW
+    @_verts.push  hH
 
-    verts.push  hW
-    verts.push -hH
+    @_verts.push  hW
+    @_verts.push -hH
 
-    verts.push -hW
-    verts.push -hH
-
-    super verts
-
-    # Position and rotation
-    if options.position instanceof AJSVector2 then @setPosition options.position
-    if typeof options.rotation == "number" then @setRotation options.rotation
-
-    if typeof options.psyx == "boolean"
-
-      if options.mass == undefined or options.mass < 0
-        throw "Mass must be set and >= 0: #{options.mass}"
-
-      if options.friction == undefined or options.friction < 0
-        throw "Friction must be set and >= 0: #{options.friction}"
-
-      if options.elasticity == undefined or options.elasticity < 0
-        throw "Elasticity must be set and >= 0: #{options.elasticity}"
-
-      if typeof options.mass != "number" then throw "Mass must be a number"
-      if typeof options.friction != "number" then throw "Friction must be a number"
-      if typeof options.elasticity != "number" then throw "Elasticity must be a number"
-
-      if options.psyx
-        @enablePsyx(options.mass, options.friction, options.elasticity)
-      else
-        @disablePsyx()
+    @_verts.push -hW
+    @_verts.push -hH
 
   # Returns width
   #
