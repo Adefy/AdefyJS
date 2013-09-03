@@ -15,24 +15,30 @@ class AJSNGon extends AJSBaseActor
   # @option options [Number] angle rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
+    param.required options
+    @_radius = param.required options.radius
+    @_segments = param.required options.segments
+    options.psyx = param.optional options.psyx, false
 
-    # Sanity checks
-    options = param.required options
+    if @_radius <= 0 then throw "Radius must be larger than 0"
+    if @_segments < 3 then throw "Shape must consist of at least 3 segments"
 
-    if typeof options.radius != "number" then throw "Radius must be provided"
-    if typeof options.segments != "number" then throw "Segments must be provided"
 
-    if options.radius <= 0 then throw "Radius must be larger than 0"
-    if options.segments <= 0
-      throw "Shape must consist of at least 3 segments"
+    # Creates and registers our actor, valides physics properties
+    super @_verts, options.mass, options.friction, options.elasticity
 
-    @_radius = options.radius
-    @_segments = options.segments
+    # Set attributes if passed in
+    if options.color instanceof AJSColor3
+      @setColor options.color
+    if options.position instanceof AJSVector2
+      @setPosition options.position
+    if typeof options.rotation == "number"
+      @setRotation options.rotation
 
-    if options.color not instanceof AJSColor3
-      @_color = new AJSColor3(255, 255, 255)
-    else
-      @_color = options.color
+    if options.psyx then @enablePsyx @_mass, @_friction, @_elasticity
+
+    @_setRenderMode 2
+
 
     # Build vertices
     # Uses algo from http://slabode.exofire.net/circle_draw.shtml
@@ -42,12 +48,12 @@ class AJSNGon extends AJSBaseActor
     tanFactor = Math.tan theta
     radFactor = Math.cos theta
 
-    verts = [2 * @_segments]
+    @_verts = []
 
-    for i in [0..@_segments]
+    for i in [0...@_segments]
       index = i * 2
-      verts[i] = x
-      verts[i + 1] = y
+      @_verts[index] = x
+      @_verts[index + 1] = y
 
       tx = -y
       ty = x
@@ -59,8 +65,16 @@ class AJSNGon extends AJSBaseActor
       y *= radFactor
 
     # Cap the shape
-    verts.push verts[0]
-    verts.push verts[1]
+    @_verts.push @_verts[0]
+    @_verts.push @_verts[1]
+
+    # Reverse winding!
+    _tv = []
+    for i in [0...@_verts.length] by 2
+      _tv.push @_verts[@_verts.length - 2 - i]
+      _tv.push @_verts[@_verts.length - 1 - i]
+
+    @_verts = _tv
 
     super verts
 

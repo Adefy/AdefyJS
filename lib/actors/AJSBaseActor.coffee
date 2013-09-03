@@ -5,16 +5,21 @@
 class AJSBaseActor
 
   # Instantiates the actor in the engine, gets a handle for it
-  constructor: (@_verts) ->
+  #
+  # @param [Array<Number>] verts flat 2d capped array of vertices
+  # @param [Number] mass object mass
+  # @param [Number] friction object friction
+  # @param [Number] elasticity object elasticity
+  constructor: (@_verts, mass, friction, elasticity) ->
+    param.required @_verts
+    @_mass = param.optional mass, 0
+    @_friction = param.optional friction, 0.2
+    @_elasticity = param.optional elasticity, 0.3
+
+    if mass < 0 then mass = 0
+    if @_verts.length < 6 then throw "At least three vertices must be provided"
 
     @_psyx = false
-
-    # Sanity checks
-    if @_verts == null or @_verts == undefined
-      throw "No vertices provided!"
-
-    if @_verts.length < 6
-      throw "At least three vertices must be provided"
 
     # Actual actor creation
     # convert vertices to string form
