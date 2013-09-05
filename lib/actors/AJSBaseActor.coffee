@@ -93,7 +93,7 @@ class AJSBaseActor
   # @return [Number] Angle in degrees
   getRotation: (radians) ->
     if radians != true then radians = false
-    return window.AdefyGLI.Actors().getActorRotation radians, @_id
+    return window.AdefyGLI.Actors().getActorRotation @_id, radians
 
   # Set actor color
   #
