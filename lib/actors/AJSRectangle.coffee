@@ -69,3 +69,25 @@ class AJSRectangle extends AJSBaseActor
   #
   # @return [Number] height
   getHeight: -> @_h
+
+  # Set height. Enforces minimum, rebuilds vertices, and updates actor
+  #
+  # @param [Number] height new height, > 0
+  setHeight: (h) ->
+    param.required h
+
+    if h <= 0 then throw new Error "New height must be >0 !"
+
+    @_h = h
+    @_rebuildVerts()
+    @_updateVertices()
+
+  # Set width. Enforces minimum, rebuilds vertices, and updates actor
+  setWidth: (b) ->
+    param.required b
+
+    if b <= 0 then throw new Error "New width must be >0 !"
+
+    @_w = b
+    @_rebuildVerts()
+    @_updateVertices()

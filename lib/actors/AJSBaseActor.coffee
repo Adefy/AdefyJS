@@ -12,9 +12,9 @@ class AJSBaseActor
   # @param [Number] elasticity object elasticity
   constructor: (@_verts, mass, friction, elasticity) ->
     param.required @_verts
-    @_mass = param.optional mass, 0
-    @_friction = param.optional friction, 0.2
-    @_elasticity = param.optional elasticity, 0.3
+    @_m = param.optional mass, 0
+    @_f = param.optional friction, 0.2
+    @_e = param.optional elasticity, 0.3
 
     if mass < 0 then mass = 0
     if @_verts.length < 6 then throw "At least three vertices must be provided"
