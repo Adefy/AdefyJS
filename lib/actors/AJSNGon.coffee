@@ -104,3 +104,27 @@ class AJSNGon extends AJSBaseActor
   #
   # @return [Number] segments
   getSegments: -> @_segments
+
+  # Set radius. Enforces minimum, rebuilds vertices, and updates actor
+  #
+  # @param [Number] radius new radius, > 0
+  setRadius: (r) ->
+    param.required r
+
+    if r <= 0 then throw new Error "New radius must be >0 !"
+
+    @_radius = r
+    @_rebuildVerts()
+    @_updateVertices()
+
+  # Set segments. Enforces minimum, rebuilds vertices, and updates actor
+  #
+  # @param [Number] segments new segment count, >= 3
+  setSegments: (s) ->
+    param.required s
+
+    if s < 3 then throw new Error "New segment count must be >=3 !"
+
+    @_segments = s
+    @_rebuildVerts()
+    @_updateVertices()

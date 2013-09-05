@@ -37,14 +37,6 @@ class AJSBaseActor
   destroy: ->
     window.AdefyGLI.Actors().destroyActor @_id
 
-  # Private method that rebuilds our vertex array. Called without application
-  # in the constructor, with applicatio any other time.
-  #
-  # @param [Boolean] apply defaults to false
-  _rebuildVerts: (apply) ->
-    apply = param.optional apply, false
-    @_verts = []
-
   # Provide an alternate set of vertices for our physics body.
   #
   # @param [Array<Number>] verts
@@ -56,6 +48,11 @@ class AJSBaseActor
   # @param [Number] mode
   _setRenderMode: (mode) ->
     window.AdefyGLI.Actors().setRenderMode param.required(mode, [1, 2]), @_id
+
+  # Re-creates our actor with our current vertices. This does not modify
+  # the vertices, only re-sends them!
+  _updateVertices: ->
+    window.AdefyGLI.Actors().updateVertices JSON.stringify(@_verts), @_id
 
   # Return actor id
   #
