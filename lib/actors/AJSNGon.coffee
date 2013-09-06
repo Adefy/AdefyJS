@@ -36,7 +36,7 @@ class AJSNGon extends AJSBaseActor
     if typeof options.rotation == "number"
       @setRotation options.rotation
 
-    if options.psyx then @enablePsyx @_mass, @_friction, @_elasticity
+    if options.psyx then @enablePsyx()
 
     _tempVerts = @_verts
     _tempVerts.length -= 2

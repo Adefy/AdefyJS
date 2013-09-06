@@ -32,7 +32,7 @@ class AJSRectangle extends AJSBaseActor
     if typeof options.rotation == "number"
       @setRotation options.rotation
 
-    if options.psyx then @enablePsyx @_mass, @_friction, @_elasticity
+    if options.psyx then @enablePsyx()
 
   # Private method that rebuilds our vertex array, allows us to modify our
   # dimensions
