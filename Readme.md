@@ -21,4 +21,9 @@ To generate the docs, run `codo`
 
 Building
 ========
-AWGL is included as a submodule to allow for proper testing with an adefy platform. After a fresh clone, run `git submodule init` followed by `git submodule update` to pull in the AWGL sources. The build system is identical to that of AWGL, so for more info check out its readme: https://github.com/Mirceam94/AdefyWebGL/blob/master/Readme.md
+AdefyWebGL needs to be present one level up, so it is recommended to host all
+Adefy-related repos in a single folder. Change the name of your AdefyWebGL
+folder if needed in the gruntfile. The build system is identical to that of
+AWGL, so for more info check out its readme:
+
+https://github.com/Mirceam94/AdefyWebGL/blob/master/Readme.md
