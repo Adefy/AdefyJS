@@ -9,6 +9,7 @@ module.exports = (grunt) ->
   testDir = "test"
   devDir = "dev"
   docDir = "doc"
+  awglDir = "../AdefyWebGL"
 
   # Intermediate vars
   __adefyOut = {}
@@ -106,6 +107,32 @@ module.exports = (grunt) ->
           cwd: "#{testDir}/env"
           src: [ "**" ]
           dest: "#{buildDir}/#{testDir}"
+        ]
+      awgl:
+        files: [
+          expand: false
+          src: "#{awglDir}/build/awgl.js"
+          dest: "#{buildDir}/static/js/awgl.js"
+        ,
+          expand: false
+          src: "#{awglDir}/build/awgl.js"
+          dest: "#{devDir}/js/awgl.js"
+        ,
+          expand: false
+          src: "#{awglDir}/build/awgl-concat.coffee"
+          dest: "#{buildDir}/static/js/awgl-concat.coffee"
+        ,
+          expand: false
+          src: "#{awglDir}/build/awgl.js.map"
+          dest: "#{buildDir}/static/js/awgl.js.map"
+        ,
+          expand: false
+          src: "#{awglDir}/build/awgl.js.map"
+          dest: "#{devDir}/js/awgl.js.map"
+        ,
+          expand: false
+          src: "#{awglDir}/build/awgl-concat.coffee"
+          dest: "#{devDir}/js/awgl-concat.coffee"
         ]
 
     clean: [

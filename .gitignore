@@ -4,3 +4,5 @@ dev/adefy.js.map
 dev/ajs-concat.coffee
 build/*
 node_modules/*
+dev/js/awgl.js
+dev/js/awgl.js.map
