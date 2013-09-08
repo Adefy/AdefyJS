@@ -115,7 +115,11 @@ class AJSBaseActor
   # @param [Number] mass 0.0 - unbound
   # @param [Number] friction 0.0 - 1.0
   # @param [Number] elasticity 0.0 - 1.0
-  enablePsyx: (@_m, @_f, @_e) ->
+  enablePsyx: (m, f, e) ->
+    @_m = param.optional m, @_m
+    @_f = param.optional f, @_f
+    @_e = param.optional e, @_e
+
     @_psyx = window.AdefyGLI.Actors().enableActorPhysics @_m, @_f, @_e, @_id
 
   # Destroys the physics body if one exists
