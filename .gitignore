@@ -2,6 +2,7 @@ doc/*
 dev/adefy.js
 dev/adefy.js.map
 dev/ajs-concat.coffee
+dev/js/awgl-concat.coffee
 build/*
 node_modules/*
 dev/js/awgl.js
