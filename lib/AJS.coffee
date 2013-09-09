@@ -7,4 +7,4 @@
 # @depend util/AJSUtilParam.coffee
 # @depend actors/AJSRectangle.coffee
 # @depend actors/AJSTriangle.coffee
-# @depend actors/AJSNGon.coffee
+# @depend actors/AJSPolygon.coffee

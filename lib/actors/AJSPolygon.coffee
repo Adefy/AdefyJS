@@ -3,7 +3,7 @@
 # @depend AJSBaseActor.coffee
 # @depend ../util/AJSVector2.coffee
 # @depend ../util/AJSColor3.coffee
-class AJSNGon extends AJSBaseActor
+class AJSPolygon extends AJSBaseActor
 
   # Set up vertices, with the resulting nGon centered around its position
   #
