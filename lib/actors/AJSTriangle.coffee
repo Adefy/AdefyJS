@@ -12,7 +12,7 @@ class AJSTriangle extends AJSBaseActor
   # @option options [Number] height
   # @option options [AJSColor3] color
   # @option options [AJSVec2] position
-  # @option options [Number] angle rotation in degrees
+  # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
     options = param.required options
