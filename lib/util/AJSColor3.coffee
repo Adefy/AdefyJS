@@ -21,7 +21,7 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] red
   getR: (asFloat) ->
-    if asFloat == undefined then return @_r
+    if asFloat != true then return @_r
     if @_r == 0
       if asFloat
         return 0.0
@@ -34,7 +34,7 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] green
   getG: (asFloat) ->
-    if asFloat == undefined then return @_g
+    if asFloat != true then return @_g
     if @_g == 0
       if asFloat
         return 0.0
@@ -47,7 +47,7 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] blue
   getB: (asFloat) ->
-    if asFloat == undefined then return @_b
+    if asFloat != true then return @_b
     if @_b == 0
       if asFloat
         return 0.0
