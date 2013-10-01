@@ -1,3 +1,7 @@
+##
+## Copyright © 2013 Spectrum IT Solutions Gmbh - All Rights Reserved
+##
+
 # Implements a variable-side polygon actor
 #
 # @depend AJSBaseActor.coffee
