@@ -12,7 +12,7 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Number] height
   # @option options [AJSColor3] color
   # @option options [AJSVec2] position
-  # @option options [Number] angle rotation in degrees
+  # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
     options = param.required options
@@ -27,8 +27,14 @@ class AJSRectangle extends AJSBaseActor
 
     if options.color instanceof AJSColor3
       @setColor options.color
+    else if options.color != undefined and options.color.r != undefined
+      @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
+
     if options.position instanceof AJSVector2
       @setPosition options.position
+    else if options.position != undefined and options.position.x != undefined
+      @setPosition new AJSVector2 options.position.x, options.position.y
+
     if typeof options.rotation == "number"
       @setRotation options.rotation
 
