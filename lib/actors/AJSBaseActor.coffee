@@ -108,7 +108,7 @@ class AJSBaseActor
   # Check if psyx simulation is enabled
   #
   # @return [Boolean] psyx psyx enabled status
-  hasPsyx: -> return @_psyx
+  hasPsyx: -> @_psyx
 
   # Creates the internal physics body, if one does not already exist
   #
@@ -126,4 +126,5 @@ class AJSBaseActor
 
   # Destroys the physics body if one exists
   disablePsyx: ->
-    @_psyx = !(window.AdefyGLI.Actors().destroyPhysicsBody @_id)
+
+    if window.AdefyGLI.Actors().destroyPhysicsBody @_id then @_psyx = false
