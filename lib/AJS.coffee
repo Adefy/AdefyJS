@@ -116,7 +116,6 @@ class AJS
     if options not instanceof Array then options = [ options ]
 
     for i in [0...properties.length]
-      if options[i].start == undefined then options[i].start = start
       if options[i].fps == undefined then options[i].fps = fps
 
-      Animations.animate actor, properties[i], options[i]
+      Animations.animate actor.getId(), properties[i], options[i], start
