@@ -45,10 +45,10 @@ class AJS
       return
     else AJS._initialized = true
 
-    engine = window.AdefyGLI.Engine()
+    @_engine = window.AdefyGLI.Engine()
 
     # Initialize!
-    engine.initialize ((agl) -> ad agl), width, height, 1, ""
+    @_engine.initialize ((agl) -> ad agl), width, height, 1, ""
 
   # Set renderer clear color, component values between 0 and 255
   #
