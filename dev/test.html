@@ -17,8 +17,9 @@
 <body>
   <script>
 
-    window.ajax = microAjax
-    var testAd = new AWGLEngine("./ad/", 4, function() {
+    AJS.init(function() {
+
+      AJS.setClearColor(200, 50, 40);
 
       var a = new AJSRectangle({
         psyx: true,
@@ -28,7 +29,7 @@
         w: 100,
         h: 100,
         position: new AJSVector2(100, 300),
-        color: new AJSColor3(255, 0, 0)
+        color: new AJSColor3(40, 200, 30)
       });
 
       var b = new AJSRectangle({
@@ -40,7 +41,24 @@
         h: 100,
         position: new AJSVector2(100, 600)
       });
-    });
+
+      var c = new AJSRectangle({
+        w: 300,
+        h: 75,
+        position: new AJSVector2(400, 400),
+        color: new AJSColor3(40, 50, 200)
+      });
+
+      AJS.animate(c, ["rotation", ["position", "x"]], [{
+        endVal: 400,
+        duration: 4000
+      }, {
+        endVal: 600,
+        duration: 6000,
+        start: 3000
+      }], -1);
+
+    }, 800, 600);
 
   </script>
 </body>
