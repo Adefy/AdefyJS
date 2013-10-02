@@ -51,4 +51,4 @@ class AJSUtilParam
 
     p
 
-window.param = AJSUtilParam
+if window.param == undefined then window.param = AJSUtilParam
