@@ -70,6 +70,18 @@ class AJS
     col = window.AdefyGLI.Engine().getClearColor()
     new AJSColor3 col.r, col.g, col.b
 
+  # Override engine log level
+  #
+  # @param [Number] level 0-4
+  @setLogLevel: (level) ->
+    param.required level, [0, 1, 2, 3, 4]
+
+    window.AdefyGLI.Engine().setLogLevel level
+
+  @_syntheticMap:
+
+    "width": ""
+
   # Animates actor properties. Pass in either a single property, or an array
   # of property definitions. The same goes for the animation options.
   #
@@ -115,7 +127,58 @@ class AJS
     if properties not instanceof Array then properties = [ properties ]
     if options not instanceof Array then options = [ options ]
 
+    # Helpful below
+    _registerDelayedMap = (actor, property, options, time) ->
+      setTimeout ->
+        console.log "MAP"
+        result = AJS.mapAnimation actor, property, options
+        property = result.property
+        options = result.options
+        Animations.animate actor.getId(), property, options
+      , time
+
     for i in [0...properties.length]
       if options[i].fps == undefined then options[i].fps = fps
+      if options[i].start == undefined then options[i].start = start
 
-      Animations.animate actor.getId(), properties[i], options[i], start
+      # Check if the property is directly supported by the engine. If not, we
+      # need to map it to the corresponding property and options structure our
+      # engine requires to execute it.
+      if not Animations.canAnimate properties[i]
+
+        # Check if we can map the property
+        if not actor.canMapAnimation properties[i]
+          throw new Error "Unrecognized property, can't animate!"
+
+        # Check if an absolute change is required
+        if actor.absoluteMapping properties[i]
+          timeout = options[i].start
+          options[i].start = -1
+          _registerDelayedMap actor, properties[i], options[i], timeout
+
+        else
+          result = AJS.mapAnimation actor, properties[i], options[i]
+          properties[i] = result.property
+          options[i] = result.options
+
+      # Animate normally if we can
+      else Animations.animate actor.getId(), properties[i], options[i]
+
+  # Generates an engine-supported animation for the specified property and
+  # options. Use this when animating a property not directly supported by
+  # the engine.
+  #
+  # Note that AJS.animate() uses this internally upon encountering an
+  # unsupported property!
+  #
+  # @param [AJSBaseActor] actor actor animation applies to
+  # @param [String] property property name
+  # @param [Object] options animation options
+  # @return [Object] animation object containing "property" and "options" keys
+  @mapAnimation: (actor, property, options) ->
+    param.required actor
+    param.required property
+    param.required options
+
+    # We actually pass this down to the actor. Evil, eh? Muahahahaha
+    actor.mapAnimation property, options

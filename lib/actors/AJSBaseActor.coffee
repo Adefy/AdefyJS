@@ -58,6 +58,10 @@ class AJSBaseActor
   _updateVertices: ->
     window.AdefyGLI.Actors().updateVertices JSON.stringify(@_verts), @_id
 
+  # Fetches vertices from the engine
+  _fetchVertices: ->
+    @_verts = window.AdefyGLI.Actors().getVertices @_id
+
   # Return actor id
   #
   # @return [Number] id
@@ -130,5 +134,41 @@ class AJSBaseActor
 
   # Destroys the physics body if one exists
   disablePsyx: ->
-
     if window.AdefyGLI.Actors().destroyPhysicsBody @_id then @_psyx = false
+
+  # This is called by AJS.mapAnimation(), which is in turn called by
+  # AJS.animate() when required. You shouldn't map your animations yourself,
+  # let AJS do that by passing them to AJS.animate() as-is.
+  #
+  # Actors extending us should also extend this method to support animating
+  # their unique properties.
+  #
+  # Generates an engine-supported animation for the specified property and
+  # options. Use this when animating a property not directly supported by
+  # the engine.
+  #
+  # @param [String] property property name
+  # @param [Object] options animation options
+  # @return [Object] animation object containing "property" and "options" keys
+  mapAnimation: (property, options) ->
+
+    # Since we don't have any properties not already supported by the engine,
+    # we return null to signal an error (calls to actors get passed down to us
+    # for unrecognized properties)
+    null
+
+  # Checks if the property is one we provide animation mapping for
+  #
+  # @param [String] property property name
+  # @return [Boolean] support
+  canMapAnimation: (property) -> false
+
+  # Checks if the mapping for the property requires an absolute modification
+  # to the actor. Multiple absolute modifications should never be performed
+  # at the same time!
+  #
+  # NOTE: This returns false for properties we don't recognize
+  #
+  # @param [String] property property name
+  # @return [Boolean] absolute hope to the gods this is false
+  absoluteMapping: (property) -> false

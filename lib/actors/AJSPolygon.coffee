@@ -2,7 +2,26 @@
 ## Copyright © 2013 Spectrum IT Solutions Gmbh - All Rights Reserved
 ##
 
-# Implements a variable-side polygon actor
+# Implements a variable-side polygon actor. The android engine implements
+# this natively!
+#
+# NOTE: On WebGL, the radius and side-count should NEVER be animated at the
+#       same time! This is a limitation of our vertice animations; side-count
+#       and radius modifications both require a complete vertex-recalculation,
+#       and as such are applied as absolute changes instead of relative ones
+#       like width/height for AJSRectangle. Make sure your radius and
+#       segment-count animations never overlap!
+#
+# NOTE 2: Even when the radius and side-count are animated seperately, very
+#         strange things will happen as a result of the uni-directional line
+#         of communication between us and the engine. Animating the radius does
+#         not actually update our stored radius value. Sad pandas. The android
+#         engine implements a polygon natively, and as such solves this
+#         problem. Expect your WebGL exports to behave strangely if you animate
+#         both on the same object.
+#
+# NOTE 3: Things work alright if you animate the radius first, then the seg
+#         count. Keep this in mind.
 #
 # @depend AJSBaseActor.coffee
 # @depend ../util/AJSVector2.coffee
@@ -57,23 +76,29 @@ class AJSPolygon extends AJSBaseActor
   # Private method that rebuilds our vertex array.
   #
   # @param [Boolean] ignorePsyx defaults to false, only true in constructor
-  _rebuildVerts: (ignorePsyx) ->
+  # @param [Boolean] sim signals a simulation, returns verts (default false)
+  # @param [Number] segments segment count for simulation
+  # @param [Number] radius radius for simulation
+  _rebuildVerts: (ignorePsyx, sim, segments, radius) ->
     ignorePsyx = param.optional ignorePsyx, false
+    sim = param.optional sim, false
+    segments = param.optional segments, @_segments
+    radius = param.optional radius, @_radius
 
     # Build vertices
     # Uses algo from http://slabode.exofire.net/circle_draw.shtml
-    x = @_radius
+    x = radius
     y = 0
-    theta = (2.0 * 3.1415926) / @_segments
+    theta = (2.0 * 3.1415926) / segments
     tanFactor = Math.tan theta
     radFactor = Math.cos theta
 
-    @_verts = []
+    verts = []
 
-    for i in [0...@_segments]
+    for i in [0...segments]
       index = i * 2
-      @_verts[index] = x
-      @_verts[index + 1] = y
+      verts[index] = x
+      verts[index + 1] = y
 
       tx = -y
       ty = x
@@ -85,35 +110,27 @@ class AJSPolygon extends AJSBaseActor
       y *= radFactor
 
     # Cap the shape
-    @_verts.push @_verts[0]
-    @_verts.push @_verts[1]
+    verts.push verts[0]
+    verts.push verts[1]
 
     # Reverse winding!
     _tv = []
-    for i in [0...@_verts.length] by 2
-      _tv.push @_verts[@_verts.length - 2 - i]
-      _tv.push @_verts[@_verts.length - 1 - i]
+    for i in [0...verts.length] by 2
+      _tv.push verts[verts.length - 2 - i]
+      _tv.push verts[verts.length - 1 - i]
 
-    @_verts = _tv
+    verts = _tv
 
-    if !ignorePsyx
+    if !ignorePsyx and not sim
 
       # NOTE: We need to prepend ourselves with (0, 0) for rendering, but pass
       #       the original vert array as our physical representation!
-      @_setPhysicsVertices @_verts
+      @_setPhysicsVertices verts
 
-    @_verts.push 0
-    @_verts.push 0
+    verts.push 0
+    verts.push 0
 
-  # Returns radius
-  #
-  # @return [Number] radius
-  getRadius: -> @_radius
-
-  # Returns number of segments comprising the shape
-  #
-  # @return [Number] segments
-  getSegments: -> @_segments
+    if sim then return verts else @_verts = verts
 
   # Set radius. Enforces minimum, rebuilds vertices, and updates actor
   #
@@ -138,3 +155,106 @@ class AJSPolygon extends AJSBaseActor
     @_segments = s
     @_rebuildVerts()
     @_updateVertices()
+
+  # This is called by AJS.mapAnimation(), which is in turn called by
+  # AJS.animate() when required. You shouldn't map your animations yourself,
+  # let AJS do that by passing them to AJS.animate() as-is.
+  #
+  # Generates an engine-supported animation for the specified property and
+  # options. Use this when animating a property not directly supported by
+  # the engine.
+  #
+  # @param [String] property property name
+  # @param [Object] options animation options
+  # @return [Object] animation object containing "property" and "options" keys
+  mapAnimation: (property, options) ->
+    param.required property
+    param.required options
+
+    anim = {}
+
+    # Grab current vertices
+    @_fetchVertices()
+
+    # Calculate actual segments and radius
+    @_segments = (@_verts.length / 2) - 2
+
+    # Note: Radius is only an estimate! Values are always off.
+    minX = 0
+    maxX = 0
+
+    for i in [0...@_verts.length] by 2
+      if @_verts[i] < minX then minX = @_verts[i]
+      if @_verts[i] > maxX then maxX = @_verts[i]
+
+    @_radius = (maxX - minX) / 2
+
+    # Attaches the appropriate prefix, returns "." for 0
+    prefixVal = (val) ->
+      if val == 0 then val = "."
+      else if val >= 0 then val = "+#{val}"
+      else val = "#{val}"
+      val
+
+    # We have two unique properties, radius and segments, both of which
+    # must be animated in the same way. We first calculate values at
+    # each step, then generate vert deltas accordingly.
+    if property == "radius"
+
+      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      delay = 0
+      options.deltas = []
+      options.delays = []
+
+      # Create delta sets
+      for val in bezValues.values
+
+        delay += bezValues.stepTime
+
+        if val != 0
+          options.deltas.push @_rebuildVerts true, true, @_segments, val
+          options.delays.push delay
+
+      anim.property = "vertices"
+      anim.options = options
+
+    else if property == "sides"
+
+      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      delay = 0
+      options.deltas = []
+      options.delays = []
+
+      # Create delta sets
+      for val in bezValues.values
+
+        delay += bezValues.stepTime
+
+        if val != 0
+          options.deltas.push @_rebuildVerts true, true, val, @_radius
+          options.delays.push delay
+
+      anim.property = "vertices"
+      anim.options = options
+
+    else return super property, options
+
+    anim
+
+  # Checks if the property is one we provide animation mapping for
+  #
+  # @param [String] property property name
+  # @return [Boolean] support
+  canMapAnimation: (property) ->
+    if property == "sides" or property == "radius" then return true
+    else return false
+
+  # Checks if the mapping for the property requires an absolute modification
+  # to the actor. Multiple absolute modifications should never be performed
+  # at the same time!
+  #
+  # NOTE: This returns false for properties we don't recognize
+  #
+  # @param [String] property property name
+  # @return [Boolean] absolute hope to the gods this is false
+  absoluteMapping: (property) -> true

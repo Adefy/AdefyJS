@@ -70,16 +70,6 @@ class AJSRectangle extends AJSBaseActor
     @_verts.push -hW
     @_verts.push -hH
 
-  # Returns width
-  #
-  # @return [Number] width
-  getWidth: -> @_w
-
-  # Returns height
-  #
-  # @return [Number] height
-  getHeight: -> @_h
-
   # Set height. Enforces minimum, rebuilds vertices, and updates actor
   #
   # @param [Number] height new height, > 0
@@ -101,3 +91,138 @@ class AJSRectangle extends AJSBaseActor
     @_w = b
     @_rebuildVerts()
     @_updateVertices()
+
+  # This is called by AJS.mapAnimation(), which is in turn called by
+  # AJS.animate() when required. You shouldn't map your animations yourself,
+  # let AJS do that by passing them to AJS.animate() as-is.
+  #
+  # Generates an engine-supported animation for the specified property and
+  # options. Use this when animating a property not directly supported by
+  # the engine.
+  #
+  # @param [String] property property name
+  # @param [Object] options animation options
+  # @return [Object] animation object containing "property" and "options" keys
+  mapAnimation: (property, options) ->
+    param.required property
+    param.required options
+
+    anim = {}
+
+    # Attaches the appropriate prefix, returns "." for 0
+    prefixVal = (val) ->
+      if val == 0 then val = "."
+      else if val >= 0 then val = "+#{val}"
+      else val = "#{val}"
+      val
+
+    # We have two unique properties, width and height, both of which
+    # must be animated in the same way. We first calculate values at
+    # each step, then generate vert deltas accordingly.
+    if property == "width"
+
+      options.startVal /= 2
+      options.endVal /= 2
+
+      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      delay = 0
+      options.deltas = []
+      options.delays = []
+
+      # To keep things relative, we subtract previous deltas
+      sum = bezValues.values[0]
+
+      # Create delta sets
+      for val in bezValues.values
+
+        val -= sum
+        sum += val
+        delay += bezValues.stepTime
+
+        if val != 0
+          options.deltas.push [
+            prefixVal -val    # Bottom-left
+            "."
+
+            prefixVal -val    # Top-left
+            "."
+
+            prefixVal val     # Top-right
+            "."
+
+            prefixVal val     # Bottom-right
+            "."
+
+            prefixVal -val    # Bottom-left
+            "."
+          ]
+
+          options.delays.push delay
+
+      anim.property = "vertices"
+      anim.options = options
+
+    else if property == "height"
+
+      options.startVal /= 2
+      options.endVal /= 2
+
+      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      delay = 0
+      options.deltas = []
+      options.delays = []
+
+      # To keep things relative, we subtract previous deltas
+      sum = bezValues.values[0]
+
+      # Create delta sets
+      for val in bezValues.values
+
+        val -= sum
+        sum += val
+        delay += bezValues.stepTime
+
+        if val != 0
+          options.deltas.push [
+            "."
+            prefixVal -val    # Bottom-left
+
+            "."
+            prefixVal val     # Top-left
+
+            "."
+            prefixVal val     # Top-right
+
+            "."
+            prefixVal -val    # Bottom-right
+
+            "."
+            prefixVal -val    # Bottom-left
+          ]
+
+          options.delays.push delay
+
+      anim.property = "vertices"
+      anim.options = options
+
+    else return super property, options
+
+    anim
+
+  # Checks if the property is one we provide animation mapping for
+  #
+  # @param [String] property property name
+  # @return [Boolean] support
+  canMapAnimation: (property) ->
+    if property == "height" or property == "width" then return true
+    else return false
+
+  # Checks if the mapping for the property requires an absolute modification
+  # to the actor. Multiple absolute modifications should never be performed
+  # at the same time!
+  #
+  # NOTE: This returns false for properties we don't recognize
+  #
+  # @param [String] property property name
+  # @return [Boolean] absolute hope to the gods this is false
+  absoluteMapping: (property) -> false
