@@ -48,7 +48,7 @@ class AJSTriangle extends AJSBaseActor
   # Fetches vertices from engine and returns base
   #
   # @return [Number] base
-  getWidth: ->
+  getBase: ->
     @_fetchVertices()
     @_base = @_verts[4] * 2
 
