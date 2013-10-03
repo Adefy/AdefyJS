@@ -45,6 +45,20 @@ class AJSTriangle extends AJSBaseActor
 
     if options.psyx then @enablePsyx()
 
+  # Fetches vertices from engine and returns base
+  #
+  # @return [Number] base
+  getWidth: ->
+    @_fetchVertices()
+    @_base = @_verts[4] * 2
+
+  # Fetches vertices from engine and returns height
+  #
+  # @return [Number] height
+  getHeight: ->
+    @_fetchVertices()
+    @_height = @_verts[3] * 2
+
   # Private method that rebuilds our vertex array.
   _rebuildVerts: ->
     hB = @_base / 2.0

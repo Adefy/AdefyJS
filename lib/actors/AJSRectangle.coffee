@@ -44,6 +44,20 @@ class AJSRectangle extends AJSBaseActor
 
     if options.psyx then @enablePsyx()
 
+  # Fetches vertices from engine and returns width
+  #
+  # @return [Number] width
+  getWidth: ->
+    @_fetchVertices()
+    @_w = @_verts[4] * 2
+
+  # Fetches vertices from engine and returns height
+  #
+  # @return [Number] height
+  getHeight: ->
+    @_fetchVertices()
+    @_h = @_verts[3] * 2
+
   # Private method that rebuilds our vertex array, allows us to modify our
   # dimensions
   _rebuildVerts: ->
