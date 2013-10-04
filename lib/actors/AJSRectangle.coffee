@@ -142,6 +142,7 @@ class AJSRectangle extends AJSBaseActor
       delay = 0
       options.deltas = []
       options.delays = []
+      options.udata = []
 
       # To keep things relative, we subtract previous deltas
       sum = bezValues.values[0]
@@ -171,7 +172,10 @@ class AJSRectangle extends AJSBaseActor
             "."
           ]
 
+          options.udata.push val * 2
           options.delays.push delay
+
+      options.cbStep = (width) => @_w += width * 2
 
       anim.property = "vertices"
       anim.options = options
@@ -185,6 +189,7 @@ class AJSRectangle extends AJSBaseActor
       delay = 0
       options.deltas = []
       options.delays = []
+      options.udata = []
 
       # To keep things relative, we subtract previous deltas
       sum = bezValues.values[0]
@@ -214,7 +219,10 @@ class AJSRectangle extends AJSBaseActor
             prefixVal -val    # Bottom-left
           ]
 
+          options.udata.push val
           options.delays.push delay
+
+      options.cbStep = (height) => @_h += height * 2
 
       anim.property = "vertices"
       anim.options = options

@@ -136,6 +136,7 @@ class AJSTriangle extends AJSBaseActor
       delay = 0
       options.deltas = []
       options.delays = []
+      options.udata = []
 
       # To keep things relative, we subtract previous deltas
       sum = bezValues.values[0]
@@ -162,7 +163,10 @@ class AJSTriangle extends AJSBaseActor
             prefixVal -val    # Bottom-left
           ]
 
+          options.udata.push val
           options.delays.push delay
+
+      options.cbStep = (height) => @_height += height * 2
 
       anim.property = "vertices"
       anim.options = options
@@ -176,6 +180,7 @@ class AJSTriangle extends AJSBaseActor
       delay = 0
       options.deltas = []
       options.delays = []
+      options.udata = []
 
       # To keep things relative, we subtract previous deltas
       sum = bezValues.values[0]
@@ -202,7 +207,10 @@ class AJSTriangle extends AJSBaseActor
             "."
           ]
 
+          options.udata.push val
           options.delays.push delay
+
+      options.cbStep = (base) => @_base += base * 2
 
       anim.property = "vertices"
       anim.options = options

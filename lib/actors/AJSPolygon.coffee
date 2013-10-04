@@ -156,6 +156,16 @@ class AJSPolygon extends AJSBaseActor
     @_rebuildVerts()
     @_updateVertices()
 
+  # Get radius
+  #
+  # @return [Number] radius
+  getRadius: -> @_radius
+
+  # Get segment count
+  #
+  # @return [Number] segments
+  getSegments: -> @_segments
+
   # This is called by AJS.mapAnimation(), which is in turn called by
   # AJS.animate() when required. You shouldn't map your animations yourself,
   # let AJS do that by passing them to AJS.animate() as-is.
@@ -176,19 +186,6 @@ class AJSPolygon extends AJSBaseActor
     # Grab current vertices
     @_fetchVertices()
 
-    # Calculate actual segments and radius
-    @_segments = (@_verts.length / 2) - 2
-
-    # Note: Radius is only an estimate! Values are always off.
-    minX = 0
-    maxX = 0
-
-    for i in [0...@_verts.length] by 2
-      if @_verts[i] < minX then minX = @_verts[i]
-      if @_verts[i] > maxX then maxX = @_verts[i]
-
-    @_radius = (maxX - minX) / 2
-
     # Attaches the appropriate prefix, returns "." for 0
     prefixVal = (val) ->
       if val == 0 then val = "."
@@ -205,6 +202,7 @@ class AJSPolygon extends AJSBaseActor
       delay = 0
       options.deltas = []
       options.delays = []
+      options.udata = []
 
       # Create delta sets
       for val in bezValues.values
@@ -212,8 +210,12 @@ class AJSPolygon extends AJSBaseActor
         delay += bezValues.stepTime
 
         if val != 0
+          options.udata.push val
           options.deltas.push @_rebuildVerts true, true, @_segments, val
           options.delays.push delay
+
+      # Update our stored radius on each step
+      options.cbStep = (radius) => @_radius = radius
 
       anim.property = "vertices"
       anim.options = options
@@ -224,6 +226,7 @@ class AJSPolygon extends AJSBaseActor
       delay = 0
       options.deltas = []
       options.delays = []
+      options.udata = []
 
       # Create delta sets
       for val in bezValues.values
@@ -231,8 +234,12 @@ class AJSPolygon extends AJSBaseActor
         delay += bezValues.stepTime
 
         if val != 0
+          options.udata.push val
           options.deltas.push @_rebuildVerts true, true, val, @_radius
           options.delays.push delay
+
+      # Update our stored seg count on each step
+      options.cbStep = (segments) => @_segments = segments
 
       anim.property = "vertices"
       anim.options = options

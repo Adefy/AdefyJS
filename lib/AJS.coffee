@@ -129,8 +129,8 @@ class AJS
 
     # Helpful below
     _registerDelayedMap = (actor, property, options, time) ->
+
       setTimeout ->
-        console.log "MAP"
         result = AJS.mapAnimation actor, property, options
         property = result.property
         options = result.options
@@ -160,6 +160,7 @@ class AJS
           result = AJS.mapAnimation actor, properties[i], options[i]
           properties[i] = result.property
           options[i] = result.options
+          Animations.animate actor.getId(), properties[i], options[i]
 
       # Animate normally if we can
       else Animations.animate actor.getId(), properties[i], options[i]
