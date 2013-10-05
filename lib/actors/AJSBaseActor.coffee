@@ -60,7 +60,7 @@ class AJSBaseActor
 
   # Fetches vertices from the engine
   _fetchVertices: ->
-    @_verts = window.AdefyGLI.Actors().getVertices @_id
+    @_verts = JSON.parse window.AdefyGLI.Actors().getVertices @_id
 
   # Return actor id
   #
