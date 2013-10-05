@@ -114,7 +114,7 @@ class AJSRectangle extends AJSBaseActor
   # options. Use this when animating a property not directly supported by
   # the engine.
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
@@ -133,12 +133,13 @@ class AJSRectangle extends AJSBaseActor
     # We have two unique properties, width and height, both of which
     # must be animated in the same way. We first calculate values at
     # each step, then generate vert deltas accordingly.
-    if property == "width"
+    if property[0] == "width"
 
       options.startVal /= 2
       options.endVal /= 2
 
       bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
       options.delays = []
@@ -177,15 +178,16 @@ class AJSRectangle extends AJSBaseActor
 
       options.cbStep = (width) => @_w += width * 2
 
-      anim.property = "vertices"
+      anim.property = ["vertices"]
       anim.options = options
 
-    else if property == "height"
+    else if property[0] == "height"
 
       options.startVal /= 2
       options.endVal /= 2
 
       bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
       options.delays = []
@@ -224,7 +226,7 @@ class AJSRectangle extends AJSBaseActor
 
       options.cbStep = (height) => @_h += height * 2
 
-      anim.property = "vertices"
+      anim.property = ["vertices"]
       anim.options = options
 
     else return super property, options
@@ -233,10 +235,10 @@ class AJSRectangle extends AJSBaseActor
 
   # Checks if the property is one we provide animation mapping for
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property == "height" or property == "width" then return true
+    if property[0] == "height" or property[0] == "width" then return true
     else return false
 
   # Checks if the mapping for the property requires an absolute modification
@@ -245,6 +247,6 @@ class AJSRectangle extends AJSBaseActor
   #
   # NOTE: This returns false for properties we don't recognize
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> false

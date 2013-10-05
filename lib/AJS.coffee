@@ -67,7 +67,7 @@ class AJS
   # @return [AJSColor3] clearcol
   @getClearColor: ->
 
-    col = window.AdefyGLI.Engine().getClearColor()
+    col = JSON.parse window.AdefyGLI.Engine().getClearColor()
     new AJSColor3 col.r, col.g, col.b
 
   # Override engine log level
@@ -111,7 +111,7 @@ class AJS
   # Start and fps are only set on animations if they do not already exist!
   #
   # @param [AJSBaseActor] actor actor to effect
-  # @param [String, Array, Array<String, Array>] properties properties to animate
+  # @param [Array, Array<Array>] properties properties to animate
   # @param [Object, Array<Object>] options animation options
   # @param [Number] start optional, animation start time (applies to all)
   # @param [Number] fps optional animation rate, defaults to 30
@@ -124,16 +124,13 @@ class AJS
 
     Animations = window.AdefyGLI.Animations()
 
-    if properties not instanceof Array then properties = [ properties ]
-    if options not instanceof Array then options = [ options ]
-
     # Helpful below
     _registerDelayedMap = (actor, property, options, time) ->
 
       setTimeout ->
         result = AJS.mapAnimation actor, property, options
-        property = result.property
-        options = result.options
+        property = JSON.stringify result.property
+        options = JSON.stringify result.options
         Animations.animate actor.getId(), property, options
       , time
 
@@ -144,11 +141,11 @@ class AJS
       # Check if the property is directly supported by the engine. If not, we
       # need to map it to the corresponding property and options structure our
       # engine requires to execute it.
-      if not Animations.canAnimate properties[i]
+      if not Animations.canAnimate properties[i][0]
 
         # Check if we can map the property
         if not actor.canMapAnimation properties[i]
-          throw new Error "Unrecognized property, can't animate!"
+          throw new Error "Unrecognized property! #{properties[i]}"
 
         # Check if an absolute change is required
         if actor.absoluteMapping properties[i]
@@ -158,12 +155,15 @@ class AJS
 
         else
           result = AJS.mapAnimation actor, properties[i], options[i]
-          properties[i] = result.property
-          options[i] = result.options
+          properties[i] = JSON.stringify result.property
+          options[i] = JSON.stringify result.options
           Animations.animate actor.getId(), properties[i], options[i]
 
       # Animate normally if we can
-      else Animations.animate actor.getId(), properties[i], options[i]
+      else
+        options[i] = JSON.stringify options[i]
+        properties[i] = JSON.stringify properties[i]
+        Animations.animate actor.getId(), properties[i], options[i]
 
   # Generates an engine-supported animation for the specified property and
   # options. Use this when animating a property not directly supported by

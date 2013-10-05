@@ -174,7 +174,7 @@ class AJSPolygon extends AJSBaseActor
   # options. Use this when animating a property not directly supported by
   # the engine.
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
@@ -193,12 +193,15 @@ class AJSPolygon extends AJSBaseActor
       else val = "#{val}"
       val
 
+    JSONopts = JSON.stringify options
+
     # We have two unique properties, radius and segments, both of which
     # must be animated in the same way. We first calculate values at
     # each step, then generate vert deltas accordingly.
-    if property == "radius"
+    if property[0] == "radius"
 
-      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
       options.delays = []
@@ -217,12 +220,13 @@ class AJSPolygon extends AJSBaseActor
       # Update our stored radius on each step
       options.cbStep = (radius) => @_radius = radius
 
-      anim.property = "vertices"
+      anim.property = ["vertices"]
       anim.options = options
 
-    else if property == "sides"
+    else if property[0] == "sides"
 
-      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
       options.delays = []
@@ -241,7 +245,7 @@ class AJSPolygon extends AJSBaseActor
       # Update our stored seg count on each step
       options.cbStep = (segments) => @_segments = segments
 
-      anim.property = "vertices"
+      anim.property = ["vertices"]
       anim.options = options
 
     else return super property, options
@@ -250,10 +254,10 @@ class AJSPolygon extends AJSBaseActor
 
   # Checks if the property is one we provide animation mapping for
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property == "sides" or property == "radius" then return true
+    if property[0] == "sides" or property[0] == "radius" then return true
     else return false
 
   # Checks if the mapping for the property requires an absolute modification
@@ -262,6 +266,6 @@ class AJSPolygon extends AJSBaseActor
   #
   # NOTE: This returns false for properties we don't recognize
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> true

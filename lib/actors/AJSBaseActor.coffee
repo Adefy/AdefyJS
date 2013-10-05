@@ -147,7 +147,7 @@ class AJSBaseActor
   # options. Use this when animating a property not directly supported by
   # the engine.
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->

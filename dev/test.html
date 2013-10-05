@@ -17,48 +17,175 @@
 <body>
   <script>
 
-    AJS.init(function() {
+    AJS.init(function () {
 
-      AJS.setClearColor(200, 50, 40);
+        AJS.setClearColor(0, 0, 0);
+        AJS.setLogLevel(4);
 
-      var a = new AJSRectangle({
-        psyx: true,
-        mass: 0,
-        friction: 0.3,
-        elasticity: 0.4,
-        w: 100,
-        h: 100,
-        position: new AJSVector2(100, 300),
-        color: new AJSColor3(40, 200, 30)
-      });
-
-      var b = new AJSRectangle({
-        psyx: true,
-        mass: 5,
-        friction: 0.3,
-        elasticity: 0.4,
-        w: 100,
-        h: 100,
-        position: new AJSVector2(100, 600)
-      });
-
-      var c = new AJSRectangle({
-        w: 300,
-        h: 75,
-        position: new AJSVector2(400, 400),
-        color: new AJSColor3(40, 50, 200)
-      });
-
-      AJS.animate(c, ["rotation", ["position", "x"]], [{
-        endVal: 400,
-        duration: 4000
-      }, {
-        endVal: 600,
-        duration: 6000,
-        start: 3000
-      }], -1);
-
-    }, 800, 600);
+        var b = new AJSPolygon({
+            "rotation": 0,
+            "position": {
+                "x": 128,
+                "y": 122
+            },
+            "color": {
+                "r": 255,
+                "g": 255,
+                "b": 255
+            },
+            "radius": 100,
+            "segments": 5
+        });
+        AJS.animate(b, [["sides"], ["color", "r"],
+            ["color", "g"],
+            ["color", "b"],
+            ["position", "x"],
+            ["position", "y"],
+            ["radius"],
+            ["sides"],
+            ["sides"],
+            ["rotation"],
+            ["sides"],
+            ["color", "r"],
+            ["color", "g"],
+            ["color", "b"]
+        ], [{
+            "endVal": 8,
+            "controlPoints": [],
+            "duration": 1083,
+            "property": "sides",
+            "start": 0,
+            "startVal": 5
+        }, {
+            "endVal": 138,
+            "controlPoints": [],
+            "duration": 1582,
+            "property": ["color", "r"],
+            "start": -1
+        }, {
+            "endVal": 231.72335083314312,
+            "controlPoints": [],
+            "duration": 1582,
+            "property": ["color", "g"],
+            "start": -1
+        }, {
+            "endVal": 98,
+            "controlPoints": [],
+            "duration": 1582,
+            "property": ["color", "b"],
+            "start": -1
+        }, {
+            "endVal": 634,
+            "controlPoints": [],
+            "duration": 2500,
+            "property": ["position", "x"],
+            "start": -1
+        }, {
+            "endVal": 141,
+            "controlPoints": [],
+            "duration": 2500,
+            "property": ["position", "y"],
+            "start": -1
+        }, {
+            "endVal": 23,
+            "controlPoints": [],
+            "duration": 2500,
+            "property": "radius",
+            "start": 0,
+            "startVal": 100
+        }, {
+            "endVal": 5,
+            "controlPoints": [],
+            "duration": 1514,
+            "property": "sides",
+            "start": 1083,
+            "startVal": 8
+        }, {
+            "endVal": 16,
+            "controlPoints": [],
+            "duration": 860,
+            "property": "sides",
+            "start": 2597,
+            "startVal": 5
+        }, {
+            "endVal": 145,
+            "controlPoints": [],
+            "duration": 4065,
+            "property": "rotation",
+            "start": -1
+        }, {
+            "endVal": 14.874418604651163,
+            "controlPoints": [],
+            "duration": 608,
+            "property": "sides",
+            "start": 3457,
+            "startVal": 16
+        }, {
+            "endVal": 255,
+            "controlPoints": [],
+            "duration": 2799,
+            "property": ["color", "r"],
+            "start": 1582
+        }, {
+            "endVal": 77,
+            "controlPoints": [],
+            "duration": 2799,
+            "property": ["color", "g"],
+            "start": 1582
+        }, {
+            "endVal": 255,
+            "controlPoints": [],
+            "duration": 2799,
+            "property": ["color", "b"],
+            "start": 1582
+        }]);
+        var c = new AJSPolygon({
+            "rotation": 0,
+            "position": {
+                "x": 123,
+                "y": 363
+            },
+            "color": {
+                "r": 255,
+                "g": 99,
+                "b": 51
+            },
+            "radius": 27,
+            "segments": 3
+        });
+        AJS.animate(c, [
+            ["position", "x"],
+            ["position", "y"],
+            ["sides"],
+            ["radius"]
+        ], [{
+            "endVal": 638,
+            "controlPoints": [],
+            "duration": 3639,
+            "property": ["position", "x"],
+            "start": -1
+        }, {
+            "endVal": 353,
+            "controlPoints": [],
+            "duration": 3639,
+            "property": ["position", "y"],
+            "start": -1
+        }, {
+            "endVal": 8,
+            "controlPoints": [],
+            "duration": 3639,
+            "property": "sides",
+            "start": 0,
+            "startVal": 3
+        }, {
+            "endVal": 116,
+            "controlPoints": [],
+            "duration": 3639,
+            "property": "radius",
+            "start": 0,
+            "startVal": 27
+        }]);
+    }, 800, 480);
 
   </script>
 </body>

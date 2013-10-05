@@ -108,7 +108,7 @@ class AJSTriangle extends AJSBaseActor
   # options. Use this when animating a property not directly supported by
   # the engine.
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
@@ -127,12 +127,13 @@ class AJSTriangle extends AJSBaseActor
     # We have two unique properties, base and height, both of which
     # must be animated in the same way. We first calculate values at
     # each step, then generate vert deltas accordingly.
-    if property == "height"
+    if property[0] == "height"
 
       options.startVal /= 2
       options.endVal /= 2
 
       bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
       options.delays = []
@@ -168,15 +169,16 @@ class AJSTriangle extends AJSBaseActor
 
       options.cbStep = (height) => @_height += height * 2
 
-      anim.property = "vertices"
+      anim.property = ["vertices"]
       anim.options = options
 
-    else if property == "base"
+    else if property[0] == "base"
 
       options.startVal /= 2
       options.endVal /= 2
 
       bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
       options.delays = []
@@ -212,7 +214,7 @@ class AJSTriangle extends AJSBaseActor
 
       options.cbStep = (base) => @_base += base * 2
 
-      anim.property = "vertices"
+      anim.property = ["vertices"]
       anim.options = options
 
     else return super property, options
@@ -221,10 +223,10 @@ class AJSTriangle extends AJSBaseActor
 
   # Checks if the property is one we provide animation mapping for
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property == "base" or property == "height" then return true
+    if property[0] == "base" or property[0] == "height" then return true
     else return false
 
   # Checks if the mapping for the property requires an absolute modification
@@ -233,6 +235,6 @@ class AJSTriangle extends AJSBaseActor
   #
   # NOTE: This returns false for properties we don't recognize
   #
-  # @param [String] property property name
+  # @param [Array<String>] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> false
