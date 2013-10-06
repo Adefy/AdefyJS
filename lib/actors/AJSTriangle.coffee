@@ -131,8 +131,9 @@ class AJSTriangle extends AJSBaseActor
 
       options.startVal /= 2
       options.endVal /= 2
+      JSONopts = JSON.stringify options
 
-      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
@@ -140,14 +141,15 @@ class AJSTriangle extends AJSBaseActor
       options.udata = []
 
       # To keep things relative, we subtract previous deltas
-      sum = bezValues.values[0]
+      sum = Number bezValues.values[0]
 
       # Create delta sets
       for val in bezValues.values
 
+        val = Number val
         val -= sum
         sum += val
-        delay += bezValues.stepTime
+        delay += Number bezValues.stepTime
 
         if val != 0
           options.deltas.push [
@@ -176,8 +178,9 @@ class AJSTriangle extends AJSBaseActor
 
       options.startVal /= 2
       options.endVal /= 2
+      JSONopts = JSON.stringify options
 
-      bezValues = window.AdefyGLI.Animations().preCalculateBez options
+      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
@@ -185,14 +188,15 @@ class AJSTriangle extends AJSBaseActor
       options.udata = []
 
       # To keep things relative, we subtract previous deltas
-      sum = bezValues.values[0]
+      sum = Number bezValues.values[0]
 
       # Create delta sets
       for val in bezValues.values
 
+        val = Number val
         val -= sum
         sum += val
-        delay += bezValues.stepTime
+        delay += Number bezValues.stepTime
 
         if val != 0
           options.deltas.push [

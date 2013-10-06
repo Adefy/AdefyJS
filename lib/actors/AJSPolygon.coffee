@@ -67,10 +67,7 @@ class AJSPolygon extends AJSBaseActor
 
     if options.psyx then @enablePsyx()
 
-    _tempVerts = @_verts
-    _tempVerts.length -= 2
-    @_setPhysicsVertices _tempVerts
-
+    @_setPhysicsVertices @_verts.slice(0, @_verts.length - 2)
     @_setRenderMode 2
 
   # Private method that rebuilds our vertex array.
@@ -116,8 +113,10 @@ class AJSPolygon extends AJSBaseActor
     # Reverse winding!
     _tv = []
     for i in [0...verts.length] by 2
-      _tv.push verts[verts.length - 2 - i]
-      _tv.push verts[verts.length - 1 - i]
+      _tv1 = verts[verts.length - 2 - i]
+      _tv2 = verts[verts.length - 1 - i]
+      if sim then _tv.push "`#{_tv1}" else _tv.push _tv1
+      if sim then _tv.push "`#{_tv2}" else _tv.push _tv2
 
     verts = _tv
 
@@ -127,8 +126,8 @@ class AJSPolygon extends AJSBaseActor
       #       the original vert array as our physical representation!
       @_setPhysicsVertices verts
 
-    verts.push 0
-    verts.push 0
+    if sim then verts.push "`0" else verts.push 0
+    if sim then verts.push "`0" else verts.push 0
 
     if sim then return verts else @_verts = verts
 
@@ -210,7 +209,8 @@ class AJSPolygon extends AJSBaseActor
       # Create delta sets
       for val in bezValues.values
 
-        delay += bezValues.stepTime
+        val = Number val
+        delay += Number bezValues.stepTime
 
         if val != 0
           options.udata.push val
@@ -235,7 +235,8 @@ class AJSPolygon extends AJSBaseActor
       # Create delta sets
       for val in bezValues.values
 
-        delay += bezValues.stepTime
+        val = Number val
+        delay += Number bezValues.stepTime
 
         if val != 0
           options.udata.push val
