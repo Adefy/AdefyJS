@@ -106,6 +106,9 @@ class AJSBaseActor
   setColor: (col) ->
     window.AdefyGLI.Actors().setActorColor col._r, col._g, col._b, @_id
 
+  setTexture: (texture) ->
+    window.AdefyGLI.Actors().setTexture texture, @_id
+
   # Get actor color
   #
   # @return [AJSColor3] color
