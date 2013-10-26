@@ -70,6 +70,7 @@ class AJSPolygon extends AJSBaseActor
     @_setPhysicsVertices @_verts.slice(0, @_verts.length - 2)
     @_setRenderMode 2
 
+  # @private
   # Private method that rebuilds our vertex array.
   #
   # @param [Boolean] ignorePsyx defaults to false, only true in constructor

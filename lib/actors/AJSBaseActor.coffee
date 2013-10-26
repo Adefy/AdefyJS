@@ -41,23 +41,27 @@ class AJSBaseActor
   destroy: ->
     window.AdefyGLI.Actors().destroyActor @_id
 
+  # @private
   # Provide an alternate set of vertices for our physics body.
   #
   # @param [Array<Number>] verts
   _setPhysicsVertices: (verts) ->
     window.AdefyGLI.Actors().setPhysicsVertices JSON.stringify(verts), @_id
 
+  # @private
   # Set render mode, documented on the interface
   #
   # @param [Number] mode
   _setRenderMode: (mode) ->
     window.AdefyGLI.Actors().setRenderMode param.required(mode, [1, 2]), @_id
 
+  # @private
   # Re-creates our actor with our current vertices. This does not modify
   # the vertices, only re-sends them!
   _updateVertices: ->
     window.AdefyGLI.Actors().updateVertices JSON.stringify(@_verts), @_id
 
+  # @private
   # Fetches vertices from the engine
   _fetchVertices: ->
     @_verts = JSON.parse window.AdefyGLI.Actors().getVertices @_id

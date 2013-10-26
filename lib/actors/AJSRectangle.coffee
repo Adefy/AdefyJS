@@ -58,6 +58,7 @@ class AJSRectangle extends AJSBaseActor
     @_fetchVertices()
     @_h = @_verts[3] * 2
 
+  # @private
   # Private method that rebuilds our vertex array, allows us to modify our
   # dimensions
   _rebuildVerts: ->
