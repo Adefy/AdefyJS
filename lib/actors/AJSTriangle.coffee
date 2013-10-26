@@ -59,6 +59,7 @@ class AJSTriangle extends AJSBaseActor
     @_fetchVertices()
     @_height = @_verts[3] * 2
 
+  # @private
   # Private method that rebuilds our vertex array.
   _rebuildVerts: ->
     hB = @_base / 2.0
