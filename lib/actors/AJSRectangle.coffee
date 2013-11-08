@@ -254,3 +254,10 @@ class AJSRectangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> false
+
+  # We're special, we get texture support. Yay us!
+  #
+  # @param [String] name texture name as per the manifest
+  setTexture: (name) ->
+    param.required name
+    window.AdefyGLI.Actors().setActorTexture name, @_id

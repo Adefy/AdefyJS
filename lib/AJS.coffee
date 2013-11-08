@@ -183,3 +183,9 @@ class AJS
 
     # We actually pass this down to the actor. Evil, eh? Muahahahaha
     actor.mapAnimation property, options
+
+  # Load package.json source; used only by the WebGL engine, in turn loads
+  # textures relative to our current path.
+  #
+  # @param [String] json valid package.json source
+  @loadManifest: (json) -> window.AdefyGLI.Engine().loadManifest json
