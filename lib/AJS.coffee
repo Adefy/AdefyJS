@@ -188,4 +188,8 @@ class AJS
   # textures relative to our current path.
   #
   # @param [String] json valid package.json source
-  @loadManifest: (json) -> window.AdefyGLI.Engine().loadManifest json
+  # @param [Method] cb callback to call after load (textures)
+  @loadManifest: (json, cb) ->
+    param.required json
+    cb = param.optional cb, ->
+    window.AdefyGLI.Engine().loadManifest json, cb
