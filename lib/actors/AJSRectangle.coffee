@@ -273,3 +273,60 @@ class AJSRectangle extends AJSBaseActor
   setTexture: (name) ->
     param.required name
     window.AdefyGLI.Actors().setActorTexture name, @_id
+    @
+
+  # Animate a resize
+  # If duration is undefined, changes are applied immediately
+  #
+  # If either width or height is null, it is left unmodified
+  #
+  # @param [Number] endW target width
+  # @param [Number] endH target height
+  # @param [Number] startW current width
+  # @param [Number] startH current height
+  # @param [Number] duration animation duration
+  # @param [Number] start animation start, default 0
+  # @param [Array<Object>] cp animation control points
+  resize: (endW, endH, startW, startH, duration, start, cp) ->
+    endW = param.optional endW, null
+    endH = param.optional endH, null
+
+    if duration == undefined
+      if endW != null then @setWidth endW
+      if endH != null then @setHeight endH
+      return @
+    else
+
+      if start == undefined then start = 0
+      if cp == undefined then cp = []
+
+      components = []
+      args = []
+
+      if endW != null
+        param.required startW
+
+        components.push ["width"]
+        args.push
+          endVal: endW
+          startVal: startW
+          controlPoints: cp
+          duration: duration
+          start: start
+          property: "width"
+
+      if endH != null
+        param.required startH
+
+        components.push ["height"]
+        args.push
+          endVal: endH
+          startVal: startH
+          controlPoints: cp
+          duration: duration
+          start: start
+          property: "height"
+
+      if components.length > 0 then AJS.animate @, components, args
+
+      @
