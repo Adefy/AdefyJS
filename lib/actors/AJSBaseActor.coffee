@@ -25,9 +25,14 @@ class AJSBaseActor
 
     @_psyx = false
 
+    # Set tverts, to pass it in later (lazy, my clipboard is currently full,
+    # etc...)
+    if @_texverts == undefined then tverts = undefined
+    else tverts = JSON.stringify @_texverts
+
     # Actual actor creation
     # convert vertices to string form
-    @_id = window.AdefyGLI.Actors().createActor JSON.stringify @_verts
+    @_id = window.AdefyGLI.Actors().createActor JSON.stringify @_verts, tverts
 
     if @_id == -1
       throw "Failed to create actor!"

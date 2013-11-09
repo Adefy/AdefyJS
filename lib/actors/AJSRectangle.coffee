@@ -26,6 +26,15 @@ class AJSRectangle extends AJSBaseActor
     if @_w <= 0 then throw "Width must be greater than 0"
     if @_h <= 0 then throw "Height must be greater than 0"
 
+    # We are the only ones with UV coords for the moment
+    @_texverts = [
+      0, 0,
+      1, 0,
+      1, 1,
+      0, 1,
+      0, 0
+    ]
+
     @_rebuildVerts()
     super @_verts, options.mass, options.friction, options.elasticity
 
