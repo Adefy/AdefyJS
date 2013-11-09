@@ -179,3 +179,126 @@ class AJSBaseActor
   # @param [String] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> false
+
+  # Schedule a rotation animation
+  # If only an angle is provided, the actor is immediately and instantly
+  # rotated
+  #
+  # @param [Number] angle target angle
+  # @param [Number] duration animation duration
+  # @param [Number] start animation start, default 0
+  # @param [Array<Object>] cp animation control points
+  rotate: (angle, duration, start, cp) ->
+    param.required angle
+
+    if duration == undefined
+      @setRotation angle
+      return @
+    else
+
+      if start == undefined then start = 0
+      if cp == undefined then cp = []
+
+      AJS.animate @, [["rotation"]], [
+        endVal: angle
+        controlPoints: cp
+        duration: duration
+        property: "rotation"
+        start: start
+      ]
+
+      @
+
+  # Schedule a movement
+  # If only target coordinates are provided, the actor is immediately and
+  # instantly moved
+  #
+  # If either coordinate is null, it is not modified
+  #
+  # @param [Number] x target x coordinate
+  # @param [Number] y target y coordinate
+  # @param [Number] duration animation duration
+  # @param [Number] start animation start, default 0
+  # @param [Array<Object>] cp animation control points
+  move: (x, y, duration, start, cp) ->
+
+    if duration == undefined
+      if x == null or x == undefined then x = @getPosition().x
+      if y == null or y == undefined then y = @getPosition().y
+
+      @setPosition { x: x, y: y }
+      return @
+    else
+
+      if start == undefined then start = 0
+      if cp == undefined then cp = []
+
+      if x not null
+        AJS.animate @, [["position", "x"]], [
+          endVal: x
+          controlPoints: cp
+          duration: duration
+          start: start
+        ]
+
+      if y not null
+        AJS.animate @, [["position", "y"]], [
+          endVal: y
+          controlPoints: cp
+          duration: duration
+          start: start
+        ]
+
+      return @
+
+  # Schedule a color change
+  # If only target components are provided the color is immediately set
+  #
+  # If either coordinate is null, it is not modified
+  #
+  # @param [Number] r target red component
+  # @param [Number] g target green component
+  # @param [Number] b target blue component
+  # @param [Number] duration animation duration
+  # @param [Number] start animation start, default 0
+  # @param [Array<Object>] cp animation control points
+  color: (r, g, b, duration, start, cp) ->
+
+    if duration == undefined
+      if r == null or r == undefined then r = @getColor().r
+      if g == null or g == undefined then g = @getColor().g
+      if b == null or b == undefined then b = @getColor().b
+
+      @setColor { _r: r, _g: g, _b: b }
+      return @
+
+    else
+
+      if start == undefined then start = 0
+      if cp == undefined then cp = []
+
+      if r not null
+        AJS.animate @, [["color", "r"]], [
+          endVal: r
+          controlPoints: cp
+          duration: duration
+          start: start
+        ]
+
+      if g not null
+        AJS.animate @, [["color", "g"]], [
+          endVal: g
+          controlPoints: cp
+          duration: duration
+          start: start
+        ]
+
+      if b not null
+        AJS.animate @, [["color", "b"]], [
+          endVal: b
+          controlPoints: cp
+          duration: duration
+          start: start
+        ]
+
+      return @
