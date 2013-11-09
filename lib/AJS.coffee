@@ -193,3 +193,80 @@ class AJS
     param.required json
     cb = param.optional cb, ->
     window.AdefyGLI.Engine().loadManifest json, cb
+
+  # Create new rectangle actor
+  #
+  # @param [Number] x x spawn coord
+  # @param [Number] y y spawn coord
+  # @param [Number] w width
+  # @param [Number] h height
+  # @param [Number] r red color component
+  # @param [Number] g green color component
+  # @param [Number] b blue color component
+  @createRectangleActor: (x, y, w, h, r, g, b) ->
+    param.required x
+    param.required y
+    param.required w
+    param.required h
+
+    new AJSRectangle
+      position: { x: x, y: y }
+      color: { r: r, g: g, b: b }
+      w: w
+      h: h
+
+  # Create a new square actor
+  #
+  # @param [Number] x x spawn coord
+  # @param [Number] y y spawn coord
+  # @param [Number] l side length
+  # @param [Number] r red color component
+  # @param [Number] g green color component
+  # @param [Number] b blue color component
+  @createSquareActor: (x, y, l, r, g, b) ->
+    AJS.createRectangleActor x, y, l, l, r, g, b
+
+  # Create a new circle actor
+  #
+  # @param [Number] x x spawn coord
+  # @param [Number] y y spawn coord
+  # @param [Number] s side count
+  # @param [Number] r red color component
+  # @param [Number] g green color component
+  # @param [Number] b blue color component
+  @createCircleActor: (x, y, s, r, g, b) ->
+    param.required x
+    param.required y
+    param.required s
+
+    new AJSPolygon
+      position: { x: x, y: y }
+      color: { r: r, g: g, b: b }
+      radius: s
+      segments: 32
+
+  # Create a new triangle actor
+  #
+  # @param [Number] x x spawn coord
+  # @param [Number] y y spawn coord
+  # @param [Number] base base width
+  # @param [Number] height height
+  # @param [Number] r red color component
+  # @param [Number] g green color component
+  # @param [Number] b blue color component
+  @createTriangleActor: (x, y, base, height, r, g, b) ->
+    param.required x
+    param.required y
+    param.required base
+    param.required height
+
+    if r == undefined then r = Math.floor (Math.random() * 255)
+    if g == undefined then g = Math.floor (Math.random() * 255)
+    if b == undefined then b = Math.floor (Math.random() * 255)
+
+    new AJSTriangle
+     position: { x: x, y: y }
+     color: { r: r, g: g, b: b }
+     base: base
+     height: height
+ 
