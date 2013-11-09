@@ -105,6 +105,7 @@ class AJSRectangle extends AJSBaseActor
     @_h = h
     @_rebuildVerts()
     @_updateVertices()
+    @
 
   # Set width. Enforces minimum, rebuilds vertices, and updates actor
   setWidth: (b) ->
@@ -115,6 +116,7 @@ class AJSRectangle extends AJSBaseActor
     @_w = b
     @_rebuildVerts()
     @_updateVertices()
+    @
 
   # This is called by AJS.mapAnimation(), which is in turn called by
   # AJS.animate() when required. You shouldn't map your animations yourself,

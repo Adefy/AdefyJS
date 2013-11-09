@@ -32,7 +32,7 @@ class AJSBaseActor
 
     # Actual actor creation
     # convert vertices to string form
-    @_id = window.AdefyGLI.Actors().createActor JSON.stringify @_verts, tverts
+    @_id = window.AdefyGLI.Actors().createActor JSON.stringify(@_verts), tverts
 
     if @_id == -1
       throw "Failed to create actor!"
@@ -83,6 +83,7 @@ class AJSBaseActor
   setPosition: (v) ->
     @_position = v
     window.AdefyGLI.Actors().setActorPosition v.x, v.y, @_id
+    @
 
   # Modifies the rotation of the native object, and stores
   # a local copy of it
@@ -93,6 +94,7 @@ class AJSBaseActor
     if radians != true then radians = false
     @_rotation = a
     window.AdefyGLI.Actors().setActorRotation a, @_id, radians
+    @
 
   # Returns the position of the object, as stored locally
   #
@@ -114,9 +116,11 @@ class AJSBaseActor
   # @param [AJSColor3] color
   setColor: (col) ->
     window.AdefyGLI.Actors().setActorColor col._r, col._g, col._b, @_id
+    @
 
   setTexture: (texture) ->
     window.AdefyGLI.Actors().setTexture texture, @_id
+    @
 
   # Get actor color
   #
@@ -143,10 +147,12 @@ class AJSBaseActor
     @_e = param.optional e, @_e
 
     @_psyx = window.AdefyGLI.Actors().enableActorPhysics @_m, @_f, @_e, @_id
+    @
 
   # Destroys the physics body if one exists
   disablePsyx: ->
     if window.AdefyGLI.Actors().destroyPhysicsBody @_id then @_psyx = false
+    @
 
   # This is called by AJS.mapAnimation(), which is in turn called by
   # AJS.animate() when required. You shouldn't map your animations yourself,
@@ -238,7 +244,7 @@ class AJSBaseActor
       if start == undefined then start = 0
       if cp == undefined then cp = []
 
-      if x not null
+      if x != null
         AJS.animate @, [["position", "x"]], [
           endVal: x
           controlPoints: cp
@@ -246,7 +252,7 @@ class AJSBaseActor
           start: start
         ]
 
-      if y not null
+      if y != null
         AJS.animate @, [["position", "y"]], [
           endVal: y
           controlPoints: cp
@@ -254,7 +260,7 @@ class AJSBaseActor
           start: start
         ]
 
-      return @
+      @
 
   # Schedule a color change
   # If only target components are provided the color is immediately set
@@ -267,7 +273,7 @@ class AJSBaseActor
   # @param [Number] duration animation duration
   # @param [Number] start animation start, default 0
   # @param [Array<Object>] cp animation control points
-  color: (r, g, b, duration, start, cp) ->
+  colorTo: (r, g, b, duration, start, cp) ->
 
     if duration == undefined
       if r == null or r == undefined then r = @getColor().r
@@ -282,7 +288,7 @@ class AJSBaseActor
       if start == undefined then start = 0
       if cp == undefined then cp = []
 
-      if r not null
+      if r != null
         AJS.animate @, [["color", "r"]], [
           endVal: r
           controlPoints: cp
@@ -290,7 +296,7 @@ class AJSBaseActor
           start: start
         ]
 
-      if g not null
+      if g != null
         AJS.animate @, [["color", "g"]], [
           endVal: g
           controlPoints: cp
@@ -298,7 +304,7 @@ class AJSBaseActor
           start: start
         ]
 
-      if b not null
+      if b != null
         AJS.animate @, [["color", "b"]], [
           endVal: b
           controlPoints: cp
@@ -306,4 +312,4 @@ class AJSBaseActor
           start: start
         ]
 
-      return @
+      @

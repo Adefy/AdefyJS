@@ -269,4 +269,3 @@ class AJS
      color: { r: r, g: g, b: b }
      base: base
      height: height
- 

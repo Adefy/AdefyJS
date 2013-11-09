@@ -143,6 +143,7 @@ class AJSPolygon extends AJSBaseActor
     @_radius = r
     @_rebuildVerts()
     @_updateVertices()
+    @
 
   # Set segments. Enforces minimum, rebuilds vertices, and updates actor
   #
@@ -155,6 +156,7 @@ class AJSPolygon extends AJSBaseActor
     @_segments = s
     @_rebuildVerts()
     @_updateVertices()
+    @
 
   # Get radius
   #
