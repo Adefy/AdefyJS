@@ -148,6 +148,40 @@ class AJSBaseActor
   disablePsyx: ->
     if window.AdefyGLI.Actors().destroyPhysicsBody @_id then @_psyx = false
 
+  # Attach a texture to the actor. This creates a square actor, textures it,
+  # and anchors it to ourselves. Use this when texturing actors that don't
+  # currently directly support textures.
+  #
+  # @param [String] texture texture name
+  # @param [Number] width attached actor width
+  # @param [Number] height attached actor height
+  # @param [Number] offx anchor point offset
+  # @param [Number] offy anchor point offset
+  # @param [Angle] angle anchor point rotation
+  attachTexture: (texture, w, h, x, y, angle) ->
+    param.required texture
+    param.required w
+    param.required h
+    x = param.optional x, 0
+    y = param.optional y, 0
+    angle = param.optional angle, 0
+
+    window.AdefyGLI.Actors().attachTexture texture, w, h, x, y, angle, @_id
+
+  # Remove attached texture if we have one
+  #
+  # @return [Boolean] success
+  removeAttachment: ->
+    return window.AdefyGLI.Actors().removeAttachment @_id
+
+  # Set attached texture visiblity
+  #
+  # @param [Boolean] visible
+  # @return [Boolean] success
+  setAttachmentVisible: (visible) ->
+    param.required visible
+    return window.AdefyGLI.Actors().setAttachmentVisible visible, @_id
+
   # This is called by AJS.mapAnimation(), which is in turn called by
   # AJS.animate() when required. You shouldn't map your animations yourself,
   # let AJS do that by passing them to AJS.animate() as-is.

@@ -7,3 +7,4 @@ build/*
 node_modules/*
 dev/js/awgl.js
 dev/js/awgl.js.map
+.DS_Store
