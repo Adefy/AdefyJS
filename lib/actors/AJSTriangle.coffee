@@ -90,6 +90,7 @@ class AJSTriangle extends AJSBaseActor
     @_height = h
     @_rebuildVerts()
     @_updateVertices()
+    @
 
   # Set base. Enforces minimum, rebuilds vertices, and updates actor
   setBase: (b) ->
@@ -100,6 +101,7 @@ class AJSTriangle extends AJSBaseActor
     @_base = b
     @_rebuildVerts()
     @_updateVertices()
+    @
 
   # This is called by AJS.mapAnimation(), which is in turn called by
   # AJS.animate() when required. You shouldn't map your animations yourself,
@@ -243,3 +245,58 @@ class AJSTriangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> false
+
+  # Animate a resize
+  # If duration is undefined, changes are applied immediately
+  #
+  # If either base or height is null, it is left unmodified
+  #
+  # @param [Number] endB target width
+  # @param [Number] endH target height
+  # @param [Number] startB current width
+  # @param [Number] startH current height
+  # @param [Number] duration animation duration
+  # @param [Number] start animation start, default 0
+  # @param [Array<Object>] cp animation control points
+  resize: (endB, endH, startB, startH, duration, start, cp) ->
+    endB = param.optional endB, null
+    endH = param.optional endH, null
+
+    if duration == undefined
+      if endB != null then @setBase endB
+      if endH != null then @setHeight endH
+      return @
+    else
+      if start == undefined then start = 0
+      if cp == undefined then cp = []
+
+      components = []
+      args = []
+
+      if endB != null
+        param.required startB
+
+        components.push ["base"]
+        args.push
+          endVal: endB
+          startVal: startB
+          controlPoints: cp
+          duration: duration
+          start: start
+          property: "base"
+
+      if endH != null
+        param.required startH
+
+        components.push ["height"]
+        args.push
+          endVal: endH
+          startVal: startH
+          controlPoints: cp
+          duration: duration
+          start: start
+          property: "height"
+
+      if components.length > 0 then AJS.animate @, components, args
+
+      @
