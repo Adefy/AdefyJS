@@ -52,6 +52,19 @@ class AJSBaseActor
   # @param [Number] layer
   setLayer: (layer) ->
     window.AdefyGLI.Actors().setActorLayer param.required(layer), @_id
+    @
+
+  # Set our physics layer. Actors will only collide if they are in the same
+  # layer! There are only 16 physics layers (1-16, with default layer 0)
+  #
+  # Default layer is 0
+  #
+  # Physics layers persist between physics body creations
+  #
+  # @param [Number] layer
+  setPhysicsLayer: (layer) ->
+    window.AdefyGLI.Actors().setActorPhysicsLayer param.required(layer), @_id
+    @
 
   # @private
   # Provide an alternate set of vertices for our physics body.
