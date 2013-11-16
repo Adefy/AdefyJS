@@ -50,6 +50,19 @@ class AJS
     # Initialize!
     @_engine.initialize ((agl) -> ad agl), width, height, 1, ""
 
+  # Set camera position. Leaving out a component leaves it unmodified
+  #
+  # @param [Number] x
+  # @param [Number] y
+  @setCameraPosition: (x, y) ->
+    window.AdefyGLI.Engine().setCameraPosition x, y
+
+  # Fetch camera position. Returns an object with x, y keys
+  #
+  # @return [Object] pos
+  @getCameraPosition: ->
+    JSON.parse window.AdefyGLI.Engine().getCameraPosition()
+
   # Set renderer clear color, component values between 0 and 255
   #
   # @param [Number] r
