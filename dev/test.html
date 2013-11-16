@@ -33,15 +33,16 @@
 
             for(var i = 0; i < 7; i++) {
               AJS.createRectangleActor(120 + (100 * i), 0, 100, 100)
-              .enablePsyx(0, 1, 0.1);
+              .enablePsyx(0, 1, 0.1).setLayer(1000);
             }
 
             c = AJS.createCircleActor(200, 600, 50);
             c.enablePsyx(50, 0.5, 0.1);
             c.attachTexture("bowtie", 256, 512);
+            c.setLayer(1500);
 
             AJS.createTriangleActor(180, 300, 30, 60)
-            .enablePsyx(100, 0.5, 0.9);
+            .enablePsyx(100, 0.5, 0.9).setLayer(2000);
 
         });
     }, 1280, 720);

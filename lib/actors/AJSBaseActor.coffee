@@ -46,11 +46,19 @@ class AJSBaseActor
   destroy: ->
     window.AdefyGLI.Actors().destroyActor @_id
 
+  # Set our render layer. Higher layers render last (on top)
+  # Default layer is 0
+  #
+  # @param [Number] layer
+  setLayer: (layer) ->
+    window.AdefyGLI.Actors().setActorLayer param.required(layer), @_id
+
   # @private
   # Provide an alternate set of vertices for our physics body.
   #
   # @param [Array<Number>] verts
   _setPhysicsVertices: (verts) ->
+    param.required verts
     window.AdefyGLI.Actors().setPhysicsVertices JSON.stringify(verts), @_id
 
   # @private
