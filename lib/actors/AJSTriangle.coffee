@@ -45,6 +45,12 @@ class AJSTriangle extends AJSBaseActor
 
     if options.psyx then @enablePsyx()
 
+  # Creates the engine actor object
+  #
+  # @return [Number] id actor id
+  interfaceActorCreate: ->
+    window.AdefyGLI.Actors().createPolygonActor JSON.stringify @_verts
+
   # Fetches vertices from engine and returns base
   #
   # @return [Number] base

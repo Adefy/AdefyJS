@@ -20,26 +20,31 @@ class AJSBaseActor
     @_f = param.optional friction, 0.2
     @_e = param.optional elasticity, 0.3
 
+    if @interfaceActorCreate == null
+      throw new Error "Actor class doesn't provide interface actor creation!"
+
     if mass < 0 then mass = 0
-    if @_verts.length < 6 then throw "At least three vertices must be provided"
+    if @_verts.length < 6
+      throw new Error "At least three vertices must be provided"
 
     @_psyx = false
 
-    # Set tverts, to pass it in later (lazy, my clipboard is currently full,
-    # etc...)
-    if @_texverts == undefined then tverts = undefined
-    else tverts = JSON.stringify @_texverts
-
     # Actual actor creation
-    # convert vertices to string form
-    @_id = window.AdefyGLI.Actors().createActor JSON.stringify(@_verts), tverts
+    @_id = @interfaceActorCreate()
 
     if @_id == -1
-      throw "Failed to create actor!"
+      throw new Error "Failed to create actor!"
 
     @setPosition new AJSVector2()
     @setRotation 0
     @setColor new AJSColor3 255, 255, 255
+
+  # Creates the engine actor object
+  #
+  # This method needs to be overloaded in all child classes
+  #
+  # @return [Number] id actor id
+  interfaceActorCreate: null
 
   # De-registers the actor, clearing the physics and visual bodies.
   # Note that the instance in question should not be used after this is called!

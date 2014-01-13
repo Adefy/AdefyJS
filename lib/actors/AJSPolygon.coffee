@@ -70,6 +70,12 @@ class AJSPolygon extends AJSBaseActor
     @_setPhysicsVertices @_verts.slice(0, @_verts.length - 2)
     @_setRenderMode 2
 
+  # Creates the engine actor object
+  #
+  # @return [Number] id actor id
+  interfaceActorCreate: ->
+    window.AdefyGLI.Actors().createCircleActor JSON.stringify(@_verts), @_radius
+
   # @private
   # Private method that rebuilds our vertex array.
   #

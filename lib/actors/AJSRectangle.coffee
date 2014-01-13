@@ -20,20 +20,11 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
     options = param.required options
-    @_w = param.required options.w
-    @_h = param.required options.h
+    @_width = param.required options.w
+    @_height = param.required options.h
 
-    if @_w <= 0 then throw "Width must be greater than 0"
-    if @_h <= 0 then throw "Height must be greater than 0"
-
-    # We are the only ones with UV coords for the moment
-    @_texverts = [
-      0, 0,
-      1, 0,
-      1, 1,
-      0, 1,
-      0, 0
-    ]
+    if @_width <= 0 then throw new Error "Width must be greater than 0"
+    if @_height <= 0 then throw new Error "Height must be greater than 0"
 
     @_rebuildVerts()
     super @_verts, options.mass, options.friction, options.elasticity
@@ -53,19 +44,25 @@ class AJSRectangle extends AJSBaseActor
 
     if options.psyx then @enablePsyx()
 
-  # Fetches vertices from engine and returns width
+  # Creates the engine actor object
+  #
+  # @return [Number] id actor id
+  interfaceActorCreate: ->
+    window.AdefyGLI.Actors().createRectangleActor @getWidth(), @getHeight()
+
+  # Fetches and saves vertices from engine and returns width
   #
   # @return [Number] width
   getWidth: ->
     @_fetchVertices()
-    @_w = @_verts[4] * 2
+    @_width = @_verts[4] * 2
 
-  # Fetches vertices from engine and returns height
+  # Fetches and saves vertices from engine and returns height
   #
   # @return [Number] height
   getHeight: ->
     @_fetchVertices()
-    @_h = @_verts[3] * 2
+    @_height = @_verts[3] * 2
 
   # @private
   # Private method that rebuilds our vertex array, allows us to modify our
@@ -73,8 +70,8 @@ class AJSRectangle extends AJSBaseActor
   _rebuildVerts: ->
 
     # Build vertices
-    hW = @_w / 2.0
-    hH = @_h / 2.0
+    hW = @_width / 2.0
+    hH = @_height / 2.0
 
     # Extra vert caps the shape
     @_verts = []
@@ -102,7 +99,7 @@ class AJSRectangle extends AJSBaseActor
 
     if h <= 0 then throw new Error "New height must be >0 !"
 
-    @_h = h
+    @_height = h
     @_rebuildVerts()
     @_updateVertices()
     @
@@ -113,7 +110,7 @@ class AJSRectangle extends AJSBaseActor
 
     if b <= 0 then throw new Error "New width must be >0 !"
 
-    @_w = b
+    @_width = b
     @_rebuildVerts()
     @_updateVertices()
     @
@@ -190,7 +187,7 @@ class AJSRectangle extends AJSBaseActor
           options.udata.push val * 2
           options.delays.push delay
 
-      options.cbStep = (width) => @_w += width * 2
+      options.cbStep = (width) => @_width += width * 2
 
       anim.property = ["vertices"]
       anim.options = options
@@ -240,7 +237,7 @@ class AJSRectangle extends AJSBaseActor
           options.udata.push val
           options.delays.push delay
 
-      options.cbStep = (height) => @_h += height * 2
+      options.cbStep = (height) => @_height += height * 2
 
       anim.property = ["vertices"]
       anim.options = options
