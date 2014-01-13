@@ -95,7 +95,14 @@ class AJSBaseActor
   # @private
   # Fetches vertices from the engine
   _fetchVertices: ->
-    @_verts = JSON.parse window.AdefyGLI.Actors().getVertices @_id
+    res = window.AdefyGLI.Actors().getVertices @_id
+    if res.length > 0
+      try
+        @_verts = JSON.parse res
+      catch e
+        console.error "Invalid verts [#{e}]: #{res}"
+
+    @_verts
 
   # Return actor id
   #

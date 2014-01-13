@@ -48,7 +48,7 @@ class AJSRectangle extends AJSBaseActor
   #
   # @return [Number] id actor id
   interfaceActorCreate: ->
-    window.AdefyGLI.Actors().createRectangleActor @getWidth(), @getHeight()
+    window.AdefyGLI.Actors().createRectangleActor @_width, @_height
 
   # Fetches and saves vertices from engine and returns width
   #
