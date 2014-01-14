@@ -74,7 +74,7 @@ class AJSPolygon extends AJSBaseActor
   #
   # @return [Number] id actor id
   interfaceActorCreate: ->
-    window.AdefyGLI.Actors().createCircleActor JSON.stringify(@_verts), @_radius
+    window.AdefyGLI.Actors().createPolygonActor @_radius, @_segments
 
   # @private
   # Private method that rebuilds our vertex array.
@@ -127,7 +127,7 @@ class AJSPolygon extends AJSBaseActor
 
     verts = _tv
 
-    if !ignorePsyx and not sim
+    if not ignorePsyx and not sim
 
       # NOTE: We need to prepend ourselves with (0, 0) for rendering, but pass
       #       the original vert array as our physical representation!

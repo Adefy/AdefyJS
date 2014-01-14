@@ -24,33 +24,125 @@
         "path": "bowtie.png",
         "compression": "none",
         "type": "image",
-        "name": "bowtie"
+        "name": "sit"
       }]
     };
 
     AJS.init(function () {
         AJS.loadManifest(JSON.stringify(manifest), function() {
 
-            for(var i = 0; i < 7; i++) {
-              AJS.createRectangleActor(120 + (100 * i), 0, 100, 100)
-              .enablePsyx(0, 1, 0.1).setLayer(1000);
-            }
+      color = new AJSColor3(111, 0, 111)
+      position = new AJSVector2(200, 800);
 
-            c = AJS.createCircleActor(200, 600, 50);
-            c.enablePsyx(50, 0.5, 0.1);
-            c.attachTexture("bowtie", 256, 512);
-            c.setLayer(1500);
-            c.setPhysicsLayer(6);
+      //- setClearColor (r, g, b)
+      AJS.setClearColor(173, 216, 230);
 
-            AJS.createTriangleActor(180, 300, 30, 60)
-            .enablePsyx(100, 0.5, 0.9).setLayer(2000);
+      //- getClearColor ()
+      console.log("ClearColor: " + AJS.getClearColor());
 
-            var posX = 0;
+      AJS.createCircleActor(1180, 620, 50)
+      .setColor(new AJSColor3(255, 0, 255));
 
-            setInterval(function() {
-              posX++;
-              AJS.setCameraPosition(posX);
-            }, 50);
+      // - createActor (vertices, textureVertices)
+      // - setActorPosition (x, y, id)
+      testActor = AJS.createRectangleActor(300, 300, 200, 200)
+
+      // - setActorColor (r, g, b, id)
+      // - setActorRotation (angle, id, radians)
+      // - setActorLayer (layer, id)
+      .setColor(color).setRotation(33).setLayer(1);
+
+      // - getActorColor (id)
+      console.log("getActorColor: " + testActor.getColor());
+
+      // - getActorRotation (id, radians)
+      console.log("getActorRotation: " + testActor.getRotation());
+
+      // set position and resize test
+      setTimeout(function() {
+        testActor.setPosition(position);
+        // - animate: (id, property[vertices/size], options)
+        // - getVertices (id)
+        testActor.resize(100, 500, 300, 300, 400, 0);
+      }, 500);
+
+      // rotate test
+      setTimeout(function() {
+        // - animate: (id, property[rotation], options)
+        testActor.rotate(-90, 1000, 0);
+      }, 1100);
+
+      // color animation test
+      setTimeout(function() {
+        // - animate: (id, property[color], options)
+        testActor.colorTo(111, 111, 0, 1000, 0);
+      }, 2200);
+
+      // position animation test
+      setTimeout(function() {
+        // - animate: (id, property[position], options)
+        testActor.move(360, 900, 1000, 0);
+      }, 3400);
+
+      // texture and enabling physics test
+      setTimeout(function() {
+
+        // - setActorTexture (texture, id)
+        testActor.setTexture("sit");
+
+        // - enableActorPhysics (mass, friction, elasticity, id)
+        // - setPhysicsVertices (vertices, id) X
+        testActor.enablePsyx(1, 0.5, 0.6);
+        floor = AJS.createRectangleActor(150, 150, 1000, 50)
+        .setColor(color).setLayer(2).enablePsyx(0, 0.1, 1);
+      }, 5000);
+
+      //drop test
+      setTimeout(function() {
+        // - destroyPhysicsBody (id)
+        floor.disablePsyx();
+      }, 7000);
+
+      // destroy bodies test
+      setTimeout(function() {
+        // - destroyActor (id)
+        floor.destroy();
+        testActor.destroy();
+      }, 8000);
+
+      // change background colour
+      setTimeout(function() {
+        // - setClearColor (r, g, b)
+        AJS.setClearColor(255, 255, 0);
+      }, 8300)
+
+      // test psyx layers
+      setTimeout(function() {
+
+        floor = AJS.createRectangleActor(250, 50, 1000, 50)
+        .setColor(color).setLayer(2).enablePsyx(0, 0.1, 1);
+        time = 0;
+        for(var y = 0; y < 14; y++) {
+          for(var x = 0; x < 8; x++) {
+
+            time += 15;
+
+            setTimeout(function() {
+
+              var psyxLayer = Math.floor(Math.random() * 4);
+              var px = Math.floor(Math.random() * 50) + 200;
+              var py = Math.floor(Math.random() * 100) + 1100;
+              var r = Math.floor(Math.random() * 256);
+              var g = Math.floor(Math.random() * 256);
+              var b = Math.floor(Math.random() * 256);
+              color = new AJSColor3(r, g, b);
+              // - setActorPhysicsLayer (layer, id)
+              AJS.createRectangleActor(px, py, 50, 50).setPhysicsLayer(psyxLayer)
+              .setColor(color).enablePsyx(1, 0.5, 0.6);
+            }, time);
+          }
+        }
+      }, 8400)
 
         });
     }, 1280, 720);

@@ -48,7 +48,7 @@ class AJS
     @_engine = window.AdefyGLI.Engine()
 
     # Initialize!
-    @_engine.initialize ((agl) -> ad agl), width, height, 1, ""
+    @_engine.initialize width, height, ((agl) -> ad agl), 1
 
   # Set camera position. Leaving out a component leaves it unmodified
   #
@@ -243,20 +243,33 @@ class AJS
   #
   # @param [Number] x x spawn coord
   # @param [Number] y y spawn coord
-  # @param [Number] s side count
+  # @param [Number] radius
   # @param [Number] r red color component
   # @param [Number] g green color component
   # @param [Number] b blue color component
-  @createCircleActor: (x, y, s, r, g, b) ->
+  @createCircleActor: (x, y, radius, r, g, b) ->
+    AJS.createPolygonActor x, y, radius, 32, r, g, b
+
+  # Create a new circle actor
+  #
+  # @param [Number] x x spawn coord
+  # @param [Number] y y spawn coord
+  # @param [Number] radius
+  # @param [Number] segments
+  # @param [Number] r red color component
+  # @param [Number] g green color component
+  # @param [Number] b blue color component
+  @createPolygonActor: (x, y, radius, segments, r, g, b) ->
     param.required x
     param.required y
-    param.required s
+    param.required radius
+    param.required segments
 
     new AJSPolygon
       position: { x: x, y: y }
       color: { r: r, g: g, b: b }
-      radius: s
-      segments: 32
+      radius: radius
+      segments: segments
 
   # Create a new triangle actor
   #
