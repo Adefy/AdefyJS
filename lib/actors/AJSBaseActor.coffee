@@ -155,6 +155,12 @@ class AJSBaseActor
     window.AdefyGLI.Actors().setTexture texture, @_id
     @
 
+  setTextureRepeat: (x, y) ->
+    y = param.optional y, 1
+
+    window.AdefyGLI.Actors().setActorTextureRepeat x, y, @_id
+    @
+
   # Get actor color
   #
   # @return [AJSColor3] color
