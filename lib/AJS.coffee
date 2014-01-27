@@ -296,11 +296,11 @@ class AJS
      base: base
      height: height
 
-  # Get texture by name
+  # Get texture size by name
   #
   # @param [String] name
-  # @return [Object] texture
-  @getTexture: (name) ->
+  # @return [Object] size
+  @getTextureSize: (name) ->
     param.required name
 
-    window.AdefyGLI.Engine().getTexture name
+    window.AdefyGLI.Engine().getTextureSize name
