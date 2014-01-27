@@ -295,3 +295,12 @@ class AJS
      color: { r: r, g: g, b: b }
      base: base
      height: height
+
+  # Get texture by name
+  #
+  # @param [String] name
+  # @return [Object] texture
+  @getTexture: (name) ->
+    param.required name
+
+    window.AdefyGLI.Engine().getTexture name
