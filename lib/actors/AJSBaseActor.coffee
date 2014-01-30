@@ -1,11 +1,7 @@
-##
-## Copyright © 2013 Spectrum IT Solutions Gmbh - All Rights Reserved
-##
-
 # Base actor class, defines all primitive methods and handles interactions
 # with the native engine. This merely represents a handle on an internal actor
 #
-# @depend ../util/AJSVector2.coffee
+## @depend ../util/AJSVector2.coffee
 class AJSBaseActor
 
   # Instantiates the actor in the engine, gets a handle for it

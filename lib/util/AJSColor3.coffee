@@ -1,7 +1,3 @@
-##
-## Copyright © 2013 Spectrum IT Solutions Gmbh - All Rights Reserved
-##
-
 # Color class, holds r/g/b components
 #
 # Serves to provide a consistent structure for defining colors, and offers

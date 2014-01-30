@@ -1,12 +1,8 @@
-##
-## Copyright © 2013 Spectrum IT Solutions Gmbh - All Rights Reserved
-##
-
 # Implements a rectangular actor
 #
-# @depend AJSBaseActor.coffee
-# @depend ../util/AJSVector2.coffee
-# @depend ../util/AJSColor3.coffee
+## @depend AJSBaseActor.coffee
+## @depend ../util/AJSVector2.coffee
+## @depend ../util/AJSColor3.coffee
 class AJSRectangle extends AJSBaseActor
 
   # Set up vertices, with the resulting rectangle centered around its position

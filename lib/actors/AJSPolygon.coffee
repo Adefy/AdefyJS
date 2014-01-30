@@ -1,7 +1,3 @@
-##
-## Copyright © 2013 Spectrum IT Solutions Gmbh - All Rights Reserved
-##
-
 # Implements a variable-side polygon actor. The android engine implements
 # this natively!
 #
@@ -23,9 +19,9 @@
 # NOTE 3: Things work alright if you animate the radius first, then the seg
 #         count. Keep this in mind.
 #
-# @depend AJSBaseActor.coffee
-# @depend ../util/AJSVector2.coffee
-# @depend ../util/AJSColor3.coffee
+## @depend AJSBaseActor.coffee
+## @depend ../util/AJSVector2.coffee
+## @depend ../util/AJSColor3.coffee
 class AJSPolygon extends AJSBaseActor
 
   # Set up vertices, with the resulting nGon centered around its position
