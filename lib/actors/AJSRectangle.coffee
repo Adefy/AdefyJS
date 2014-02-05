@@ -44,6 +44,7 @@ class AJSRectangle extends AJSBaseActor
   #
   # @return [Number] id actor id
   interfaceActorCreate: ->
+    AJS.info "Creating rectangle actor (#{@_width}x#{@_height})"
     window.AdefyGLI.Actors().createRectangleActor @_width, @_height
 
   # Fetches and saves vertices from engine and returns width
@@ -144,6 +145,7 @@ class AJSRectangle extends AJSBaseActor
       options.endVal /= 2
       JSONopts = JSON.stringify options
 
+      AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
       bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
@@ -194,6 +196,7 @@ class AJSRectangle extends AJSBaseActor
       options.endVal /= 2
       JSONopts = JSON.stringify options
 
+      AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
       bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
@@ -265,6 +268,8 @@ class AJSRectangle extends AJSBaseActor
   # @param [String] name texture name as per the manifest
   setTexture: (name) ->
     param.required name
+
+    AJS.info "Setting rectangle actor (#{@_id}) texture [#{name}]"
     window.AdefyGLI.Actors().setActorTexture name, @_id
     @
 

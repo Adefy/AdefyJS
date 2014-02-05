@@ -27,7 +27,7 @@ class AJSColor3
         return 0.0
       else
         return 0
-    return @_r / 255
+    @_r / 255
 
   # Returns the green component as either an int or float
   #
@@ -40,7 +40,7 @@ class AJSColor3
         return 0.0
       else
         return 0
-    return @_g / 255
+    @_g / 255
 
   # Returns the blue component as either an int or float
   #
@@ -53,7 +53,7 @@ class AJSColor3
         return 0.0
       else
         return 0
-    return @_b / 255
+    @_b / 255
 
   # Set red component, takes a value between 0-255
   #

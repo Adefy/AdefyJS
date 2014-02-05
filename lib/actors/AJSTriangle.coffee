@@ -45,6 +45,7 @@ class AJSTriangle extends AJSBaseActor
   #
   # @return [Number] id actor id
   interfaceActorCreate: ->
+    AJS.info "Creating triangle actor..."
     window.AdefyGLI.Actors().createRawActor JSON.stringify @_verts
 
   # Fetches vertices from engine and returns base
@@ -138,6 +139,7 @@ class AJSTriangle extends AJSBaseActor
       options.endVal /= 2
       JSONopts = JSON.stringify options
 
+      AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
       bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
@@ -185,6 +187,7 @@ class AJSTriangle extends AJSBaseActor
       options.endVal /= 2
       JSONopts = JSON.stringify options
 
+      AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
       bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0

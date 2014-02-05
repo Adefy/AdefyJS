@@ -21,6 +21,10 @@ class AJS
   # @private
   @_initialized: false
 
+  # Log level, between 0 and 4
+  # @private
+  @_logLevel: 2
+
   # AJS is a singleton, do not instantiate! Constructor throws an error.
   constructor: -> throw new Error "AJS shouldn't be instantiated!"
 
@@ -37,27 +41,107 @@ class AJS
 
     # Should never happen, so don't fail quietly
     if AJS._initialized
-      throw new Error "AJS can only be initialized once"
-      return
+      return @error "AJS can only be initialized once"
     else AJS._initialized = true
 
     @_engine = window.AdefyGLI.Engine()
 
     # Initialize!
-    @_engine.initialize width, height, ((agl) -> ad agl), 1
+    @_engine.initialize width, height, ((agl) -> ad agl), 2
+    @info "Initialized AJS"
+
+  # Override AJS and engine log level
+  #
+  # @param [Number] level 0-4
+  @setLogLevel: (level) ->
+    param.required level, [0, 1, 2, 3, 4]
+    @info "Setting log level to #{level}"
+
+    window.AdefyGLI.Engine().setLogLevel level
+    @_logLevel = level
+    @
+
+  # Base logging statement, issues the log message with an optional prefix
+  # if the current log level allows it
+  #
+  # @param [Number] level
+  # @param [String] message
+  # @param [String] prefix optional prefix
+  @log: (level, message, prefix) ->
+    if prefix == undefined then prefix = ""
+
+    # Return early if not at a suiteable level, or level is 0
+    if level > @_logLevel or level == 0 or @_logLevel == 0 then return
+
+    # Specialized console output
+    if level == 1 and console.error != undefined
+      if console.error then console.error "#{prefix}#{message}"
+      else console.log "#{prefix}#{message}"
+    else if level == 2 and console.warn != undefined
+      if console.warn then console.warn "#{prefix}#{message}"
+      else console.log "#{prefix}#{message}"
+    else if level == 3 and console.debug != undefined
+      if console.debug then console.debug "#{prefix}#{message}"
+      else console.log "#{prefix}#{message}"
+    else if level == 4 and console.info != undefined
+      if console.info then console.info "#{prefix}#{message}"
+      else console.log "#{prefix}#{message}"
+    else if level > 4 and me.tags[level] != undefined
+        console.log "#{prefix}#{message}"
+      else
+        console.log message
+
+  # Shortcut for logging a warning. Nothing is logged if the log level is not
+  # at least 2
+  #
+  # @param [String] message
+  @warning: (message) ->
+    @log 2, message, "[WARNING] "
+    @
+
+  # Shortcut for logging a warning. Nothing is logged if the log level is not
+  # at least 1
+  #
+  # @param [String] message
+  @error: (message) ->
+    @log 1, message, "[ERROR] "
+    @
+
+  # Shortcut for logging a warning. Nothing is logged if the log level is not
+  # at least 4
+  #
+  # @param [String] message
+  @info: (message) ->
+    @log 4, message, "[INFO] "
+    @
+
+  # Shortcut for logging a warning. Nothing is logged if the log level is not
+  # at least 3
+  #
+  # @param [String] message
+  @debug: (message) ->
+    @log 3, message, "[DEBUG] "
+    @
 
   # Set camera position. Leaving out a component leaves it unmodified
   #
   # @param [Number] x
   # @param [Number] y
   @setCameraPosition: (x, y) ->
+    param.required x
+    param.required y
+
+    @info "Setting camera position (#{x}, #{y})"
     window.AdefyGLI.Engine().setCameraPosition x, y
+    @
 
   # Fetch camera position. Returns an object with x, y keys
   #
   # @return [Object] pos
   @getCameraPosition: ->
+    @info "Fetching camera position..."
     JSON.parse window.AdefyGLI.Engine().getCameraPosition()
+    @
 
   # Set renderer clear color, component values between 0 and 255
   #
@@ -68,6 +152,7 @@ class AJS
     param.required r
     param.required g
     param.required b
+    @info "Setting clear color to (#{r}, #{g}, #{b})"
 
     window.AdefyGLI.Engine().setClearColor r, g, b
 
@@ -75,17 +160,10 @@ class AJS
   #
   # @return [AJSColor3] clearcol
   @getClearColor: ->
+    @info "Fetching clear color..."
 
     col = JSON.parse window.AdefyGLI.Engine().getClearColor()
     new AJSColor3 col.r, col.g, col.b
-
-  # Override engine log level
-  #
-  # @param [Number] level 0-4
-  @setLogLevel: (level) ->
-    param.required level, [0, 1, 2, 3, 4]
-
-    window.AdefyGLI.Engine().setLogLevel level
 
   @_syntheticMap:
 
@@ -201,6 +279,8 @@ class AJS
   @loadManifest: (json, cb) ->
     param.required json
     cb = param.optional cb, ->
+    @info "Loading manifest #{JSON.stringify json}"
+
     window.AdefyGLI.Engine().loadManifest json, cb
 
   # Create new rectangle actor
@@ -298,5 +378,6 @@ class AJS
   # @return [Object] size
   @getTextureSize: (name) ->
     param.required name
+    @info "Fetching texture size by name (#{name})"
 
     window.AdefyGLI.Engine().getTextureSize name

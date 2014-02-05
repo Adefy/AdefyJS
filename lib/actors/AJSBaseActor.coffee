@@ -45,6 +45,7 @@ class AJSBaseActor
   # De-registers the actor, clearing the physics and visual bodies.
   # Note that the instance in question should not be used after this is called!
   destroy: ->
+    AJS.info "Destroying actor #{@_id}"
     window.AdefyGLI.Actors().destroyActor @_id
 
   # Set our render layer. Higher layers render last (on top)
@@ -52,6 +53,7 @@ class AJSBaseActor
   #
   # @param [Number] layer
   setLayer: (layer) ->
+    AJS.info "Setting actor (#{@_id}) layer #{layer}"
     window.AdefyGLI.Actors().setActorLayer param.required(layer), @_id
     @
 
@@ -64,6 +66,7 @@ class AJSBaseActor
   #
   # @param [Number] layer
   setPhysicsLayer: (layer) ->
+    AJS.info "Setting actor (#{@_id}) physics layer #{layer}"
     window.AdefyGLI.Actors().setActorPhysicsLayer param.required(layer), @_id
     @
 
@@ -73,6 +76,7 @@ class AJSBaseActor
   # @param [Array<Number>] verts
   _setPhysicsVertices: (verts) ->
     param.required verts
+    AJS.info "Setting actor physics vertices (#{@_id}) [#{verts.length} verts]"
     window.AdefyGLI.Actors().setPhysicsVertices JSON.stringify(verts), @_id
 
   # @private
@@ -80,17 +84,20 @@ class AJSBaseActor
   #
   # @param [Number] mode
   _setRenderMode: (mode) ->
+    AJS.info "Setting actor (#{@_id}) render mode #{mode}"
     window.AdefyGLI.Actors().setRenderMode param.required(mode, [1, 2]), @_id
 
   # @private
   # Re-creates our actor with our current vertices. This does not modify
   # the vertices, only re-sends them!
   _updateVertices: ->
+    AJS.info "Updating actor (#{@_id}) vertices [#{@_verts.length} verts]"
     window.AdefyGLI.Actors().updateVertices JSON.stringify(@_verts), @_id
 
   # @private
   # Fetches vertices from the engine
   _fetchVertices: ->
+    AJS.info "Fetching actor vertices (#{@_id})..."
     res = window.AdefyGLI.Actors().getVertices @_id
     if res.length > 0
       try
@@ -110,6 +117,7 @@ class AJSBaseActor
   #
   # @param [AJSVector2] position New position
   setPosition: (v) ->
+    AJS.info "Setting actor position (#{@_id}) #{JSON.stringify v}"
     @_position = v
     window.AdefyGLI.Actors().setActorPosition v.x, v.y, @_id
     @
@@ -120,6 +128,8 @@ class AJSBaseActor
   # @param [Number] angle New angle in degrees
   # @param [Boolean] radians set in radians, defaults to false
   setRotation: (a, radians) ->
+    AJS.info "Setting actor (#{@_id}) rotation #{a} [radians: #{radians}]"
+
     if radians != true then radians = false
     @_rotation = a
     window.AdefyGLI.Actors().setActorRotation a, @_id, radians
@@ -129,6 +139,8 @@ class AJSBaseActor
   #
   # @return [AJSVector2] Position
   getPosition: ->
+    AJS.info "Fetching actor position..."
+
     raw = JSON.parse window.AdefyGLI.Actors().getActorPosition @_id
     return new AJSVector2 raw.x, raw.y
 
@@ -137,6 +149,8 @@ class AJSBaseActor
   # @param [Boolean] radians return in radians, defaults to false
   # @return [Number] Angle in degrees
   getRotation: (radians) ->
+    AJS.info "Fetching actor rotation [radians: #{radians}]..."
+
     if radians != true then radians = false
     return window.AdefyGLI.Actors().getActorRotation @_id, radians
 
@@ -144,15 +158,18 @@ class AJSBaseActor
   #
   # @param [AJSColor3] color
   setColor: (col) ->
+    AJS.info "Setting actor (#{@_id}) color #{JSON.stringify col}"
     window.AdefyGLI.Actors().setActorColor col._r, col._g, col._b, @_id
     @
 
   setTexture: (texture) ->
+    AJS.info "Setting actor (#{@_id}) texture #{texture}"
     window.AdefyGLI.Actors().setTexture texture, @_id
     @
 
   setTextureRepeat: (x, y) ->
     y = param.optional y, 1
+    AJS.info "Setting actor (#{@_id}) texture repeat (#{x}, #{y})"
 
     window.AdefyGLI.Actors().setActorTextureRepeat x, y, @_id
     @
@@ -161,8 +178,9 @@ class AJSBaseActor
   #
   # @return [AJSColor3] color
   getColor: ->
+    AJS.info "Fetching actor (#{@_id}) color..."
     raw = JSON.parse window.AdefyGLI.Actors().getActorColor @_id
-    return new AJSColor3 raw.r, raw.g, raw.b
+    new AJSColor3 raw.r, raw.g, raw.b
 
   # Check if psyx simulation is enabled
   #
@@ -175,17 +193,17 @@ class AJSBaseActor
   # @param [Number] friction 0.0 - 1.0
   # @param [Number] elasticity 0.0 - 1.0
   enablePsyx: (m, f, e) ->
-
-    # Supply our values if not passed in
     @_m = param.optional m, @_m
     @_f = param.optional f, @_f
     @_e = param.optional e, @_e
+    AJS.info "Enabling actor physics (#{@_id}) [m: #{m}, f: #{f}, e: #{e}]"
 
     @_psyx = window.AdefyGLI.Actors().enableActorPhysics @_m, @_f, @_e, @_id
     @
 
   # Destroys the physics body if one exists
   disablePsyx: ->
+    AJS.info "Disabling actor (#{@_id}) physics..."
     if window.AdefyGLI.Actors().destroyPhysicsBody @_id then @_psyx = false
     @
 
@@ -207,13 +225,15 @@ class AJSBaseActor
     y = param.optional y, 0
     angle = param.optional angle, 0
 
+    AJS.info "Attaching texture #{texture} #{w}x#{h} to actor (#{@_id})"
     window.AdefyGLI.Actors().attachTexture texture, w, h, x, y, angle, @_id
 
   # Remove attached texture if we have one
   #
   # @return [Boolean] success
   removeAttachment: ->
-    return window.AdefyGLI.Actors().removeAttachment @_id
+    AJS.info "Removing actor (#{@_id}) texture attachment"
+    window.AdefyGLI.Actors().removeAttachment @_id
 
   # Set attached texture visiblity
   #
@@ -221,7 +241,8 @@ class AJSBaseActor
   # @return [Boolean] success
   setAttachmentVisible: (visible) ->
     param.required visible
-    return window.AdefyGLI.Actors().setAttachmentVisible visible, @_id
+    AJS.info "Setting actor texture attachment visiblity [#{visible}]"
+    window.AdefyGLI.Actors().setAttachmentVisible visible, @_id
 
   # This is called by AJS.mapAnimation(), which is in turn called by
   # AJS.animate() when required. You shouldn't map your animations yourself,

@@ -70,6 +70,7 @@ class AJSPolygon extends AJSBaseActor
   #
   # @return [Number] id actor id
   interfaceActorCreate: ->
+    AJS.info "Creating polygon actor (R: #{@_radius}, S: #{@_segments})"
     window.AdefyGLI.Actors().createPolygonActor @_radius, @_segments
 
   # @private
@@ -204,6 +205,7 @@ class AJSPolygon extends AJSBaseActor
     # each step, then generate vert deltas accordingly.
     if property[0] == "radius"
 
+      AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
       bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
@@ -230,6 +232,7 @@ class AJSPolygon extends AJSBaseActor
 
     else if property[0] == "sides"
 
+      AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
       bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0

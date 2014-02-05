@@ -20,9 +20,9 @@ class AJSVector2
   # @return [AJSVector2] sum
   add: (v) ->
     if v instanceof AJSVector2
-      return new AJSVector2 @x + v.x, @y + v.y
+      new AJSVector2 @x + v.x, @y + v.y
     else
-      return new AJSVector2 @x + v, @y + v
+      new AJSVector2 @x + v, @y + v
 
   # Returns the difference between this vector and a vector or scalar
   #
@@ -30,9 +30,9 @@ class AJSVector2
   # @return [AJSVector2] difference
   subtract: (v) ->
     if v instanceof AJSVector2
-      return new AJSVector2 @x - v.x, @y - v.y
+      new AJSVector2 @x - v.x, @y - v.y
     else
-      return new AJSVector2 @x - v, @y - v
+      new AJSVector2 @x - v, @y - v
 
   # Returns the product of this vector and a vector or scalar
   #
@@ -40,9 +40,9 @@ class AJSVector2
   # @return [AJSVector2] product
   multiply: (v) ->
     if v instanceof AJSVector2
-      return new AJSVector2 @x * v.x, @y * v.y
+      new AJSVector2 @x * v.x, @y * v.y
     else
-      return new AJSVector2 @x * v, @y * v
+      new AJSVector2 @x * v, @y * v
 
   # Returns the quotient of this vector and a vector or scalar
   #
@@ -50,9 +50,9 @@ class AJSVector2
   # @return [AJSVector2] quotient
   divide: (v) ->
     if v instanceof AJSVector2
-      return new AJSVector2 @x / v.x, @y / v.y
+      new AJSVector2 @x / v.x, @y / v.y
     else
-      return new AJSVector2 @x / v, @y / v
+      new AJSVector2 @x / v, @y / v
 
   # Checks the equality of this vector and one other
   #
