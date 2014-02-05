@@ -20,7 +20,7 @@ class AJSBaseActor
       throw new Error "Actor class doesn't provide interface actor creation!"
 
     if mass < 0 then mass = 0
-    if @_verts != undefined @_verts != null and @_verts.length < 6
+    if @_verts != undefined and @_verts != null and @_verts.length < 6
       throw new Error "At least three vertices must be provided"
 
     @_psyx = false
