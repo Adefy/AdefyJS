@@ -11,7 +11,7 @@ class AJSBaseActor
   # @param [Number] friction object friction
   # @param [Number] elasticity object elasticity
   constructor: (@_verts, mass, friction, elasticity) ->
-    param.required @_verts
+    @_verts = param.optional @_verts
     @_m = param.optional mass, 0
     @_f = param.optional friction, 0.2
     @_e = param.optional elasticity, 0.3
@@ -20,7 +20,7 @@ class AJSBaseActor
       throw new Error "Actor class doesn't provide interface actor creation!"
 
     if mass < 0 then mass = 0
-    if @_verts.length < 6
+    if @_verts != undefined @_verts != null and @_verts.length < 6
       throw new Error "At least three vertices must be provided"
 
     @_psyx = false

@@ -5,7 +5,7 @@
 ## @depend ../util/AJSColor3.coffee
 class AJSRectangle extends AJSBaseActor
 
-  # Set up vertices, with the resulting rectangle centered around its position
+  # Spawn rectangle
   #
   # @param [Object] options instantiation options
   # @option options [Number] width
@@ -22,8 +22,7 @@ class AJSRectangle extends AJSBaseActor
     if @_width <= 0 then throw new Error "Width must be greater than 0"
     if @_height <= 0 then throw new Error "Height must be greater than 0"
 
-    @_rebuildVerts()
-    super @_verts, options.mass, options.friction, options.elasticity
+    super null, options.mass, options.friction, options.elasticity
 
     if options.color instanceof AJSColor3
       @setColor options.color
@@ -47,69 +46,43 @@ class AJSRectangle extends AJSBaseActor
     AJS.info "Creating rectangle actor (#{@_width}x#{@_height})"
     window.AdefyGLI.Actors().createRectangleActor @_width, @_height
 
-  # Fetches and saves vertices from engine and returns width
+  # Fetches width from engine
   #
   # @return [Number] width
   getWidth: ->
-    @_fetchVertices()
-    @_width = @_verts[4] * 2
+    AJS.info "Fetching actor (#{@_id}) width..."
+    @_width = window.AdefyGLI.Actors().getRectangleActorWidth @_id
 
-  # Fetches and saves vertices from engine and returns height
+  # Fetches height from engine
   #
   # @return [Number] height
   getHeight: ->
-    @_fetchVertices()
-    @_height = @_verts[3] * 2
+    AJS.info "Fetching actor (#{@_id}) height..."
+    @_height = window.AdefyGLI.Actors().getRectangleActorHeight @_id
 
-  # @private
-  # Private method that rebuilds our vertex array, allows us to modify our
-  # dimensions
-  _rebuildVerts: ->
 
-    # Build vertices
-    hW = @_width / 2.0
-    hH = @_height / 2.0
-
-    # Extra vert caps the shape
-    @_verts = []
-
-    @_verts.push -hW
-    @_verts.push -hH
-
-    @_verts.push -hW
-    @_verts.push  hH
-
-    @_verts.push  hW
-    @_verts.push  hH
-
-    @_verts.push  hW
-    @_verts.push -hH
-
-    @_verts.push -hW
-    @_verts.push -hH
-
-  # Set height. Enforces minimum, rebuilds vertices, and updates actor
+  # Set height. Enforces minimum and updates actor
   #
   # @param [Number] height new height, > 0
   setHeight: (h) ->
     param.required h
-
     if h <= 0 then throw new Error "New height must be >0 !"
+    AJS.info "Setting actor (#{@_id}) height [#{h}]..."
 
     @_height = h
-    @_rebuildVerts()
-    @_updateVertices()
+    window.AdefyGLI.Actors().setRectangleActorHeight @_id, h
     @
 
-  # Set width. Enforces minimum, rebuilds vertices, and updates actor
-  setWidth: (b) ->
-    param.required b
+  # Set width. Enforces minimum and updates actor
+  #
+  # @param [Number] width new width, > 0
+  setWidth: (w) ->
+    param.required w
+    if w <= 0 then throw new Error "New width must be >0 !"
+    AJS.info "Setting actor (#{@_id}) width [#{w}]..."
 
-    if b <= 0 then throw new Error "New width must be >0 !"
-
-    @_width = b
-    @_rebuildVerts()
-    @_updateVertices()
+    @_width = w
+    window.AdefyGLI.Actors().setRectangleActorWidth @_id, w
     @
 
   # This is called by AJS.mapAnimation(), which is in turn called by
@@ -262,16 +235,6 @@ class AJSRectangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] absolute hope to the gods this is false
   absoluteMapping: (property) -> false
-
-  # We're special, we get texture support. Yay us!
-  #
-  # @param [String] name texture name as per the manifest
-  setTexture: (name) ->
-    param.required name
-
-    AJS.info "Setting rectangle actor (#{@_id}) texture [#{name}]"
-    window.AdefyGLI.Actors().setActorTexture name, @_id
-    @
 
   # Animate a resize
   # If duration is undefined, changes are applied immediately

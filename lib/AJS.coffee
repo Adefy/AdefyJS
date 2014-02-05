@@ -8,6 +8,7 @@
 ## @depend actors/AJSRectangle.coffee
 ## @depend actors/AJSTriangle.coffee
 ## @depend actors/AJSPolygon.coffee
+## @depend actors/AJSCircle.coffee
 
 # AJS main class, instantiates the engine and provides access to common methods
 # Should never be instantiated, all methods are static.
@@ -324,7 +325,14 @@ class AJS
   # @param [Number] g green color component
   # @param [Number] b blue color component
   @createCircleActor: (x, y, radius, r, g, b) ->
-    AJS.createPolygonActor x, y, radius, 32, r, g, b
+    param.required x
+    param.required y
+    param.required radius
+
+    new AJSCircle
+      position: { x: x, y: y }
+      color: { r: r, g: g, b: b }
+      radius: radius
 
   # Create a new circle actor
   #
