@@ -43,7 +43,7 @@ class AJSCircle extends AJSBaseActor
   # @return [Number] id actor id
   interfaceActorCreate: ->
     AJS.info "Creating circle actor [#{@_radius}]"
-    window.AdefyGLI.Actors().createCircleActor @_radius, @_verts
+    window.AdefyGLI.Actors().createCircleActor JSON.stringify(@_verts), @_radius
 
   # @private
   # Private method that rebuilds our vertex array.
