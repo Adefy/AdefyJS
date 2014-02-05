@@ -164,7 +164,7 @@ class AJSBaseActor
 
   setTexture: (texture) ->
     AJS.info "Setting actor (#{@_id}) texture #{texture}"
-    window.AdefyGLI.Actors().setTexture texture, @_id
+    window.AdefyGLI.Actors().setActorTexture texture, @_id
     @
 
   setTextureRepeat: (x, y) ->
