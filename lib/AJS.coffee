@@ -389,3 +389,12 @@ class AJS
     @info "Fetching texture size by name (#{name})"
 
     window.AdefyGLI.Engine().getTextureSize name
+
+  # Designate the rectangluar region defining the remind me later button
+  #
+  # @param [Number] x
+  # @param [Number] y
+  # @param [Number] w
+  # @param [Number] h
+  @setRemindMeLaterButton: (x, y, w, h) ->
+    window.AdefyGLI.Engine().setRemindMeButton x, y, w, h
