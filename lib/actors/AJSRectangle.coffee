@@ -24,10 +24,26 @@ class AJSRectangle extends AJSBaseActor
 
     scale = AJS.getAutoScale()
 
+    # Scale square actors by scale midpoint
     if @_width == @_height
       scale = (scale.x + scale.y) / 2
       if options.noScaleW != true then @_width *= scale
       if options.noScaleH != true then @_height *= scale
+
+    # Scale by scale midpoint while maintaining aspect ratio
+    else if options.scaleAR == true
+
+      ar = @_width / @_height
+      scale = (scale.x + scale.y) / 2
+
+      if @_width > @_height
+        @_height *= scale
+        @_width = ar * @_height
+      else
+        @_width *= scale
+        @_height = @_width / ar
+
+    # Scale per-axis
     else
       if options.noScaleW != true then @_width *= scale.x
       if options.noScaleH != true then @_height *= scale.y
