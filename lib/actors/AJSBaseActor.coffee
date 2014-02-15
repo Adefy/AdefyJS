@@ -118,6 +118,11 @@ class AJSBaseActor
   # @param [AJSVector2] position New position
   setPosition: (v) ->
     AJS.info "Setting actor position (#{@_id}) #{JSON.stringify v}"
+
+    scale = AJS.getAutoScale()
+    v.x *= scale.x
+    v.y *= scale.y
+
     @_position = v
     window.AdefyGLI.Actors().setActorPosition v.x, v.y, @_id
     @
@@ -142,7 +147,12 @@ class AJSBaseActor
     AJS.info "Fetching actor position..."
 
     raw = JSON.parse window.AdefyGLI.Actors().getActorPosition @_id
-    return new AJSVector2 raw.x, raw.y
+
+    scale = AJS.getAutoScale()
+    raw.x /= scale.x
+    raw.y /= scale.y
+
+    new AJSVector2 raw.x, raw.y
 
   # Returns the rotation of the native object, as stored locally
   #
@@ -152,7 +162,7 @@ class AJSBaseActor
     AJS.info "Fetching actor rotation [radians: #{radians}]..."
 
     if radians != true then radians = false
-    return window.AdefyGLI.Actors().getActorRotation @_id, radians
+    window.AdefyGLI.Actors().getActorRotation @_id, radians
 
   # Set actor color
   #
@@ -226,6 +236,13 @@ class AJSBaseActor
     angle = param.optional angle, 0
 
     AJS.info "Attaching texture #{texture} #{w}x#{h} to actor (#{@_id})"
+
+    scale = AJS.getAutoScale()
+    x *= scale.x
+    y *= scale.y
+    w *= scale.x
+    h *= scale.y
+
     window.AdefyGLI.Actors().attachTexture texture, w, h, x, y, angle, @_id
 
   # Remove attached texture if we have one
@@ -322,6 +339,10 @@ class AJSBaseActor
   # @param [Number] start animation start, default 0
   # @param [Array<Object>] cp animation control points
   move: (x, y, duration, start, cp) ->
+
+    scale = AJS.getAutoScale()
+    x *= scale.x
+    y *= scale.y
 
     if duration == undefined
       if x == null or x == undefined then x = @getPosition().x

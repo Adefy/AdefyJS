@@ -42,6 +42,9 @@ class AJSPolygon extends AJSBaseActor
     if @_radius <= 0 then throw "Radius must be larger than 0"
     if @_segments < 3 then throw "Shape must consist of at least 3 segments"
 
+    scale = AJS.getAutoScale()
+    @radius *= Math.min scale.x, scale.y
+
     @_rebuildVerts true
 
     # Creates and registers our actor, valides physics properties

@@ -26,8 +26,27 @@ class AJS
   # @private
   @_logLevel: 2
 
+  @_scaleX: 1
+  @_scaleY: 1
+
   # AJS is a singleton, do not instantiate! Constructor throws an error.
   constructor: -> throw new Error "AJS shouldn't be instantiated!"
+
+  # Set display scale, internal method used by our backend to scale creatives
+  # for the target device display
+  #
+  # @param [Number] scaleX
+  # @param [Number] scaleY
+  # @private
+  @setAutoScale: (scaleX, scaleY) ->
+    AJS._scaleX = scaleX
+    AJS._scaleY = scaleY
+
+  # Fetch auto scale, used internally by AJS components
+  #
+  # @return [Object] scale scale object with x and y values
+  # @private
+  @getAutoScale: -> x: AJS._scaleX, y: AJS._scaleY
 
   # Initializes the engine with a specific screen size and ad length
   # The actual ad needs to be passed in as a method
@@ -133,6 +152,10 @@ class AJS
     param.required y
 
     @info "Setting camera position (#{x}, #{y})"
+
+    x *= AJS._scaleX
+    y *= AJS._scaleY
+
     window.AdefyGLI.Engine().setCameraPosition x, y
     @
 
@@ -141,8 +164,11 @@ class AJS
   # @return [Object] pos
   @getCameraPosition: ->
     @info "Fetching camera position..."
-    JSON.parse window.AdefyGLI.Engine().getCameraPosition()
-    @
+
+    pos = JSON.parse window.AdefyGLI.Engine().getCameraPosition()
+    pos.x /= AJS._scaleX
+    pos.y /= AJS.scaleY
+    pos
 
   # Set renderer clear color, component values between 0 and 255
   #
@@ -314,6 +340,10 @@ class AJS
   # @param [Number] g green color component
   # @param [Number] b blue color component
   @createSquareActor: (x, y, l, r, g, b) ->
+    param.required x
+    param.required y
+    param.required l
+
     AJS.createRectangleActor x, y, l, l, r, g, b
 
   # Create a new circle actor

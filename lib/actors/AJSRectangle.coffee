@@ -22,6 +22,10 @@ class AJSRectangle extends AJSBaseActor
     if @_width <= 0 then throw new Error "Width must be greater than 0"
     if @_height <= 0 then throw new Error "Height must be greater than 0"
 
+    scale = AJS.getAutoScale()
+    @_width *= scale.x
+    @_height *= scale.y
+
     super null, options.mass, options.friction, options.elasticity
 
     if options.color instanceof AJSColor3

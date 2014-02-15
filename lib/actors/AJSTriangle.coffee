@@ -22,6 +22,10 @@ class AJSTriangle extends AJSBaseActor
     if @_base <= 0 then throw "Base must be wider than 0"
     if @_height <= 0 then throw "Height must be greater than 0"
 
+    scale = AJS.getAutoScale()
+    @_base *= scale.x
+    @_height *= scale.y
+
     @_rebuildVerts()
     super @_verts, options.mass, options.friction, options.elasticity
 
@@ -87,8 +91,9 @@ class AJSTriangle extends AJSBaseActor
   # @param [Number] height new height, > 0
   setHeight: (h) ->
     param.required h
-
     if h <= 0 then throw new Error "New height must be >0 !"
+
+    h *= AJS.getAutoScale().y
 
     @_height = h
     @_rebuildVerts()
@@ -98,8 +103,9 @@ class AJSTriangle extends AJSBaseActor
   # Set base. Enforces minimum, rebuilds vertices, and updates actor
   setBase: (b) ->
     param.required b
-
     if b <= 0 then throw new Error "New base must be >0 !"
+
+    b *= AJS.getAutoScale().x
 
     @_base = b
     @_rebuildVerts()
@@ -121,6 +127,7 @@ class AJSTriangle extends AJSBaseActor
     param.required property
     param.required options
 
+    scale = AJS.getAutoScale()
     anim = {}
 
     # Attaches the appropriate prefix, returns "." for 0
@@ -137,6 +144,9 @@ class AJSTriangle extends AJSBaseActor
 
       options.startVal /= 2
       options.endVal /= 2
+      options.startVal *= scale.y
+      options.endVal *= scale.y
+
       JSONopts = JSON.stringify options
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
@@ -185,6 +195,9 @@ class AJSTriangle extends AJSBaseActor
 
       options.startVal /= 2
       options.endVal /= 2
+      options.startVal *= scale.x
+      options.endVal *= scale.x
+
       JSONopts = JSON.stringify options
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
@@ -274,6 +287,14 @@ class AJSTriangle extends AJSBaseActor
     else
       if start == undefined then start = 0
       if cp == undefined then cp = []
+
+      # NOTE: We only scale here, since the setBase() and setHeight() methods
+      #       used if duration is undefined also apply scale!
+      scale = AJS.getAutoScale()
+      endB *= scale.x
+      endH *= scale.y
+      startB *= scale.x
+      startH *= scale.y
 
       components = []
       args = []
