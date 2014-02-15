@@ -20,7 +20,7 @@ class AJSCircle extends AJSBaseActor
     if @_radius <= 0 then throw new Error "Radius must be greater than 0"
 
     scale = AJS.getAutoScale()
-    @radius *= Math.min scale.x, scale.y
+    @_radius *= (scale.x + scale.y) / 2
 
     @_rebuildVerts()
     super @_verts, options.mass, options.friction, options.elasticity
