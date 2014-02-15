@@ -341,8 +341,8 @@ class AJSBaseActor
   move: (x, y, duration, start, cp) ->
 
     scale = AJS.getAutoScale()
-    x *= scale.x
-    y *= scale.y
+    if x != null then x *= scale.x
+    if y != null then y *= scale.y
 
     if duration == undefined
       if x == null or x == undefined then x = @getPosition().x
