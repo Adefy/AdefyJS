@@ -73,8 +73,8 @@ class AJSPolygon extends AJSBaseActor
   #
   # @return [Number] id actor id
   interfaceActorCreate: ->
-    AJS.info "Creating polygon actor (R: #{@_radius}, S: #{@_segments})"
-    window.AdefyGLI.Actors().createPolygonActor @_radius, @_segments
+    AJS.info "Creating polygon actor (#{@_verts.length} verts)"
+    window.AdefyGLI.Actors().createPolygonActor JSON.stringify @_verts
 
   # @private
   # Private method that rebuilds our vertex array.
