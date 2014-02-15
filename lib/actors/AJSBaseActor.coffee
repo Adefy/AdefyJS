@@ -242,7 +242,7 @@ class AJSBaseActor
     y *= scale.y
 
     if w == h
-      scale = Math.min scale.x, scale.y
+      scale = (scale.x + scale.y) / 2
       w *= scale
       h *= scale
     else

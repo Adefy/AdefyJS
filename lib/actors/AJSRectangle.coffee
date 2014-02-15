@@ -25,7 +25,7 @@ class AJSRectangle extends AJSBaseActor
     scale = AJS.getAutoScale()
 
     if @_width == @_height
-      scale = Math.min scale.x, scale.y
+      scale = (scale.x + scale.y) / 2
       if options.noScaleW != true then @_width *= scale
       if options.noScaleH != true then @_height *= scale
     else
