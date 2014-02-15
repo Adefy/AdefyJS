@@ -240,8 +240,14 @@ class AJSBaseActor
     scale = AJS.getAutoScale()
     x *= scale.x
     y *= scale.y
-    w *= scale.x
-    h *= scale.y
+
+    if w == h
+      scale = Math.min scale.x, scale.y
+      w *= scale
+      h *= scale
+    else
+      w *= scale.x
+      h *= scale.y
 
     window.AdefyGLI.Actors().attachTexture texture, w, h, x, y, angle, @_id
 
