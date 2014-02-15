@@ -354,12 +354,18 @@ class AJSBaseActor
       if x == null or x == undefined then x = @getPosition().x
       if y == null or y == undefined then y = @getPosition().y
 
-      @setPosition { x: x, y: y }
+      @setPosition x: x, y: y
       return @
     else
 
       if start == undefined then start = 0
       if cp == undefined then cp = []
+
+      for point in cp
+        if point.y > 1
+          if x == null then point.y *= scale.y
+          else if y == null then point.y *= scale.x
+          else point.y *= (scale.x + scale.y) / 2
 
       if x != null
         AJS.animate @, [["position", "x"]], [
