@@ -319,17 +319,23 @@ class AJS
   # @param [Number] r red color component
   # @param [Number] g green color component
   # @param [Number] b blue color component
-  @createRectangleActor: (x, y, w, h, r, g, b) ->
+  # @param [Object] extraOptions optional options hash to pass to actor
+  @createRectangleActor: (x, y, w, h, r, g, b, extraOptions) ->
     param.required x
     param.required y
     param.required w
     param.required h
 
-    new AJSRectangle
+    options =
       position: { x: x, y: y }
       color: { r: r, g: g, b: b }
       w: w
       h: h
+
+    for key, val of extraOptions
+      options[key] = val
+
+    new AJSRectangle options
 
   # Create a new square actor
   #
@@ -339,12 +345,13 @@ class AJS
   # @param [Number] r red color component
   # @param [Number] g green color component
   # @param [Number] b blue color component
-  @createSquareActor: (x, y, l, r, g, b) ->
+  # @param [Object] extraOptions optional options hash to pass to actor
+  @createSquareActor: (x, y, l, r, g, b, extraOptions) ->
     param.required x
     param.required y
     param.required l
 
-    AJS.createRectangleActor x, y, l, l, r, g, b
+    AJS.createRectangleActor x, y, l, l, r, g, b,
 
   # Create a new circle actor
   #
@@ -354,15 +361,21 @@ class AJS
   # @param [Number] r red color component
   # @param [Number] g green color component
   # @param [Number] b blue color component
-  @createCircleActor: (x, y, radius, r, g, b) ->
+  # @param [Object] extraOptions optional options hash to pass to actor
+  @createCircleActor: (x, y, radius, r, g, b, extraOptions) ->
     param.required x
     param.required y
     param.required radius
 
-    new AJSCircle
+    options =
       position: { x: x, y: y }
       color: { r: r, g: g, b: b }
       radius: radius
+
+    for key, val of extraOptions
+      options[key] = val
+
+    new AJSCircle options
 
   # Create a new circle actor
   #
@@ -373,17 +386,23 @@ class AJS
   # @param [Number] r red color component
   # @param [Number] g green color component
   # @param [Number] b blue color component
-  @createPolygonActor: (x, y, radius, segments, r, g, b) ->
+  # @param [Object] extraOptions optional options hash to pass to actor
+  @createPolygonActor: (x, y, radius, segments, r, g, b, extraOptions) ->
     param.required x
     param.required y
     param.required radius
     param.required segments
 
-    new AJSPolygon
+    options =
       position: { x: x, y: y }
       color: { r: r, g: g, b: b }
       radius: radius
       segments: segments
+
+    for key, val of extraOptions
+      options[key] = val
+
+    new AJSPolygon options
 
   # Create a new triangle actor
   #
@@ -394,7 +413,8 @@ class AJS
   # @param [Number] r red color component
   # @param [Number] g green color component
   # @param [Number] b blue color component
-  @createTriangleActor: (x, y, base, height, r, g, b) ->
+  # @param [Object] extraOptions optional options hash to pass to actor
+  @createTriangleActor: (x, y, base, height, r, g, b, extraOptions) ->
     param.required x
     param.required y
     param.required base
@@ -404,11 +424,16 @@ class AJS
     if g == undefined then g = Math.floor (Math.random() * 255)
     if b == undefined then b = Math.floor (Math.random() * 255)
 
-    new AJSTriangle
+    options = 
      position: { x: x, y: y }
      color: { r: r, g: g, b: b }
      base: base
      height: height
+
+    for key, val of extraOptions
+      options[key] = val
+
+    new AJSTriangle options
 
   # Get texture size by name
   #
