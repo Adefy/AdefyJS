@@ -65,6 +65,10 @@ class AJS
       return @error "AJS can only be initialized once"
     else AJS._initialized = true
 
+    # Clear all existing timeouts
+    lastTimeout = setTimeout (->), 1
+    clearTimeout i for i in [0...lastTimeout]
+
     @_engine = window.AdefyGLI.Engine()
 
     # Initialize!
