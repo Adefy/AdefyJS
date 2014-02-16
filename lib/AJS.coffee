@@ -54,7 +54,8 @@ class AJS
   # @param [Method] ad ad to execute
   # @param [Number] width
   # @param [Number] height
-  @init: (ad, width, height) ->
+  # @param [String] canvasID optional canvas ID for WebGL engine
+  @init: (ad, width, height, canvasID) ->
     param.required ad
     param.required width
     param.required height
@@ -67,7 +68,7 @@ class AJS
     @_engine = window.AdefyGLI.Engine()
 
     # Initialize!
-    @_engine.initialize width, height, ((agl) -> ad agl), 2
+    @_engine.initialize width, height, ((agl) -> ad agl), 2, canvasID
     @info "Initialized AJS"
 
   # Override AJS and engine log level
