@@ -306,10 +306,14 @@ class AJS
   # Load package.json source; used only by the WebGL engine, in turn loads
   # textures relative to our current path.
   #
-  # @param [String] json valid package.json source
+  # @param [String] json valid package.json source (can also be an object)
   # @param [Method] cb callback to call after load (textures)
   @loadManifest: (json, cb) ->
     param.required json
+
+    # If the json is not a string, then stringify it
+    if typeof json != "string" then json = JSON.stringify json
+
     cb = param.optional cb, ->
     @info "Loading manifest #{JSON.stringify json}"
 
