@@ -75,8 +75,10 @@ class AJS
     if @_engine.setRenderMode != undefined
       if !window.WebGLRenderingContext
         @_engine.setRenderMode 0
+        @info "Dropping to canvas render mode"
       else
         @_engine.setRenderMode 1
+        @info "Proceeding with WebGL render mode"
 
     # Initialize!
     @_engine.initialize width, height, ((agl) -> ad agl), 2, canvasID
