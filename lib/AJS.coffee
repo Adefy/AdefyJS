@@ -71,6 +71,13 @@ class AJS
 
     @_engine = window.AdefyGLI.Engine()
 
+    # Set render mode for the browser rendering engine (WebGL if we can)
+    if @_engine.setRenderMode != undefined
+      if !window.WebGLRenderingContext
+        @_engine.setRenderMode 0
+      else
+        @_engine.setRenderMode 1
+
     # Initialize!
     @_engine.initialize width, height, ((agl) -> ad agl), 2, canvasID
     @info "Initialized AJS"
