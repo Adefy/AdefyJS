@@ -74,7 +74,7 @@ class AJSPolygon extends AJSBaseActor
   # @return [Number] id actor id
   interfaceActorCreate: ->
     AJS.info "Creating polygon actor (#{@_verts.length} verts)"
-    window.AdefyGLI.Actors().createPolygonActor JSON.stringify @_verts
+    window.AdefyRE.Actors().createPolygonActor JSON.stringify @_verts
 
   # @private
   # Private method that rebuilds our vertex array.
@@ -209,7 +209,7 @@ class AJSPolygon extends AJSBaseActor
     if property[0] == "radius"
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
-      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = window.AdefyRE.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
@@ -236,7 +236,7 @@ class AJSPolygon extends AJSBaseActor
     else if property[0] == "sides"
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
-      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = window.AdefyRE.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []

@@ -69,7 +69,7 @@ class AJS
     lastTimeout = setTimeout (->), 1
     clearTimeout i for i in [0...lastTimeout]
 
-    @_engine = window.AdefyGLI.Engine()
+    @_engine = window.AdefyRE.Engine()
 
     # Set render mode for the browser rendering engine (WebGL if we can)
     if @_engine.setRenderMode != undefined
@@ -91,7 +91,7 @@ class AJS
     param.required level, [0, 1, 2, 3, 4]
     @info "Setting log level to #{level}"
 
-    window.AdefyGLI.Engine().setLogLevel level
+    window.AdefyRE.Engine().setLogLevel level
     @_logLevel = level
     @
 
@@ -170,7 +170,7 @@ class AJS
     x *= AJS._scaleX
     y *= AJS._scaleY
 
-    window.AdefyGLI.Engine().setCameraPosition x, y
+    window.AdefyRE.Engine().setCameraPosition x, y
     @
 
   # Fetch camera position. Returns an object with x, y keys
@@ -179,7 +179,7 @@ class AJS
   @getCameraPosition: ->
     @info "Fetching camera position..."
 
-    pos = JSON.parse window.AdefyGLI.Engine().getCameraPosition()
+    pos = JSON.parse window.AdefyRE.Engine().getCameraPosition()
     pos.x /= AJS._scaleX
     pos.y /= AJS.scaleY
     pos
@@ -195,7 +195,7 @@ class AJS
     param.required b
     @info "Setting clear color to (#{r}, #{g}, #{b})"
 
-    window.AdefyGLI.Engine().setClearColor r, g, b
+    window.AdefyRE.Engine().setClearColor r, g, b
 
   # Returns the renderer clear color as an AJSColor3
   #
@@ -203,7 +203,7 @@ class AJS
   @getClearColor: ->
     @info "Fetching clear color..."
 
-    col = JSON.parse window.AdefyGLI.Engine().getClearColor()
+    col = JSON.parse window.AdefyRE.Engine().getClearColor()
     new AJSColor3 col.r, col.g, col.b
 
   @_syntheticMap:
@@ -250,7 +250,7 @@ class AJS
     start = param.optional start, 0
     fps = param.optional fps, 30
 
-    Animations = window.AdefyGLI.Animations()
+    Animations = window.AdefyRE.Animations()
 
     # Helpful below
     _registerDelayedMap = (actor, property, options, time) ->
@@ -326,7 +326,7 @@ class AJS
     cb = param.optional cb, ->
     @info "Loading manifest #{JSON.stringify json}"
 
-    window.AdefyGLI.Engine().loadManifest json, cb
+    window.AdefyRE.Engine().loadManifest json, cb
 
   # Create new rectangle actor
   #
@@ -442,7 +442,7 @@ class AJS
     if g == undefined then g = Math.floor (Math.random() * 255)
     if b == undefined then b = Math.floor (Math.random() * 255)
 
-    options = 
+    options =
      position: { x: x, y: y }
      color: { r: r, g: g, b: b }
      base: base
@@ -461,7 +461,7 @@ class AJS
     param.required name
     @info "Fetching texture size by name (#{name})"
 
-    window.AdefyGLI.Engine().getTextureSize name
+    window.AdefyRE.Engine().getTextureSize name
 
   # Designate the rectangluar region defining the remind me later button
   #
@@ -470,4 +470,4 @@ class AJS
   # @param [Number] w
   # @param [Number] h
   @setRemindMeLaterButton: (x, y, w, h) ->
-    window.AdefyGLI.Engine().setRemindMeButton x, y, w, h
+    window.AdefyRE.Engine().setRemindMeButton x, y, w, h

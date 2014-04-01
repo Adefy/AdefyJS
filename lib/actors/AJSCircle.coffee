@@ -46,7 +46,7 @@ class AJSCircle extends AJSBaseActor
   # @return [Number] id actor id
   interfaceActorCreate: ->
     AJS.info "Creating circle actor [#{@_radius}]"
-    window.AdefyGLI.Actors().createCircleActor @_radius, JSON.stringify(@_verts)
+    window.AdefyRE.Actors().createCircleActor @_radius, JSON.stringify(@_verts)
 
   # @private
   # Private method that rebuilds our vertex array.
@@ -108,7 +108,7 @@ class AJSCircle extends AJSBaseActor
   # @return [Number] radius
   getRadius: ->
     AJS.info "Fetching actor (#{@_id}) radius..."
-    @_radius = window.AdefyGLI.Actors().getCircleActorRadius @_id
+    @_radius = window.AdefyRE.Actors().getCircleActorRadius @_id
 
   # Set radius and rebuild vertices. Enforces minimum and updates actor
   #
@@ -121,7 +121,7 @@ class AJSCircle extends AJSBaseActor
     @_radius = radius
     @_rebuildVerts()
     @_updateVertices()
-    window.AdefyGLI.Actors().setCircleActorRadius @_id, radius
+    window.AdefyRE.Actors().setCircleActorRadius @_id, radius
     @
 
   # This is called by AJS.mapAnimation(), which is in turn called by
@@ -153,7 +153,7 @@ class AJSCircle extends AJSBaseActor
     if property[0] == "radius"
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
-      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = window.AdefyRE.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []

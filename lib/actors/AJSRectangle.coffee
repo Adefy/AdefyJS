@@ -70,21 +70,21 @@ class AJSRectangle extends AJSBaseActor
   # @return [Number] id actor id
   interfaceActorCreate: ->
     AJS.info "Creating rectangle actor (#{@_width}x#{@_height})"
-    window.AdefyGLI.Actors().createRectangleActor @_width, @_height
+    window.AdefyRE.Actors().createRectangleActor @_width, @_height
 
   # Fetches width from engine
   #
   # @return [Number] width
   getWidth: ->
     AJS.info "Fetching actor (#{@_id}) width..."
-    @_width = window.AdefyGLI.Actors().getRectangleActorWidth @_id
+    @_width = window.AdefyRE.Actors().getRectangleActorWidth @_id
 
   # Fetches height from engine
   #
   # @return [Number] height
   getHeight: ->
     AJS.info "Fetching actor (#{@_id}) height..."
-    @_height = window.AdefyGLI.Actors().getRectangleActorHeight @_id
+    @_height = window.AdefyRE.Actors().getRectangleActorHeight @_id
 
 
   # Set height. Enforces minimum and updates actor
@@ -96,7 +96,7 @@ class AJSRectangle extends AJSBaseActor
     AJS.info "Setting actor (#{@_id}) height [#{h}]..."
 
     @_height = h
-    window.AdefyGLI.Actors().setRectangleActorHeight @_id, h
+    window.AdefyRE.Actors().setRectangleActorHeight @_id, h
     @
 
   # Set width. Enforces minimum and updates actor
@@ -108,7 +108,7 @@ class AJSRectangle extends AJSBaseActor
     AJS.info "Setting actor (#{@_id}) width [#{w}]..."
 
     @_width = w
-    window.AdefyGLI.Actors().setRectangleActorWidth @_id, w
+    window.AdefyRE.Actors().setRectangleActorWidth @_id, w
     @
 
   # This is called by AJS.mapAnimation(), which is in turn called by
@@ -145,7 +145,7 @@ class AJSRectangle extends AJSBaseActor
       JSONopts = JSON.stringify options
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
-      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = window.AdefyRE.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
@@ -196,7 +196,7 @@ class AJSRectangle extends AJSBaseActor
       JSONopts = JSON.stringify options
 
       AJS.info "Pre-calculating Bezier animation values for #{JSONopts}"
-      bezValues = window.AdefyGLI.Animations().preCalculateBez JSONopts
+      bezValues = window.AdefyRE.Animations().preCalculateBez JSONopts
       bezValues = JSON.parse bezValues
       delay = 0
       options.deltas = []
