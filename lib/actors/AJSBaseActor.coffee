@@ -85,7 +85,7 @@ class AJSBaseActor
   # @param [Number] mode
   _setRenderMode: (mode) ->
     AJS.info "Setting actor (#{@_id}) render mode #{mode}"
-    window.AdefyGLI.Actors().setRenderMode param.required(mode, [1, 2]), @_id
+    window.AdefyGLI.Actors().setRenderMode param.required(mode, [1, 2, 3]), @_id
 
   # @private
   # Re-creates our actor with our current vertices. This does not modify
