@@ -122,8 +122,8 @@ class AJSBaseActor
   ###
   setVisible: (_bool) ->
     AJS.info "Setting actor visiblity (#{@_id}) #{_bool}"
-    @_visible = v
-    window.AdefyRE.Actors().setActorPosition @_visible
+    @_visible = _bool
+    window.AdefyRE.Actors().setVisible @_visible
     @
 
   ###
