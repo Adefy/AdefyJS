@@ -115,16 +115,24 @@ class AJSBaseActor
   getId: -> @_id
 
   ###
-  # Modifies the position of the native object, and stores
-  # a local copy of it
+  # Update actor visibility
   #
-  # @param [Boolean] _bool New visibility
+  # @param [Boolean] visible New visibility
   ###
-  setVisible: (_bool) ->
-    AJS.info "Setting actor visiblity (#{@_id}) #{_bool}"
-    @_visible = _bool
+  setVisible: (@_visible) ->
+    AJS.info "Setting actor visiblity (#{@_id}) #{@_visible}"
     window.AdefyRE.Actors().setActorVisible @_visible, @_id
     @
+
+  ###
+  # Returns the visibility of the actor
+  #
+  # @return [Boolean] visible
+  ###
+  getVisible: ->
+    AJS.info "Fetching actor visiblity..."
+
+    @_visible = window.AdefyRE.Actors().getActorVisbile @_id
 
   ###
   # Modifies the position of the native object, and stores
