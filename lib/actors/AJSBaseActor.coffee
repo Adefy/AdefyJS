@@ -132,7 +132,7 @@ class AJSBaseActor
   getVisible: ->
     AJS.info "Fetching actor visiblity..."
 
-    @_visible = window.AdefyRE.Actors().getActorVisbile @_id
+    @_visible = window.AdefyRE.Actors().getActorVisible @_id
 
   ###
   # Modifies the position of the native object, and stores
