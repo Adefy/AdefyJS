@@ -4,11 +4,13 @@
 # useful float to int (0.0-1.0 to 0-255) conversion functions
 class AJSColor3
 
+  ###
   # Sets component values
   #
   # @param [Number] r red component
   # @param [Number] g green component
   # @param [Number] b blue component
+  ###
   constructor: (r, g, b) ->
 
     # @todo Check to see if this is necessary
@@ -16,10 +18,12 @@ class AJSColor3
     @_g = param.optional g, 0
     @_b = param.optional b, 0
 
+  ###
   # Returns the red component as either an int or float
   #
   # @param [Boolean] float true if a float is requested
   # @return [Number] red
+  ###
   getR: (asFloat) ->
     if asFloat != true then return @_r
     if @_r == 0
