@@ -101,7 +101,8 @@ class AJSBaseActor
   ###
   _setRenderMode: (mode) ->
     AJS.info "Setting actor (#{@_id}) render mode #{mode}"
-    renderMode = param.required mode, ARERenderer.rendererModes
+    # always be sure to keep this synced with ARERenderer.renderModes
+    renderMode = param.required mode, [1, 2, 3]
     window.AdefyRE.Actors().setRenderMode renderMode, @_id
 
   ###
