@@ -72,12 +72,12 @@ class AJS
     @_engine = window.AdefyRE.Engine()
 
     # Set render mode for the browser rendering engine (WebGL if we can)
-    if @_engine.setRenderMode != undefined
+    if @_engine.setRendererMode != undefined
       if !window.WebGLRenderingContext
-        @_engine.setRenderMode 0
+        @_engine.setRendererMode 1
         @info "Dropping to canvas render mode"
       else
-        @_engine.setRenderMode 1
+        @_engine.setRendererMode 2
         @info "Proceeding with WebGL render mode"
 
     # Initialize!
