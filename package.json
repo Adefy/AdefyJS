@@ -2,7 +2,7 @@
   "name": "ajs",
   "description": "Adefy middleware JS library",
   "author": "Cris Mihalache <cris.mihalache@spectrumit.eu>",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
