@@ -1,0 +1,18 @@
+{
+  "name": "AdefyJS",
+  "version": "1.0.0",
+  "authors": [
+    "Cris Mihalache <cris@adefy.com>",
+    "Blaž Hrastnik <blaz@adefy.com>",
+    "Corey Powell <corey@adefy.com>"
+  ],
+  "license": "Closed",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "dev/components"
+  ],
+  "dependencies": {
+    "adefyre": "git@github.com:Adefy/AdefyRE.git#master"
+  }
+}

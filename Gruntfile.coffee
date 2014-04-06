@@ -1,7 +1,7 @@
 module.exports = (grunt) ->
 
   # Output
-  libName = "adefy.js"
+  libName = "ajs.js"
   productionName = "ajs-prod.min.js"
   productionNameFull = "ajs-prod-full.min.js"
 
@@ -10,20 +10,12 @@ module.exports = (grunt) ->
   libDir = "lib"
   testDir = "test"
   devDir = "dev"
-  awglDir = "../AdefyWebGL"
-  cdnDir = "../www/ajs"
   production = "#{buildDir}/#{productionName}"
   productionFull = "#{buildDir}/#{productionNameFull}"
 
   productionConcatFull = [
-    "#{devDir}/js/underscore.min.js"
-    "#{devDir}/js/sylvester.js"
-    "#{devDir}/js/glUtils.js"
-    "#{devDir}/js/mjax.min.js"
-    "#{devDir}/js/gl-matrix-min.js"
-    "#{devDir}/js/cp.min.js"
-
-    "#{devDir}/js/adefy.js"
+    "#{devDir}/components/adefyre/build/are-prod-full.min.js"
+    "#{devDir}/js/ajs.js"
   ]
 
   # Intermediate vars
@@ -127,40 +119,6 @@ module.exports = (grunt) ->
           src: [ "**" ]
           dest: "#{buildDir}/#{testDir}"
         ]
-      awgl:
-        files: [
-          expand: false
-          src: "#{awglDir}/build/awgl.js"
-          dest: "#{buildDir}/static/js/awgl.js"
-        ,
-          expand: false
-          src: "#{awglDir}/build/awgl.js"
-          dest: "#{devDir}/js/awgl.js"
-        ,
-          expand: false
-          src: "#{awglDir}/build/awgl-concat.coffee"
-          dest: "#{buildDir}/static/js/awgl-concat.coffee"
-        ,
-          expand: false
-          src: "#{awglDir}/build/awgl.js.map"
-          dest: "#{buildDir}/static/js/awgl.js.map"
-        ,
-          expand: false
-          src: "#{awglDir}/build/awgl.js.map"
-          dest: "#{devDir}/js/awgl.js.map"
-        ,
-          expand: false
-          src: "#{awglDir}/build/awgl-concat.coffee"
-          dest: "#{devDir}/js/awgl-concat.coffee"
-        ]
-      cdn:
-        files: [
-          src: "#{buildDir}/ajs-prod.min.js"
-          dest: "#{cdnDir}/ajs.js"
-        ,
-          src: "#{buildDir}/ajs-prod-full.min.js"
-          dest: "#{cdnDir}/ajs-full.js"
-        ]
 
     clean: [
       buildDir
@@ -192,8 +150,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-mocha"
 
   # Perform a full build
-  grunt.registerTask "default", ["concat_in_order", "coffee"]
-  grunt.registerTask "full", ["clean", "copy:test_page", "concat_in_order", "coffee", "mocha"]
+  grunt.registerTask "default", ["full"]
+  grunt.registerTask "full", [
+    "clean"
+    "copy:test_page"
+    "concat_in_order"
+    "coffee"
+    "mocha"
+    "concat"
+    "uglify"
+  ]
   grunt.registerTask "dev", ["connect", "copy:test_page", "watch"]
-  grunt.registerTask "deploy", [ "concat", "uglify" ]
-  grunt.registerTask "cdn", [ "full", "deploy", "copy:cdn" ]
