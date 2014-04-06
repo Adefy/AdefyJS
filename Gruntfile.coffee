@@ -15,7 +15,7 @@ module.exports = (grunt) ->
 
   productionConcatFull = [
     "#{devDir}/components/adefyre/build/are-prod-full.min.js"
-    "#{devDir}/js/ajs.js"
+    "#{devDir}/ajs.js"
   ]
 
   # Intermediate vars
