@@ -1,8 +1,28 @@
 {
-  "name": "ajs",
+  "name": "AdefyJS",
   "description": "Adefy middleware JS library",
-  "author": "Cris Mihalache <cris.mihalache@spectrumit.eu>",
-  "version": "0.0.1",
+  "author": "Spectrum IT Solutions GmbH <office@spectrumit.eu>",
+  "version": "1.0.0",
+  "private": true,
+  "engine": "node >= 0.10.12",
+  "contributors": [
+    {
+      "name": "Cris Mihalache",
+      "email": "cris@adefy.com"
+    },
+    {
+      "name": "Blaž Hrastnik",
+      "email": "blaz@adefy.com"
+    },
+    {
+      "name": "Corey Powell",
+      "email": "corey@adefy.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Adefy/AdefyJS.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -16,7 +36,5 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.4"
-  },
-  "private": true,
-  "engine": "node >= 0.10.12"
+  }
 }

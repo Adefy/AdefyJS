@@ -1,10 +1,8 @@
-doc/*
-dev/adefy.js
-dev/adefy.js.map
+dev/ajs.js
+dev/ajs.js.map
 dev/ajs-concat.coffee
-dev/js/awgl-concat.coffee
-build/*
+build/test
+build/lib
 node_modules/*
-dev/js/awgl.js
-dev/js/awgl.js.map
 .DS_Store
+dev/components
