@@ -14,6 +14,13 @@
 # Should never be instantiated, all methods are static.
 class AJS
 
+  @Version:
+    MAJOR: 1
+    MINOR: 0
+    PATCH: 1
+    BUILD: null
+    STRING: "1.0.1"
+
   # Pointer to the engine, initalized (once) in init()
   # @private
   @_engine: null
