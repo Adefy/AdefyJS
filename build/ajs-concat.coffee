@@ -366,10 +366,9 @@ class AJSBaseActor
   # @param [Number] mode
   ###
   _setRenderMode: (mode) ->
-    AJS.info "Setting actor (#{@_id}) render mode #{mode}"
-
     # always be sure to keep this synced with ARERenderer.renderModes
     renderMode = param.required mode, [0, 1, 2]
+    AJS.info "Setting actor (#{@_id}) render mode #{renderMode}"
     window.AdefyRE.Actors().setRenderMode renderMode, @_id
 
   ###
@@ -1621,7 +1620,7 @@ class AJSPolygon extends AJSBaseActor
     if options.psyx then @enablePsyx()
 
     @_setPhysicsVertices @_verts.slice(0, @_verts.length - 2)
-    @_setRenderMode 2
+    @_setRenderMode 1
 
   # Creates the engine actor object
   #
@@ -1877,7 +1876,7 @@ class AJSCircle extends AJSBaseActor
       @setRotation options.rotation
 
     if options.psyx then @enablePsyx()
-    @_setRenderMode 2
+    @_setRenderMode 1
 
   # Creates the engine actor object
   #
@@ -2111,12 +2110,12 @@ class AJS
     @_engine = window.AdefyRE.Engine()
 
     # Set render mode for the browser rendering engine (WebGL if we can)
-    if @_engine.setRenderMode != undefined
+    if @_engine.setRendererMode != undefined
       if !window.WebGLRenderingContext
-        @_engine.setRenderMode 0
+        @_engine.setRendererMode 1
         @info "Dropping to canvas render mode"
       else
-        @_engine.setRenderMode 1
+        @_engine.setRendererMode 2
         @info "Proceeding with WebGL render mode"
 
     # Initialize!

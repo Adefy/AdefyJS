@@ -393,8 +393,8 @@ AJSBaseActor = (function() {
 
   AJSBaseActor.prototype._setRenderMode = function(mode) {
     var renderMode;
-    AJS.info("Setting actor (" + this._id + ") render mode " + mode);
     renderMode = param.required(mode, [0, 1, 2]);
+    AJS.info("Setting actor (" + this._id + ") render mode " + renderMode);
     return window.AdefyRE.Actors().setRenderMode(renderMode, this._id);
   };
 
@@ -1621,7 +1621,7 @@ AJSPolygon = (function(_super) {
       this.enablePsyx();
     }
     this._setPhysicsVertices(this._verts.slice(0, this._verts.length - 2));
-    this._setRenderMode(2);
+    this._setRenderMode(1);
   }
 
   AJSPolygon.prototype.interfaceActorCreate = function() {
@@ -1838,7 +1838,7 @@ AJSCircle = (function(_super) {
     if (options.psyx) {
       this.enablePsyx();
     }
-    this._setRenderMode(2);
+    this._setRenderMode(1);
   }
 
   AJSCircle.prototype.interfaceActorCreate = function() {
@@ -2026,12 +2026,12 @@ AJS = (function() {
       clearTimeout(i);
     }
     this._engine = window.AdefyRE.Engine();
-    if (this._engine.setRenderMode !== void 0) {
+    if (this._engine.setRendererMode !== void 0) {
       if (!window.WebGLRenderingContext) {
-        this._engine.setRenderMode(0);
+        this._engine.setRendererMode(1);
         this.info("Dropping to canvas render mode");
       } else {
-        this._engine.setRenderMode(1);
+        this._engine.setRendererMode(2);
         this.info("Proceeding with WebGL render mode");
       }
     }
