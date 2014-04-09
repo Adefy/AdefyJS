@@ -67,7 +67,7 @@ class AJSPolygon extends AJSBaseActor
     if options.psyx then @enablePsyx()
 
     @_setPhysicsVertices @_verts.slice(0, @_verts.length - 2)
-    @_setRenderMode 2
+    @_setRenderMode 1
 
   # Creates the engine actor object
   #
