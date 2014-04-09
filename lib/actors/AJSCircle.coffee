@@ -39,7 +39,7 @@ class AJSCircle extends AJSBaseActor
       @setRotation options.rotation
 
     if options.psyx then @enablePsyx()
-    @_setRenderMode 2
+    @_setRenderMode 1
 
   # Creates the engine actor object
   #

@@ -4,18 +4,23 @@
   <meta charset="utf-8">
   <title>AdefyJS Test</title>
   <script type="text/javascript" src="./components/adefyre/build/are-prod-full.min.js"></script>
+  <!-- <script type="text/javascript" src="./js/are-full.js"></script> -->
   <script type="text/javascript" src="./ajs.js"></script>
 </head>
 
 <body>
   <script>
 
-    var manifest = [{
-      "path": "bowtie.png",
-      "compression": "none",
-      "type": "image",
-      "name": "sit"
-    }];
+    var manifest = {
+      "ad": "scene.js",
+      "lib": "adefy.js",
+      "textures": [{
+        "path": "bowtie.png",
+        "compression": "none",
+        "type": "image",
+        "name": "sit"
+      }]
+    };
 
     AJS.setLogLevel(4);
 

@@ -14,6 +14,13 @@
 # Should never be instantiated, all methods are static.
 class AJS
 
+  @Version:
+    MAJOR: 1
+    MINOR: 0
+    PATCH: 1
+    BUILD: null
+    STRING: "1.0.1"
+
   # Pointer to the engine, initalized (once) in init()
   # @private
   @_engine: null
@@ -72,12 +79,12 @@ class AJS
     @_engine = window.AdefyRE.Engine()
 
     # Set render mode for the browser rendering engine (WebGL if we can)
-    if @_engine.setRenderMode != undefined
+    if @_engine.setRendererMode != undefined
       if !window.WebGLRenderingContext
-        @_engine.setRenderMode 0
+        @_engine.setRendererMode 1
         @info "Dropping to canvas render mode"
       else
-        @_engine.setRenderMode 1
+        @_engine.setRendererMode 2
         @info "Proceeding with WebGL render mode"
 
     # Initialize!
