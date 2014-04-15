@@ -17,9 +17,9 @@ class AJS
   @Version:
     MAJOR: 1
     MINOR: 0
-    PATCH: 1
+    PATCH: 2
     BUILD: null
-    STRING: "1.0.1"
+    STRING: "1.0.2"
 
   # Pointer to the engine, initalized (once) in init()
   # @private
