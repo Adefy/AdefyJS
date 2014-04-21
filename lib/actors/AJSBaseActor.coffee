@@ -327,6 +327,14 @@ class AJSBaseActor
     @
 
   ###
+  # Get the name of our current texture
+  #
+  # @return [String] name
+  ###
+  getTexture: ->
+    @_texture
+
+  ###
   # Set actor physics properties
   #
   # @param [Object]
