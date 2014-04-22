@@ -137,6 +137,24 @@ class AJSBaseActor
   getId: -> @_id
 
   ###
+  # Returns the layer of the actor
+  #
+  # @return [Number] layer
+  ###
+  getLayer: ->
+    AJS.info "Fetching actor layer..."
+    @_layer = window.AdefyRE.Actors().getActorLayer @_id
+
+  ###
+  # Returns the layer of the actor
+  #
+  # @return [Number] layer
+  ###
+  getPhysicsLayer: ->
+    AJS.info "Fetching actor physics layer..."
+    @_physicsLayer = window.AdefyRE.Actors().getActorPhysicsLayer @_id
+
+  ###
   # Returns the visibility of the actor
   #
   # @return [Boolean] visible

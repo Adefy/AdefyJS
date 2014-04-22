@@ -403,6 +403,24 @@ class AJSBaseActor
   getId: -> @_id
 
   ###
+  # Returns the layer of the actor
+  #
+  # @return [Number] layer
+  ###
+  getLayer: ->
+    AJS.info "Fetching actor layer..."
+    @_layer = window.AdefyRE.Actors().getActorLayer @_id
+
+  ###
+  # Returns the layer of the actor
+  #
+  # @return [Number] layer
+  ###
+  getPhysicsLayer: ->
+    AJS.info "Fetching actor physics layer..."
+    @_physicsLayer = window.AdefyRE.Actors().getActorPhysicsLayer @_id
+
+  ###
   # Returns the visibility of the actor
   #
   # @return [Boolean] visible
@@ -2063,9 +2081,9 @@ class AJS
   @Version:
     MAJOR: 1
     MINOR: 0
-    PATCH: 5
+    PATCH: 6
     BUILD: null
-    STRING: "1.0.5"
+    STRING: "1.0.6"
 
   # Pointer to the engine, initalized (once) in init()
   # @private

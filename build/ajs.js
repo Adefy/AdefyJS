@@ -443,6 +443,30 @@ AJSBaseActor = (function() {
   };
 
   /*
+  # Returns the layer of the actor
+  #
+  # @return [Number] layer
+  */
+
+
+  AJSBaseActor.prototype.getLayer = function() {
+    AJS.info("Fetching actor layer...");
+    return this._layer = window.AdefyRE.Actors().getActorLayer(this._id);
+  };
+
+  /*
+  # Returns the layer of the actor
+  #
+  # @return [Number] layer
+  */
+
+
+  AJSBaseActor.prototype.getPhysicsLayer = function() {
+    AJS.info("Fetching actor physics layer...");
+    return this._physicsLayer = window.AdefyRE.Actors().getActorPhysicsLayer(this._id);
+  };
+
+  /*
   # Returns the visibility of the actor
   #
   # @return [Boolean] visible
@@ -1999,9 +2023,9 @@ AJS = (function() {
   AJS.Version = {
     MAJOR: 1,
     MINOR: 0,
-    PATCH: 5,
+    PATCH: 6,
     BUILD: null,
-    STRING: "1.0.5"
+    STRING: "1.0.6"
   };
 
   AJS._engine = null;
