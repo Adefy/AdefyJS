@@ -353,6 +353,20 @@ class AJSBaseActor
     @_texture
 
   ###
+  # Get Actor's texture repeat
+  #
+  # @return [Object]
+  #   @option [Number] x
+  #   @option [Number] y
+  ###
+  getTextureRepeat: ->
+    unless @_textureRepeat
+      texRepeat = window.AdefyRE.Actors().getActorTextureRepeat @_id
+      @_textureRepeat = JSON.parse texRepeat
+
+    @_textureRepeat
+
+  ###
   # Set actor physics properties
   #
   # @param [Object]

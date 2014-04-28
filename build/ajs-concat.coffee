@@ -619,6 +619,20 @@ class AJSBaseActor
     @_texture
 
   ###
+  # Get Actor's texture repeat
+  #
+  # @return [Object]
+  #   @option [Number] x
+  #   @option [Number] y
+  ###
+  getTextureRepeat: ->
+    unless @_textureRepeat
+      texRepeat = window.AdefyRE.Actors().getActorTextureRepeat @_id
+      @_textureRepeat = JSON.parse texRepeat
+
+    @_textureRepeat
+
+  ###
   # Set actor physics properties
   #
   # @param [Object]
@@ -2081,9 +2095,9 @@ class AJS
   @Version:
     MAJOR: 1
     MINOR: 0
-    PATCH: 8
+    PATCH: 9
     BUILD: null
-    STRING: "1.0.8"
+    STRING: "1.0.9"
 
   # Pointer to the engine, initalized (once) in init()
   # @private

@@ -712,6 +712,24 @@ AJSBaseActor = (function() {
   };
 
   /*
+  # Get Actor's texture repeat
+  #
+  # @return [Object]
+  #   @option [Number] x
+  #   @option [Number] y
+  */
+
+
+  AJSBaseActor.prototype.getTextureRepeat = function() {
+    var texRepeat;
+    if (!this._textureRepeat) {
+      texRepeat = window.AdefyRE.Actors().getActorTextureRepeat(this._id);
+      this._textureRepeat = JSON.parse(texRepeat);
+    }
+    return this._textureRepeat;
+  };
+
+  /*
   # Set actor physics properties
   #
   # @param [Object]
@@ -2023,9 +2041,9 @@ AJS = (function() {
   AJS.Version = {
     MAJOR: 1,
     MINOR: 0,
-    PATCH: 8,
+    PATCH: 9,
     BUILD: null,
-    STRING: "1.0.8"
+    STRING: "1.0.9"
   };
 
   AJS._engine = null;
