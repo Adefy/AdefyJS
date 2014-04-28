@@ -1,6 +1,6 @@
 {
   "name": "AdefyJS",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "authors": [
     "Cris Mihalache <cris@adefy.com>",
     "Blaž Hrastnik <blaz@adefy.com>",
@@ -13,6 +13,6 @@
     "dev/components"
   ],
   "dependencies": {
-    "adefyre": "git@github.com:Adefy/AdefyRE.git#v1.0.8"
+    "adefyre": "git@github.com:Adefy/AdefyRE.git#v1.0.10"
   }
 }
