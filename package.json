@@ -2,7 +2,7 @@
   "name": "AdefyJS",
   "description": "Adefy middleware JS library",
   "author": "Spectrum IT Solutions GmbH <office@spectrumit.eu>",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "private": true,
   "engine": "node >= 0.10.12",
   "contributors": [

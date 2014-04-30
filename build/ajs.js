@@ -2041,9 +2041,9 @@ AJS = (function() {
   AJS.Version = {
     MAJOR: 1,
     MINOR: 0,
-    PATCH: 9,
+    PATCH: 10,
     BUILD: null,
-    STRING: "1.0.9"
+    STRING: "1.0.10"
   };
 
   AJS._engine = null;
