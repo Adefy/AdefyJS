@@ -14,8 +14,7 @@ class AJSCircle extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    options = param.required options
-    @_radius = param.required options.radius
+    @_radius = options.radius
 
     if @_radius <= 0 then throw new Error "Radius must be greater than 0"
 
@@ -54,9 +53,9 @@ class AJSCircle extends AJSBaseActor
   # @param [Boolean] sim signals a simulation, returns verts (default false)
   # @param [Number] radius radius for simulation
   _rebuildVerts: (sim, radius) ->
-    ignorePsyx = param.optional ignorePsyx, false
-    sim = param.optional sim, false
-    radius = param.optional radius, @_radius
+    ignorePsyx = !!ignorePsyx
+    sim = !!sim
+    radius ||= @_radius
 
     segments = 32
 
@@ -114,8 +113,7 @@ class AJSCircle extends AJSBaseActor
   #
   # @param [Number] radius new radius, > 0
   setRadius: (radius) ->
-    param.required radius
-    if radius <= 0 then throw new Error "New radius must be >0 !"
+    throw new Error "New radius must be >0 !" if radius <= 0
     AJS.info "Setting actor (#{@_id}) radius [#{radius}]..."
 
     @_radius = radius
@@ -136,9 +134,6 @@ class AJSCircle extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     anim = {}
 
     # Attaches the appropriate prefix, returns "." for 0

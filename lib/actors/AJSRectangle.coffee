@@ -15,23 +15,22 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    options = param.required options
-    @_width = param.required options.w
-    @_height = param.required options.h
+    @_width = options.w
+    @_height = options.h
 
-    if @_width <= 0 then throw new Error "Width must be greater than 0"
-    if @_height <= 0 then throw new Error "Height must be greater than 0"
+    throw new Error "Width must be greater than 0" if @_width <= 0
+    throw new Error "Height must be greater than 0" if @_height <= 0
 
     scale = AJS.getAutoScale()
 
     # Scale square actors by scale midpoint
     if @_width == @_height
       scale = (scale.x + scale.y) / 2
-      if options.noScaleW != true then @_width *= scale
-      if options.noScaleH != true then @_height *= scale
+      @_width *= scale unless options.noScaleW
+      @_height *= scale unless options.noScaleH
 
     # Scale by scale midpoint while maintaining aspect ratio
-    else if options.scaleAR == true
+    else if options.scaleAR
 
       ar = @_width / @_height
       scale = (scale.x + scale.y) / 2
@@ -45,19 +44,19 @@ class AJSRectangle extends AJSBaseActor
 
     # Scale per-axis
     else
-      if options.noScaleW != true then @_width *= scale.x
-      if options.noScaleH != true then @_height *= scale.y
+      @_width *= scale.x unless options.noScaleW
+      @_height *= scale.y unless options.noScaleH
 
     super null, options.mass, options.friction, options.elasticity
 
     if options.color instanceof AJSColor3
       @setColor options.color
-    else if options.color != undefined and options.color.r != undefined
+    else if options.color and options.color.r != undefined
       @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
 
     if options.position instanceof AJSVector2
       @setPosition options.position
-    else if options.position != undefined and options.position.x != undefined
+    else if options.position and options.position.x != undefined
       @setPosition new AJSVector2 options.position.x, options.position.y
 
     if typeof options.rotation == "number"
@@ -91,8 +90,7 @@ class AJSRectangle extends AJSBaseActor
   #
   # @param [Number] height new height, > 0
   setHeight: (h) ->
-    param.required h
-    if h <= 0 then throw new Error "New height must be >0 !"
+    throw new Error "New height must be >0 !" if h <= 0
     AJS.info "Setting actor (#{@_id}) height [#{h}]..."
 
     @_height = h
@@ -103,8 +101,7 @@ class AJSRectangle extends AJSBaseActor
   #
   # @param [Number] width new width, > 0
   setWidth: (w) ->
-    param.required w
-    if w <= 0 then throw new Error "New width must be >0 !"
+    throw new Error "New width must be >0 !" if w <= 0
     AJS.info "Setting actor (#{@_id}) width [#{w}]..."
 
     @_width = w
@@ -123,9 +120,6 @@ class AJSRectangle extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     anim = {}
 
     # Attaches the appropriate prefix, returns "." for 0
@@ -249,8 +243,7 @@ class AJSRectangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property[0] == "height" or property[0] == "width" then return true
-    else return false
+    property[0] == "height" or property[0] == "width"
 
   # Checks if the mapping for the property requires an absolute modification
   # to the actor. Multiple absolute modifications should never be performed
@@ -275,23 +268,19 @@ class AJSRectangle extends AJSBaseActor
   # @param [Number] start animation start, default 0
   # @param [Array<Object>] cp animation control points
   resize: (endW, endH, startW, startH, duration, start, cp) ->
-    endW = param.optional endW, null
-    endH = param.optional endH, null
 
-    if duration == undefined
-      if endW != null then @setWidth endW
-      if endH != null then @setHeight endH
+    unless duration
+      @setWidth endW if endW
+      @setHeight endH if endH
       return @
     else
 
-      if start == undefined then start = 0
-      if cp == undefined then cp = []
-
+      start ||= 0
+      cp ||= []
       components = []
       args = []
 
       if endW != null
-        param.required startW
 
         components.push ["width"]
         args.push
@@ -303,7 +292,6 @@ class AJSRectangle extends AJSBaseActor
           property: "width"
 
       if endH != null
-        param.required startH
 
         components.push ["height"]
         args.push

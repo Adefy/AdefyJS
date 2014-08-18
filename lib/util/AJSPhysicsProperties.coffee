@@ -7,9 +7,9 @@ class AJSPhysicsProperties
   #   @property [Number] friction
   ###
   constructor: (options) ->
-    @_mass = param.optional options.mass, 0
-    @_elasticity = param.optional options.elasticity, 0
-    @_friction = param.optional options.friction, 0
+    @_mass = options.mass || 0
+    @_elasticity = options.elasticity || 0
+    @_friction = options.friction || 0
 
   ###
   # Get the mass property

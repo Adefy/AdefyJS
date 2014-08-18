@@ -159,9 +159,9 @@ class AJSColor3
   constructor: (r, g, b) ->
 
     # @todo Check to see if this is necessary
-    @_r = param.optional r, 0
-    @_g = param.optional g, 0
-    @_b = param.optional b, 0
+    @_r = r || 0
+    @_g = g || 0
+    @_b = b || 0
 
   ###
   # Returns the red component as either an int or float
@@ -170,12 +170,14 @@ class AJSColor3
   # @return [Number] red
   ###
   getR: (asFloat) ->
-    if asFloat != true then return @_r
+    return @_r unless asFloat
+
     if @_r == 0
       if asFloat
         return 0.0
       else
         return 0
+
     @_r / 255
 
   # Returns the green component as either an int or float
@@ -183,12 +185,14 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] green
   getG: (asFloat) ->
-    if asFloat != true then return @_g
+    return @_g unless asFloat
+
     if @_g == 0
       if asFloat
         return 0.0
       else
         return 0
+
     @_g / 255
 
   # Returns the blue component as either an int or float
@@ -196,12 +200,14 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] blue
   getB: (asFloat) ->
-    if asFloat != true then return @_b
+    return @_b unless asFloat
+
     if @_b == 0
       if asFloat
         return 0.0
       else
         return 0
+
     @_b / 255
 
   # Set red component, takes a value between 0-255
@@ -242,9 +248,9 @@ class AJSPhysicsProperties
   #   @property [Number] friction
   ###
   constructor: (options) ->
-    @_mass = param.optional options.mass, 0
-    @_elasticity = param.optional options.elasticity, 0
-    @_friction = param.optional options.friction, 0
+    @_mass = options.mass || 0
+    @_elasticity = options.elasticity || 0
+    @_friction = options.friction || 0
 
   ###
   # Get the mass property
@@ -281,24 +287,20 @@ class AJSBaseActor
   # @param [Number] elasticity object elasticity
   ###
   constructor: (@_verts, mass, friction, elasticity) ->
-    @_verts = param.optional @_verts
-    @_m = param.optional mass, 0
-    @_f = param.optional friction, 0.2
-    @_e = param.optional elasticity, 0.3
+    @_m = Math.max 0, (mass || 0)
+    @_f = friction || 0.2
+    @_e = elasticity || 0.3
 
-    if @interfaceActorCreate == null
+    unless @interfaceActorCreate
       throw new Error "Actor class doesn't provide interface actor creation!"
 
-    if mass < 0 then mass = 0
-    if @_verts != undefined and @_verts != null and @_verts.length < 6
+    if @_verts and @_verts.length < 6
       throw new Error "At least three vertices must be provided"
 
     @_psyx = false
 
     # Actual actor creation
-    @_id = @interfaceActorCreate()
-
-    if @_id == -1
+    if (@_id = @interfaceActorCreate()) == -1
       throw new Error "Failed to create actor!"
 
     @setPosition new AJSVector2()
@@ -330,7 +332,7 @@ class AJSBaseActor
   ###
   setLayer: (layer) ->
     AJS.info "Setting actor (#{@_id}) layer #{layer}"
-    window.AdefyRE.Actors().setActorLayer param.required(layer), @_id
+    window.AdefyRE.Actors().setActorLayer layer, @_id
     @
 
   ###
@@ -345,7 +347,7 @@ class AJSBaseActor
   ###
   setPhysicsLayer: (layer) ->
     AJS.info "Setting actor (#{@_id}) physics layer #{layer}"
-    window.AdefyRE.Actors().setActorPhysicsLayer param.required(layer), @_id
+    window.AdefyRE.Actors().setActorPhysicsLayer layer, @_id
     @
 
   ###
@@ -355,7 +357,6 @@ class AJSBaseActor
   # @param [Array<Number>] verts
   ###
   _setPhysicsVertices: (verts) ->
-    param.required verts
     AJS.info "Setting actor physics vertices (#{@_id}) [#{verts.length} verts]"
     window.AdefyRE.Actors().setPhysicsVertices JSON.stringify(verts), @_id
 
@@ -366,10 +367,8 @@ class AJSBaseActor
   # @param [Number] mode
   ###
   _setRenderMode: (mode) ->
-    # always be sure to keep this synced with ARERenderer.renderModes
-    renderMode = param.required mode, [0, 1, 2]
-    AJS.info "Setting actor (#{@_id}) render mode #{renderMode}"
-    window.AdefyRE.Actors().setRenderMode renderMode, @_id
+    AJS.info "Setting actor (#{@_id}) render mode #{mode}"
+    window.AdefyRE.Actors().setRenderMode mode, @_id
 
   ###
   # @private
@@ -600,7 +599,7 @@ class AJSBaseActor
   # @return [self]
   ###
   setTextureRepeat: (x, y) ->
-    y = param.optional y, 1
+    y ||= 1
     AJS.info "Setting actor (#{@_id}) texture repeat (#{x}, #{y})"
 
     @_textureRepeat =
@@ -686,12 +685,8 @@ class AJSBaseActor
   # @param [Number] friction 0.0 - 1.0
   # @param [Number] elasticity 0.0 - 1.0
   ###
-  enablePsyx: (m, f, e) ->
-    @_m = param.optional m, @_m
-    @_f = param.optional f, @_f
-    @_e = param.optional e, @_e
-    AJS.info "Enabling actor physics (#{@_id}) [m: #{m}, f: #{f}, e: #{e}]"
-
+  enablePsyx: (@_m, @_f, @_e) ->
+    AJS.info "Enabling actor physics (#{@_id}), m: #{@_m}, f: #{@_f}, e: #{@_e}"
     @_psyx = window.AdefyRE.Actors().enableActorPhysics @_m, @_f, @_e, @_id
     @
 
@@ -701,7 +696,7 @@ class AJSBaseActor
   ###
   disablePsyx: ->
     AJS.info "Disabling actor (#{@_id}) physics..."
-    if window.AdefyRE.Actors().destroyPhysicsBody @_id then @_psyx = false
+    @_psyx = false if window.AdefyRE.Actors().destroyPhysicsBody @_id
     @
 
   ###
@@ -717,12 +712,9 @@ class AJSBaseActor
   # @param [Angle] angle anchor point rotation
   ###
   attachTexture: (texture, w, h, x, y, angle) ->
-    param.required texture
-    param.required w
-    param.required h
-    x = param.optional x, 0
-    y = param.optional y, 0
-    angle = param.optional angle, 0
+    x ||= 0
+    y ||= 0
+    angle ||= 0
 
     AJS.info "Attaching texture #{texture} #{w}x#{h} to actor (#{@_id})"
 
@@ -756,7 +748,6 @@ class AJSBaseActor
   # @return [Boolean] success
   ###
   setAttachmentVisible: (visible) ->
-    param.required visible
     AJS.info "Setting actor texture attachment visiblity [#{visible}]"
     window.AdefyRE.Actors().setAttachmentVisible visible, @_id
 
@@ -815,21 +806,16 @@ class AJSBaseActor
   # @return [self]
   ###
   rotate: (angle, duration, start, cp) ->
-    param.required angle
-
-    if duration == undefined
+    if !duration
       @setRotation angle
     else
 
-      if start == undefined then start = 0
-      if cp == undefined then cp = []
-
       AJS.animate @, [["rotation"]], [
         endVal: angle
-        controlPoints: cp
+        controlPoints: cp || []
         duration: duration
         property: "rotation"
-        start: start
+        start: start || 0
       ]
 
     @
@@ -959,23 +945,22 @@ class AJSRectangle extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    options = param.required options
-    @_width = param.required options.w
-    @_height = param.required options.h
+    @_width = options.w
+    @_height = options.h
 
-    if @_width <= 0 then throw new Error "Width must be greater than 0"
-    if @_height <= 0 then throw new Error "Height must be greater than 0"
+    throw new Error "Width must be greater than 0" if @_width <= 0
+    throw new Error "Height must be greater than 0" if @_height <= 0
 
     scale = AJS.getAutoScale()
 
     # Scale square actors by scale midpoint
     if @_width == @_height
       scale = (scale.x + scale.y) / 2
-      if options.noScaleW != true then @_width *= scale
-      if options.noScaleH != true then @_height *= scale
+      @_width *= scale unless options.noScaleW
+      @_height *= scale unless options.noScaleH
 
     # Scale by scale midpoint while maintaining aspect ratio
-    else if options.scaleAR == true
+    else if options.scaleAR
 
       ar = @_width / @_height
       scale = (scale.x + scale.y) / 2
@@ -989,19 +974,19 @@ class AJSRectangle extends AJSBaseActor
 
     # Scale per-axis
     else
-      if options.noScaleW != true then @_width *= scale.x
-      if options.noScaleH != true then @_height *= scale.y
+      @_width *= scale.x unless options.noScaleW
+      @_height *= scale.y unless options.noScaleH
 
     super null, options.mass, options.friction, options.elasticity
 
     if options.color instanceof AJSColor3
       @setColor options.color
-    else if options.color != undefined and options.color.r != undefined
+    else if options.color and options.color.r != undefined
       @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
 
     if options.position instanceof AJSVector2
       @setPosition options.position
-    else if options.position != undefined and options.position.x != undefined
+    else if options.position and options.position.x != undefined
       @setPosition new AJSVector2 options.position.x, options.position.y
 
     if typeof options.rotation == "number"
@@ -1035,8 +1020,7 @@ class AJSRectangle extends AJSBaseActor
   #
   # @param [Number] height new height, > 0
   setHeight: (h) ->
-    param.required h
-    if h <= 0 then throw new Error "New height must be >0 !"
+    throw new Error "New height must be >0 !" if h <= 0
     AJS.info "Setting actor (#{@_id}) height [#{h}]..."
 
     @_height = h
@@ -1047,8 +1031,7 @@ class AJSRectangle extends AJSBaseActor
   #
   # @param [Number] width new width, > 0
   setWidth: (w) ->
-    param.required w
-    if w <= 0 then throw new Error "New width must be >0 !"
+    throw new Error "New width must be >0 !" if w <= 0
     AJS.info "Setting actor (#{@_id}) width [#{w}]..."
 
     @_width = w
@@ -1067,9 +1050,6 @@ class AJSRectangle extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     anim = {}
 
     # Attaches the appropriate prefix, returns "." for 0
@@ -1193,8 +1173,7 @@ class AJSRectangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property[0] == "height" or property[0] == "width" then return true
-    else return false
+    property[0] == "height" or property[0] == "width"
 
   # Checks if the mapping for the property requires an absolute modification
   # to the actor. Multiple absolute modifications should never be performed
@@ -1219,23 +1198,19 @@ class AJSRectangle extends AJSBaseActor
   # @param [Number] start animation start, default 0
   # @param [Array<Object>] cp animation control points
   resize: (endW, endH, startW, startH, duration, start, cp) ->
-    endW = param.optional endW, null
-    endH = param.optional endH, null
 
-    if duration == undefined
-      if endW != null then @setWidth endW
-      if endH != null then @setHeight endH
+    unless duration
+      @setWidth endW if endW
+      @setHeight endH if endH
       return @
     else
 
-      if start == undefined then start = 0
-      if cp == undefined then cp = []
-
+      start ||= 0
+      cp ||= []
       components = []
       args = []
 
       if endW != null
-        param.required startW
 
         components.push ["width"]
         args.push
@@ -1247,7 +1222,6 @@ class AJSRectangle extends AJSBaseActor
           property: "width"
 
       if endH != null
-        param.required startH
 
         components.push ["height"]
         args.push
@@ -1279,12 +1253,11 @@ class AJSTriangle extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    options = param.required options
-    @_base = param.required options.base
-    @_height = param.required options.height
+    @_base = options.base
+    @_height = options.height
 
-    if @_base <= 0 then throw "Base must be wider than 0"
-    if @_height <= 0 then throw "Height must be greater than 0"
+    throw "Base must be wider than 0" if @_base <= 0
+    throw "Height must be greater than 0" if @_height <= 0
 
     scale = AJS.getAutoScale()
     @_base *= scale.x
@@ -1296,12 +1269,12 @@ class AJSTriangle extends AJSBaseActor
     # Set attributes if passed in
     if options.color instanceof AJSColor3
       @setColor options.color
-    else if options.color != undefined and options.color.r != undefined
+    else if options.color and options.color.r != undefined
       @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
 
     if options.position instanceof AJSVector2
       @setPosition options.position
-    else if options.position != undefined and options.position.x != undefined
+    else if options.position and options.position.x != undefined
       @setPosition new AJSVector2 options.position.x, options.position.y
 
     if typeof options.rotation == "number"
@@ -1354,8 +1327,7 @@ class AJSTriangle extends AJSBaseActor
   #
   # @param [Number] height new height, > 0
   setHeight: (h) ->
-    param.required h
-    if h <= 0 then throw new Error "New height must be >0 !"
+    throw new Error "New height must be >0 !" if h <= 0
 
     h *= AJS.getAutoScale().y
 
@@ -1366,8 +1338,7 @@ class AJSTriangle extends AJSBaseActor
 
   # Set base. Enforces minimum, rebuilds vertices, and updates actor
   setBase: (b) ->
-    param.required b
-    if b <= 0 then throw new Error "New base must be >0 !"
+    throw new Error "New base must be >0 !" if b <= 0
 
     b *= AJS.getAutoScale().x
 
@@ -1388,9 +1359,6 @@ class AJSTriangle extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     scale = AJS.getAutoScale()
     anim = {}
 
@@ -1515,8 +1483,7 @@ class AJSTriangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property[0] == "base" or property[0] == "height" then return true
-    else return false
+    property[0] == "base" or property[0] == "height"
 
   # Checks if the mapping for the property requires an absolute modification
   # to the actor. Multiple absolute modifications should never be performed
@@ -1541,16 +1508,14 @@ class AJSTriangle extends AJSBaseActor
   # @param [Number] start animation start, default 0
   # @param [Array<Object>] cp animation control points
   resize: (endB, endH, startB, startH, duration, start, cp) ->
-    endB = param.optional endB, null
-    endH = param.optional endH, null
-
-    if duration == undefined
-      if endB != null then @setBase endB
-      if endH != null then @setHeight endH
+    unless duration
+      @setBase endB if endB
+      @setHeight endH if endH
       return @
     else
-      if start == undefined then start = 0
-      if cp == undefined then cp = []
+
+      start ||= 0
+      cp ||= []
 
       # NOTE: We only scale here, since the setBase() and setHeight() methods
       #       used if duration is undefined also apply scale!
@@ -1564,7 +1529,6 @@ class AJSTriangle extends AJSBaseActor
       args = []
 
       if endB != null
-        param.required startB
 
         components.push ["base"]
         args.push
@@ -1576,7 +1540,6 @@ class AJSTriangle extends AJSBaseActor
           property: "base"
 
       if endH != null
-        param.required startH
 
         components.push ["height"]
         args.push
@@ -1627,13 +1590,12 @@ class AJSPolygon extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    param.required options
-    @_radius = param.required options.radius
-    @_segments = param.required options.segments
-    options.psyx = param.optional options.psyx, false
+    @_radius = options.radius
+    @_segments = options.segments
+    options.psyx = !!options.psyx
 
-    if @_radius <= 0 then throw "Radius must be larger than 0"
-    if @_segments < 3 then throw "Shape must consist of at least 3 segments"
+    throw "Radius must be larger than 0" if @_radius <= 0
+    throw "Shape must consist of at least 3 segments" if @_segments < 3
 
     scale = AJS.getAutoScale()
     @radius *= Math.min scale.x, scale.y
@@ -1646,12 +1608,12 @@ class AJSPolygon extends AJSBaseActor
     # Set attributes if passed in
     if options.color instanceof AJSColor3
       @setColor options.color
-    else if options.color != undefined and options.color.r != undefined
+    else if options.color and options.color.r != undefined
       @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
 
     if options.position instanceof AJSVector2
       @setPosition options.position
-    else if options.position != undefined and options.position.x != undefined
+    else if options.position and options.position.x != undefined
       @setPosition new AJSVector2 options.position.x, options.position.y
 
     if typeof options.rotation == "number"
@@ -1677,10 +1639,10 @@ class AJSPolygon extends AJSBaseActor
   # @param [Number] segments segment count for simulation
   # @param [Number] radius radius for simulation
   _rebuildVerts: (ignorePsyx, sim, segments, radius) ->
-    ignorePsyx = param.optional ignorePsyx, false
-    sim = param.optional sim, false
-    segments = param.optional segments, @_segments
-    radius = param.optional radius, @_radius
+    ignorePsyx = !!ignorePsyx
+    sim = !!sim
+    segments ||= @_segments
+    radius ||= @_radius
 
     # Build vertices
     # Uses algo from http://slabode.exofire.net/circle_draw.shtml
@@ -1735,9 +1697,7 @@ class AJSPolygon extends AJSBaseActor
   #
   # @param [Number] radius new radius, > 0
   setRadius: (r) ->
-    param.required r
-
-    if r <= 0 then throw new Error "New radius must be >0 !"
+    throw new Error "New radius must be >0 !" if r <= 0
 
     @_radius = r
     @_rebuildVerts()
@@ -1748,9 +1708,7 @@ class AJSPolygon extends AJSBaseActor
   #
   # @param [Number] segments new segment count, >= 3
   setSegments: (s) ->
-    param.required s
-
-    if s < 3 then throw new Error "New segment count must be >=3 !"
+    throw new Error "New segment count must be >=3 !" if s < 3
 
     @_segments = s
     @_rebuildVerts()
@@ -1779,9 +1737,6 @@ class AJSPolygon extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     anim = {}
 
     # Grab current vertices
@@ -1891,8 +1846,7 @@ class AJSCircle extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    options = param.required options
-    @_radius = param.required options.radius
+    @_radius = options.radius
 
     if @_radius <= 0 then throw new Error "Radius must be greater than 0"
 
@@ -1931,9 +1885,9 @@ class AJSCircle extends AJSBaseActor
   # @param [Boolean] sim signals a simulation, returns verts (default false)
   # @param [Number] radius radius for simulation
   _rebuildVerts: (sim, radius) ->
-    ignorePsyx = param.optional ignorePsyx, false
-    sim = param.optional sim, false
-    radius = param.optional radius, @_radius
+    ignorePsyx = !!ignorePsyx
+    sim = !!sim
+    radius ||= @_radius
 
     segments = 32
 
@@ -1991,8 +1945,7 @@ class AJSCircle extends AJSBaseActor
   #
   # @param [Number] radius new radius, > 0
   setRadius: (radius) ->
-    param.required radius
-    if radius <= 0 then throw new Error "New radius must be >0 !"
+    throw new Error "New radius must be >0 !" if radius <= 0
     AJS.info "Setting actor (#{@_id}) radius [#{radius}]..."
 
     @_radius = radius
@@ -2013,9 +1966,6 @@ class AJSCircle extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     anim = {}
 
     # Attaches the appropriate prefix, returns "." for 0
@@ -2094,10 +2044,10 @@ class AJS
 
   @Version:
     MAJOR: 1
-    MINOR: 0
-    PATCH: 10
+    MINOR: 1
+    PATCH: 0
     BUILD: null
-    STRING: "1.0.10"
+    STRING: "1.1.0"
 
   # Pointer to the engine, initalized (once) in init()
   # @private
@@ -2141,9 +2091,6 @@ class AJS
   # @param [Number] height
   # @param [String] canvasID optional canvas ID for WebGL engine
   @init: (ad, width, height, canvasID) ->
-    param.required ad
-    param.required width
-    param.required height
 
     # Should never happen, so don't fail quietly
     if AJS._initialized
@@ -2173,7 +2120,6 @@ class AJS
   #
   # @param [Number] level 0-4
   @setLogLevel: (level) ->
-    param.required level, [0, 1, 2, 3, 4]
     @info "Setting log level to #{level}"
 
     window.AdefyRE.Engine().setLogLevel level
@@ -2247,9 +2193,6 @@ class AJS
   # @param [Number] x
   # @param [Number] y
   @setCameraPosition: (x, y) ->
-    param.required x
-    param.required y
-
     @info "Setting camera position (#{x}, #{y})"
 
     x *= AJS._scaleX
@@ -2275,9 +2218,6 @@ class AJS
   # @param [Number] g
   # @param [Number] b
   @setClearColor: (r, g, b) ->
-    param.required r
-    param.required g
-    param.required b
     @info "Setting clear color to (#{r}, #{g}, #{b})"
 
     window.AdefyRE.Engine().setClearColor r, g, b
@@ -2329,11 +2269,8 @@ class AJS
   # @param [Number] start optional, animation start time (applies to all)
   # @param [Number] fps optional animation rate, defaults to 30
   @animate: (actor, properties, options, start, fps) ->
-    param.required actor
-    param.required properties
-    param.required options
-    start = param.optional start, 0
-    fps = param.optional fps, 30
+    start ||= 0
+    fps ||= 30
 
     Animations = window.AdefyRE.Animations()
 
@@ -2390,9 +2327,6 @@ class AJS
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   @mapAnimation: (actor, property, options) ->
-    param.required actor
-    param.required property
-    param.required options
 
     # We actually pass this down to the actor. Evil, eh? Muahahahaha
     actor.mapAnimation property, options
@@ -2403,12 +2337,11 @@ class AJS
   # @param [String] json valid package.json source (can also be an object)
   # @param [Method] cb callback to call after load (textures)
   @loadManifest: (json, cb) ->
-    param.required json
 
     # If the json is not a string, then stringify it
-    if typeof json != "string" then json = JSON.stringify json
+    json = JSON.stringify json if typeof json != "string"
 
-    cb = param.optional cb, ->
+    cb ||= ->
     @info "Loading manifest #{JSON.stringify json}"
 
     window.AdefyRE.Engine().loadManifest json, cb
@@ -2424,10 +2357,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createRectangleActor: (x, y, w, h, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required w
-    param.required h
 
     options =
       position: { x: x, y: y }
@@ -2450,10 +2379,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createSquareActor: (x, y, l, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required l
-
     AJS.createRectangleActor x, y, l, l, r, g, b,
 
   # Create a new circle actor
@@ -2466,9 +2391,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createCircleActor: (x, y, radius, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required radius
 
     options =
       position: { x: x, y: y }
@@ -2491,10 +2413,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createPolygonActor: (x, y, radius, segments, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required radius
-    param.required segments
 
     options =
       position: { x: x, y: y }
@@ -2518,14 +2436,10 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createTriangleActor: (x, y, base, height, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required base
-    param.required height
 
-    if r == undefined then r = Math.floor (Math.random() * 255)
-    if g == undefined then g = Math.floor (Math.random() * 255)
-    if b == undefined then b = Math.floor (Math.random() * 255)
+    r ||= Math.floor (Math.random() * 255)
+    g ||= Math.floor (Math.random() * 255)
+    b ||= Math.floor (Math.random() * 255)
 
     options =
      position: { x: x, y: y }
@@ -2543,7 +2457,6 @@ class AJS
   # @param [String] name
   # @return [Object] size
   @getTextureSize: (name) ->
-    param.required name
     @info "Fetching texture size by name (#{name})"
 
     window.AdefyRE.Engine().getTextureSize name

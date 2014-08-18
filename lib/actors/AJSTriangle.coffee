@@ -15,12 +15,11 @@ class AJSTriangle extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    options = param.required options
-    @_base = param.required options.base
-    @_height = param.required options.height
+    @_base = options.base
+    @_height = options.height
 
-    if @_base <= 0 then throw "Base must be wider than 0"
-    if @_height <= 0 then throw "Height must be greater than 0"
+    throw "Base must be wider than 0" if @_base <= 0
+    throw "Height must be greater than 0" if @_height <= 0
 
     scale = AJS.getAutoScale()
     @_base *= scale.x
@@ -32,12 +31,12 @@ class AJSTriangle extends AJSBaseActor
     # Set attributes if passed in
     if options.color instanceof AJSColor3
       @setColor options.color
-    else if options.color != undefined and options.color.r != undefined
+    else if options.color and options.color.r != undefined
       @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
 
     if options.position instanceof AJSVector2
       @setPosition options.position
-    else if options.position != undefined and options.position.x != undefined
+    else if options.position and options.position.x != undefined
       @setPosition new AJSVector2 options.position.x, options.position.y
 
     if typeof options.rotation == "number"
@@ -90,8 +89,7 @@ class AJSTriangle extends AJSBaseActor
   #
   # @param [Number] height new height, > 0
   setHeight: (h) ->
-    param.required h
-    if h <= 0 then throw new Error "New height must be >0 !"
+    throw new Error "New height must be >0 !" if h <= 0
 
     h *= AJS.getAutoScale().y
 
@@ -102,8 +100,7 @@ class AJSTriangle extends AJSBaseActor
 
   # Set base. Enforces minimum, rebuilds vertices, and updates actor
   setBase: (b) ->
-    param.required b
-    if b <= 0 then throw new Error "New base must be >0 !"
+    throw new Error "New base must be >0 !" if b <= 0
 
     b *= AJS.getAutoScale().x
 
@@ -124,9 +121,6 @@ class AJSTriangle extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     scale = AJS.getAutoScale()
     anim = {}
 
@@ -251,8 +245,7 @@ class AJSTriangle extends AJSBaseActor
   # @param [Array<String>] property property name
   # @return [Boolean] support
   canMapAnimation: (property) ->
-    if property[0] == "base" or property[0] == "height" then return true
-    else return false
+    property[0] == "base" or property[0] == "height"
 
   # Checks if the mapping for the property requires an absolute modification
   # to the actor. Multiple absolute modifications should never be performed
@@ -277,16 +270,14 @@ class AJSTriangle extends AJSBaseActor
   # @param [Number] start animation start, default 0
   # @param [Array<Object>] cp animation control points
   resize: (endB, endH, startB, startH, duration, start, cp) ->
-    endB = param.optional endB, null
-    endH = param.optional endH, null
-
-    if duration == undefined
-      if endB != null then @setBase endB
-      if endH != null then @setHeight endH
+    unless duration
+      @setBase endB if endB
+      @setHeight endH if endH
       return @
     else
-      if start == undefined then start = 0
-      if cp == undefined then cp = []
+
+      start ||= 0
+      cp ||= []
 
       # NOTE: We only scale here, since the setBase() and setHeight() methods
       #       used if duration is undefined also apply scale!
@@ -300,7 +291,6 @@ class AJSTriangle extends AJSBaseActor
       args = []
 
       if endB != null
-        param.required startB
 
         components.push ["base"]
         args.push
@@ -312,7 +302,6 @@ class AJSTriangle extends AJSBaseActor
           property: "base"
 
       if endH != null
-        param.required startH
 
         components.push ["height"]
         args.push

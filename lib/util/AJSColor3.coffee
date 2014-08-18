@@ -14,9 +14,9 @@ class AJSColor3
   constructor: (r, g, b) ->
 
     # @todo Check to see if this is necessary
-    @_r = param.optional r, 0
-    @_g = param.optional g, 0
-    @_b = param.optional b, 0
+    @_r = r || 0
+    @_g = g || 0
+    @_b = b || 0
 
   ###
   # Returns the red component as either an int or float
@@ -25,12 +25,14 @@ class AJSColor3
   # @return [Number] red
   ###
   getR: (asFloat) ->
-    if asFloat != true then return @_r
+    return @_r unless asFloat
+
     if @_r == 0
       if asFloat
         return 0.0
       else
         return 0
+
     @_r / 255
 
   # Returns the green component as either an int or float
@@ -38,12 +40,14 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] green
   getG: (asFloat) ->
-    if asFloat != true then return @_g
+    return @_g unless asFloat
+
     if @_g == 0
       if asFloat
         return 0.0
       else
         return 0
+
     @_g / 255
 
   # Returns the blue component as either an int or float
@@ -51,12 +55,14 @@ class AJSColor3
   # @param [Boolean] float true if a float is requested
   # @return [Number] blue
   getB: (asFloat) ->
-    if asFloat != true then return @_b
+    return @_b unless asFloat
+
     if @_b == 0
       if asFloat
         return 0.0
       else
         return 0
+
     @_b / 255
 
   # Set red component, takes a value between 0-255

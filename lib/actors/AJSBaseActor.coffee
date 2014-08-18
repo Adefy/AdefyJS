@@ -15,24 +15,20 @@ class AJSBaseActor
   # @param [Number] elasticity object elasticity
   ###
   constructor: (@_verts, mass, friction, elasticity) ->
-    @_verts = param.optional @_verts
-    @_m = param.optional mass, 0
-    @_f = param.optional friction, 0.2
-    @_e = param.optional elasticity, 0.3
+    @_m = Math.max 0, (mass || 0)
+    @_f = friction || 0.2
+    @_e = elasticity || 0.3
 
-    if @interfaceActorCreate == null
+    unless @interfaceActorCreate
       throw new Error "Actor class doesn't provide interface actor creation!"
 
-    if mass < 0 then mass = 0
-    if @_verts != undefined and @_verts != null and @_verts.length < 6
+    if @_verts and @_verts.length < 6
       throw new Error "At least three vertices must be provided"
 
     @_psyx = false
 
     # Actual actor creation
-    @_id = @interfaceActorCreate()
-
-    if @_id == -1
+    if (@_id = @interfaceActorCreate()) == -1
       throw new Error "Failed to create actor!"
 
     @setPosition new AJSVector2()
@@ -64,7 +60,7 @@ class AJSBaseActor
   ###
   setLayer: (layer) ->
     AJS.info "Setting actor (#{@_id}) layer #{layer}"
-    window.AdefyRE.Actors().setActorLayer param.required(layer), @_id
+    window.AdefyRE.Actors().setActorLayer layer, @_id
     @
 
   ###
@@ -79,7 +75,7 @@ class AJSBaseActor
   ###
   setPhysicsLayer: (layer) ->
     AJS.info "Setting actor (#{@_id}) physics layer #{layer}"
-    window.AdefyRE.Actors().setActorPhysicsLayer param.required(layer), @_id
+    window.AdefyRE.Actors().setActorPhysicsLayer layer, @_id
     @
 
   ###
@@ -89,7 +85,6 @@ class AJSBaseActor
   # @param [Array<Number>] verts
   ###
   _setPhysicsVertices: (verts) ->
-    param.required verts
     AJS.info "Setting actor physics vertices (#{@_id}) [#{verts.length} verts]"
     window.AdefyRE.Actors().setPhysicsVertices JSON.stringify(verts), @_id
 
@@ -100,10 +95,8 @@ class AJSBaseActor
   # @param [Number] mode
   ###
   _setRenderMode: (mode) ->
-    # always be sure to keep this synced with ARERenderer.renderModes
-    renderMode = param.required mode, [0, 1, 2]
-    AJS.info "Setting actor (#{@_id}) render mode #{renderMode}"
-    window.AdefyRE.Actors().setRenderMode renderMode, @_id
+    AJS.info "Setting actor (#{@_id}) render mode #{mode}"
+    window.AdefyRE.Actors().setRenderMode mode, @_id
 
   ###
   # @private
@@ -334,7 +327,7 @@ class AJSBaseActor
   # @return [self]
   ###
   setTextureRepeat: (x, y) ->
-    y = param.optional y, 1
+    y ||= 1
     AJS.info "Setting actor (#{@_id}) texture repeat (#{x}, #{y})"
 
     @_textureRepeat =
@@ -420,12 +413,8 @@ class AJSBaseActor
   # @param [Number] friction 0.0 - 1.0
   # @param [Number] elasticity 0.0 - 1.0
   ###
-  enablePsyx: (m, f, e) ->
-    @_m = param.optional m, @_m
-    @_f = param.optional f, @_f
-    @_e = param.optional e, @_e
-    AJS.info "Enabling actor physics (#{@_id}) [m: #{m}, f: #{f}, e: #{e}]"
-
+  enablePsyx: (@_m, @_f, @_e) ->
+    AJS.info "Enabling actor physics (#{@_id}), m: #{@_m}, f: #{@_f}, e: #{@_e}"
     @_psyx = window.AdefyRE.Actors().enableActorPhysics @_m, @_f, @_e, @_id
     @
 
@@ -435,7 +424,7 @@ class AJSBaseActor
   ###
   disablePsyx: ->
     AJS.info "Disabling actor (#{@_id}) physics..."
-    if window.AdefyRE.Actors().destroyPhysicsBody @_id then @_psyx = false
+    @_psyx = false if window.AdefyRE.Actors().destroyPhysicsBody @_id
     @
 
   ###
@@ -451,12 +440,9 @@ class AJSBaseActor
   # @param [Angle] angle anchor point rotation
   ###
   attachTexture: (texture, w, h, x, y, angle) ->
-    param.required texture
-    param.required w
-    param.required h
-    x = param.optional x, 0
-    y = param.optional y, 0
-    angle = param.optional angle, 0
+    x ||= 0
+    y ||= 0
+    angle ||= 0
 
     AJS.info "Attaching texture #{texture} #{w}x#{h} to actor (#{@_id})"
 
@@ -490,7 +476,6 @@ class AJSBaseActor
   # @return [Boolean] success
   ###
   setAttachmentVisible: (visible) ->
-    param.required visible
     AJS.info "Setting actor texture attachment visiblity [#{visible}]"
     window.AdefyRE.Actors().setAttachmentVisible visible, @_id
 
@@ -549,21 +534,16 @@ class AJSBaseActor
   # @return [self]
   ###
   rotate: (angle, duration, start, cp) ->
-    param.required angle
-
-    if duration == undefined
+    if !duration
       @setRotation angle
     else
 
-      if start == undefined then start = 0
-      if cp == undefined then cp = []
-
       AJS.animate @, [["rotation"]], [
         endVal: angle
-        controlPoints: cp
+        controlPoints: cp || []
         duration: duration
         property: "rotation"
-        start: start
+        start: start || 0
       ]
 
     @

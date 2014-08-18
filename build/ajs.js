@@ -139,9 +139,9 @@ AJSColor3 = (function() {
   */
 
   function AJSColor3(r, g, b) {
-    this._r = param.optional(r, 0);
-    this._g = param.optional(g, 0);
-    this._b = param.optional(b, 0);
+    this._r = r || 0;
+    this._g = g || 0;
+    this._b = b || 0;
   }
 
   /*
@@ -153,7 +153,7 @@ AJSColor3 = (function() {
 
 
   AJSColor3.prototype.getR = function(asFloat) {
-    if (asFloat !== true) {
+    if (!asFloat) {
       return this._r;
     }
     if (this._r === 0) {
@@ -167,7 +167,7 @@ AJSColor3 = (function() {
   };
 
   AJSColor3.prototype.getG = function(asFloat) {
-    if (asFloat !== true) {
+    if (!asFloat) {
       return this._g;
     }
     if (this._g === 0) {
@@ -181,7 +181,7 @@ AJSColor3 = (function() {
   };
 
   AJSColor3.prototype.getB = function(asFloat) {
-    if (asFloat !== true) {
+    if (!asFloat) {
       return this._b;
     }
     if (this._b === 0) {
@@ -241,9 +241,9 @@ AJSPhysicsProperties = (function() {
   */
 
   function AJSPhysicsProperties(options) {
-    this._mass = param.optional(options.mass, 0);
-    this._elasticity = param.optional(options.elasticity, 0);
-    this._friction = param.optional(options.friction, 0);
+    this._mass = options.mass || 0;
+    this._elasticity = options.elasticity || 0;
+    this._friction = options.friction || 0;
   }
 
   /*
@@ -292,22 +292,17 @@ AJSBaseActor = (function() {
 
   function AJSBaseActor(_verts, mass, friction, elasticity) {
     this._verts = _verts;
-    this._verts = param.optional(this._verts);
-    this._m = param.optional(mass, 0);
-    this._f = param.optional(friction, 0.2);
-    this._e = param.optional(elasticity, 0.3);
-    if (this.interfaceActorCreate === null) {
+    this._m = Math.max(0, mass || 0);
+    this._f = friction || 0.2;
+    this._e = elasticity || 0.3;
+    if (!this.interfaceActorCreate) {
       throw new Error("Actor class doesn't provide interface actor creation!");
     }
-    if (mass < 0) {
-      mass = 0;
-    }
-    if (this._verts !== void 0 && this._verts !== null && this._verts.length < 6) {
+    if (this._verts && this._verts.length < 6) {
       throw new Error("At least three vertices must be provided");
     }
     this._psyx = false;
-    this._id = this.interfaceActorCreate();
-    if (this._id === -1) {
+    if ((this._id = this.interfaceActorCreate()) === -1) {
       throw new Error("Failed to create actor!");
     }
     this.setPosition(new AJSVector2());
@@ -347,7 +342,7 @@ AJSBaseActor = (function() {
 
   AJSBaseActor.prototype.setLayer = function(layer) {
     AJS.info("Setting actor (" + this._id + ") layer " + layer);
-    window.AdefyRE.Actors().setActorLayer(param.required(layer), this._id);
+    window.AdefyRE.Actors().setActorLayer(layer, this._id);
     return this;
   };
 
@@ -365,7 +360,7 @@ AJSBaseActor = (function() {
 
   AJSBaseActor.prototype.setPhysicsLayer = function(layer) {
     AJS.info("Setting actor (" + this._id + ") physics layer " + layer);
-    window.AdefyRE.Actors().setActorPhysicsLayer(param.required(layer), this._id);
+    window.AdefyRE.Actors().setActorPhysicsLayer(layer, this._id);
     return this;
   };
 
@@ -378,7 +373,6 @@ AJSBaseActor = (function() {
 
 
   AJSBaseActor.prototype._setPhysicsVertices = function(verts) {
-    param.required(verts);
     AJS.info("Setting actor physics vertices (" + this._id + ") [" + verts.length + " verts]");
     return window.AdefyRE.Actors().setPhysicsVertices(JSON.stringify(verts), this._id);
   };
@@ -392,10 +386,8 @@ AJSBaseActor = (function() {
 
 
   AJSBaseActor.prototype._setRenderMode = function(mode) {
-    var renderMode;
-    renderMode = param.required(mode, [0, 1, 2]);
-    AJS.info("Setting actor (" + this._id + ") render mode " + renderMode);
-    return window.AdefyRE.Actors().setRenderMode(renderMode, this._id);
+    AJS.info("Setting actor (" + this._id + ") render mode " + mode);
+    return window.AdefyRE.Actors().setRenderMode(mode, this._id);
   };
 
   /*
@@ -690,7 +682,7 @@ AJSBaseActor = (function() {
 
 
   AJSBaseActor.prototype.setTextureRepeat = function(x, y) {
-    y = param.optional(y, 1);
+    y || (y = 1);
     AJS.info("Setting actor (" + this._id + ") texture repeat (" + x + ", " + y + ")");
     this._textureRepeat = {
       x: x,
@@ -811,11 +803,11 @@ AJSBaseActor = (function() {
   */
 
 
-  AJSBaseActor.prototype.enablePsyx = function(m, f, e) {
-    this._m = param.optional(m, this._m);
-    this._f = param.optional(f, this._f);
-    this._e = param.optional(e, this._e);
-    AJS.info("Enabling actor physics (" + this._id + ") [m: " + m + ", f: " + f + ", e: " + e + "]");
+  AJSBaseActor.prototype.enablePsyx = function(_m, _f, _e) {
+    this._m = _m;
+    this._f = _f;
+    this._e = _e;
+    AJS.info("Enabling actor physics (" + this._id + "), m: " + this._m + ", f: " + this._f + ", e: " + this._e);
     this._psyx = window.AdefyRE.Actors().enableActorPhysics(this._m, this._f, this._e, this._id);
     return this;
   };
@@ -850,12 +842,9 @@ AJSBaseActor = (function() {
 
   AJSBaseActor.prototype.attachTexture = function(texture, w, h, x, y, angle) {
     var scale;
-    param.required(texture);
-    param.required(w);
-    param.required(h);
-    x = param.optional(x, 0);
-    y = param.optional(y, 0);
-    angle = param.optional(angle, 0);
+    x || (x = 0);
+    y || (y = 0);
+    angle || (angle = 0);
     AJS.info("Attaching texture " + texture + " " + w + "x" + h + " to actor (" + this._id + ")");
     scale = AJS.getAutoScale();
     x *= scale.x;
@@ -892,7 +881,6 @@ AJSBaseActor = (function() {
 
 
   AJSBaseActor.prototype.setAttachmentVisible = function(visible) {
-    param.required(visible);
     AJS.info("Setting actor texture attachment visiblity [" + visible + "]");
     return window.AdefyRE.Actors().setAttachmentVisible(visible, this._id);
   };
@@ -961,23 +949,16 @@ AJSBaseActor = (function() {
 
 
   AJSBaseActor.prototype.rotate = function(angle, duration, start, cp) {
-    param.required(angle);
-    if (duration === void 0) {
+    if (!duration) {
       this.setRotation(angle);
     } else {
-      if (start === void 0) {
-        start = 0;
-      }
-      if (cp === void 0) {
-        cp = [];
-      }
       AJS.animate(this, [["rotation"]], [
         {
           endVal: angle,
-          controlPoints: cp,
+          controlPoints: cp || [],
           duration: duration,
           property: "rotation",
-          start: start
+          start: start || 0
         }
       ]);
     }
@@ -1145,9 +1126,8 @@ AJSRectangle = (function(_super) {
 
   function AJSRectangle(options) {
     var ar, scale;
-    options = param.required(options);
-    this._width = param.required(options.w);
-    this._height = param.required(options.h);
+    this._width = options.w;
+    this._height = options.h;
     if (this._width <= 0) {
       throw new Error("Width must be greater than 0");
     }
@@ -1157,13 +1137,13 @@ AJSRectangle = (function(_super) {
     scale = AJS.getAutoScale();
     if (this._width === this._height) {
       scale = (scale.x + scale.y) / 2;
-      if (options.noScaleW !== true) {
+      if (!options.noScaleW) {
         this._width *= scale;
       }
-      if (options.noScaleH !== true) {
+      if (!options.noScaleH) {
         this._height *= scale;
       }
-    } else if (options.scaleAR === true) {
+    } else if (options.scaleAR) {
       ar = this._width / this._height;
       scale = (scale.x + scale.y) / 2;
       if (this._width > this._height) {
@@ -1174,22 +1154,22 @@ AJSRectangle = (function(_super) {
         this._height = this._width / ar;
       }
     } else {
-      if (options.noScaleW !== true) {
+      if (!options.noScaleW) {
         this._width *= scale.x;
       }
-      if (options.noScaleH !== true) {
+      if (!options.noScaleH) {
         this._height *= scale.y;
       }
     }
     AJSRectangle.__super__.constructor.call(this, null, options.mass, options.friction, options.elasticity);
     if (options.color instanceof AJSColor3) {
       this.setColor(options.color);
-    } else if (options.color !== void 0 && options.color.r !== void 0) {
+    } else if (options.color && options.color.r !== void 0) {
       this.setColor(new AJSColor3(options.color.r, options.color.g, options.color.b));
     }
     if (options.position instanceof AJSVector2) {
       this.setPosition(options.position);
-    } else if (options.position !== void 0 && options.position.x !== void 0) {
+    } else if (options.position && options.position.x !== void 0) {
       this.setPosition(new AJSVector2(options.position.x, options.position.y));
     }
     if (typeof options.rotation === "number") {
@@ -1216,7 +1196,6 @@ AJSRectangle = (function(_super) {
   };
 
   AJSRectangle.prototype.setHeight = function(h) {
-    param.required(h);
     if (h <= 0) {
       throw new Error("New height must be >0 !");
     }
@@ -1227,7 +1206,6 @@ AJSRectangle = (function(_super) {
   };
 
   AJSRectangle.prototype.setWidth = function(w) {
-    param.required(w);
     if (w <= 0) {
       throw new Error("New width must be >0 !");
     }
@@ -1240,8 +1218,6 @@ AJSRectangle = (function(_super) {
   AJSRectangle.prototype.mapAnimation = function(property, options) {
     var JSONopts, anim, bezValues, delay, prefixVal, sum, val, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
-    param.required(property);
-    param.required(options);
     anim = {};
     prefixVal = function(val) {
       if (val === 0) {
@@ -1320,11 +1296,7 @@ AJSRectangle = (function(_super) {
   };
 
   AJSRectangle.prototype.canMapAnimation = function(property) {
-    if (property[0] === "height" || property[0] === "width") {
-      return true;
-    } else {
-      return false;
-    }
+    return property[0] === "height" || property[0] === "width";
   };
 
   AJSRectangle.prototype.absoluteMapping = function(property) {
@@ -1333,27 +1305,20 @@ AJSRectangle = (function(_super) {
 
   AJSRectangle.prototype.resize = function(endW, endH, startW, startH, duration, start, cp) {
     var args, components;
-    endW = param.optional(endW, null);
-    endH = param.optional(endH, null);
-    if (duration === void 0) {
-      if (endW !== null) {
+    if (!duration) {
+      if (endW) {
         this.setWidth(endW);
       }
-      if (endH !== null) {
+      if (endH) {
         this.setHeight(endH);
       }
       return this;
     } else {
-      if (start === void 0) {
-        start = 0;
-      }
-      if (cp === void 0) {
-        cp = [];
-      }
+      start || (start = 0);
+      cp || (cp = []);
       components = [];
       args = [];
       if (endW !== null) {
-        param.required(startW);
         components.push(["width"]);
         args.push({
           endVal: endW,
@@ -1365,7 +1330,6 @@ AJSRectangle = (function(_super) {
         });
       }
       if (endH !== null) {
-        param.required(startH);
         components.push(["height"]);
         args.push({
           endVal: endH,
@@ -1392,9 +1356,8 @@ AJSTriangle = (function(_super) {
 
   function AJSTriangle(options) {
     var scale;
-    options = param.required(options);
-    this._base = param.required(options.base);
-    this._height = param.required(options.height);
+    this._base = options.base;
+    this._height = options.height;
     if (this._base <= 0) {
       throw "Base must be wider than 0";
     }
@@ -1408,12 +1371,12 @@ AJSTriangle = (function(_super) {
     AJSTriangle.__super__.constructor.call(this, this._verts, options.mass, options.friction, options.elasticity);
     if (options.color instanceof AJSColor3) {
       this.setColor(options.color);
-    } else if (options.color !== void 0 && options.color.r !== void 0) {
+    } else if (options.color && options.color.r !== void 0) {
       this.setColor(new AJSColor3(options.color.r, options.color.g, options.color.b));
     }
     if (options.position instanceof AJSVector2) {
       this.setPosition(options.position);
-    } else if (options.position !== void 0 && options.position.x !== void 0) {
+    } else if (options.position && options.position.x !== void 0) {
       this.setPosition(new AJSVector2(options.position.x, options.position.y));
     }
     if (typeof options.rotation === "number") {
@@ -1455,7 +1418,6 @@ AJSTriangle = (function(_super) {
   };
 
   AJSTriangle.prototype.setHeight = function(h) {
-    param.required(h);
     if (h <= 0) {
       throw new Error("New height must be >0 !");
     }
@@ -1467,7 +1429,6 @@ AJSTriangle = (function(_super) {
   };
 
   AJSTriangle.prototype.setBase = function(b) {
-    param.required(b);
     if (b <= 0) {
       throw new Error("New base must be >0 !");
     }
@@ -1481,8 +1442,6 @@ AJSTriangle = (function(_super) {
   AJSTriangle.prototype.mapAnimation = function(property, options) {
     var JSONopts, anim, bezValues, delay, prefixVal, scale, sum, val, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
-    param.required(property);
-    param.required(options);
     scale = AJS.getAutoScale();
     anim = {};
     prefixVal = function(val) {
@@ -1566,11 +1525,7 @@ AJSTriangle = (function(_super) {
   };
 
   AJSTriangle.prototype.canMapAnimation = function(property) {
-    if (property[0] === "base" || property[0] === "height") {
-      return true;
-    } else {
-      return false;
-    }
+    return property[0] === "base" || property[0] === "height";
   };
 
   AJSTriangle.prototype.absoluteMapping = function(property) {
@@ -1579,23 +1534,17 @@ AJSTriangle = (function(_super) {
 
   AJSTriangle.prototype.resize = function(endB, endH, startB, startH, duration, start, cp) {
     var args, components, scale;
-    endB = param.optional(endB, null);
-    endH = param.optional(endH, null);
-    if (duration === void 0) {
-      if (endB !== null) {
+    if (!duration) {
+      if (endB) {
         this.setBase(endB);
       }
-      if (endH !== null) {
+      if (endH) {
         this.setHeight(endH);
       }
       return this;
     } else {
-      if (start === void 0) {
-        start = 0;
-      }
-      if (cp === void 0) {
-        cp = [];
-      }
+      start || (start = 0);
+      cp || (cp = []);
       scale = AJS.getAutoScale();
       endB *= scale.x;
       endH *= scale.y;
@@ -1604,7 +1553,6 @@ AJSTriangle = (function(_super) {
       components = [];
       args = [];
       if (endB !== null) {
-        param.required(startB);
         components.push(["base"]);
         args.push({
           endVal: endB,
@@ -1616,7 +1564,6 @@ AJSTriangle = (function(_super) {
         });
       }
       if (endH !== null) {
-        param.required(startH);
         components.push(["height"]);
         args.push({
           endVal: endH,
@@ -1643,10 +1590,9 @@ AJSPolygon = (function(_super) {
 
   function AJSPolygon(options) {
     var scale;
-    param.required(options);
-    this._radius = param.required(options.radius);
-    this._segments = param.required(options.segments);
-    options.psyx = param.optional(options.psyx, false);
+    this._radius = options.radius;
+    this._segments = options.segments;
+    options.psyx = !!options.psyx;
     if (this._radius <= 0) {
       throw "Radius must be larger than 0";
     }
@@ -1659,12 +1605,12 @@ AJSPolygon = (function(_super) {
     AJSPolygon.__super__.constructor.call(this, this._verts, options.mass, options.friction, options.elasticity);
     if (options.color instanceof AJSColor3) {
       this.setColor(options.color);
-    } else if (options.color !== void 0 && options.color.r !== void 0) {
+    } else if (options.color && options.color.r !== void 0) {
       this.setColor(new AJSColor3(options.color.r, options.color.g, options.color.b));
     }
     if (options.position instanceof AJSVector2) {
       this.setPosition(options.position);
-    } else if (options.position !== void 0 && options.position.x !== void 0) {
+    } else if (options.position && options.position.x !== void 0) {
       this.setPosition(new AJSVector2(options.position.x, options.position.y));
     }
     if (typeof options.rotation === "number") {
@@ -1684,10 +1630,10 @@ AJSPolygon = (function(_super) {
 
   AJSPolygon.prototype._rebuildVerts = function(ignorePsyx, sim, segments, radius) {
     var i, index, radFactor, tanFactor, theta, tx, ty, verts, x, y, _i, _j, _ref, _tv, _tv1, _tv2;
-    ignorePsyx = param.optional(ignorePsyx, false);
-    sim = param.optional(sim, false);
-    segments = param.optional(segments, this._segments);
-    radius = param.optional(radius, this._radius);
+    ignorePsyx = !!ignorePsyx;
+    sim = !!sim;
+    segments || (segments = this._segments);
+    radius || (radius = this._radius);
     x = radius;
     y = 0;
     theta = (2.0 * 3.1415926) / segments;
@@ -1744,7 +1690,6 @@ AJSPolygon = (function(_super) {
   };
 
   AJSPolygon.prototype.setRadius = function(r) {
-    param.required(r);
     if (r <= 0) {
       throw new Error("New radius must be >0 !");
     }
@@ -1755,7 +1700,6 @@ AJSPolygon = (function(_super) {
   };
 
   AJSPolygon.prototype.setSegments = function(s) {
-    param.required(s);
     if (s < 3) {
       throw new Error("New segment count must be >=3 !");
     }
@@ -1776,8 +1720,6 @@ AJSPolygon = (function(_super) {
   AJSPolygon.prototype.mapAnimation = function(property, options) {
     var JSONopts, anim, bezValues, delay, prefixVal, val, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
-    param.required(property);
-    param.required(options);
     anim = {};
     this._fetchVertices();
     prefixVal = function(val) {
@@ -1866,8 +1808,7 @@ AJSCircle = (function(_super) {
 
   function AJSCircle(options) {
     var scale;
-    options = param.required(options);
-    this._radius = param.required(options.radius);
+    this._radius = options.radius;
     if (this._radius <= 0) {
       throw new Error("Radius must be greater than 0");
     }
@@ -1901,9 +1842,9 @@ AJSCircle = (function(_super) {
 
   AJSCircle.prototype._rebuildVerts = function(sim, radius) {
     var i, ignorePsyx, index, radFactor, segments, tanFactor, theta, tx, ty, verts, x, y, _i, _j, _ref, _tv, _tv1, _tv2;
-    ignorePsyx = param.optional(ignorePsyx, false);
-    sim = param.optional(sim, false);
-    radius = param.optional(radius, this._radius);
+    ignorePsyx = !!ignorePsyx;
+    sim = !!sim;
+    radius || (radius = this._radius);
     segments = 32;
     x = radius;
     y = 0;
@@ -1963,7 +1904,6 @@ AJSCircle = (function(_super) {
   };
 
   AJSCircle.prototype.setRadius = function(radius) {
-    param.required(radius);
     if (radius <= 0) {
       throw new Error("New radius must be >0 !");
     }
@@ -1978,8 +1918,6 @@ AJSCircle = (function(_super) {
   AJSCircle.prototype.mapAnimation = function(property, options) {
     var anim, bezValues, delay, prefixVal, val, _i, _len, _ref,
       _this = this;
-    param.required(property);
-    param.required(options);
     anim = {};
     prefixVal = function(val) {
       if (val === 0) {
@@ -2040,10 +1978,10 @@ AJSCircle = (function(_super) {
 AJS = (function() {
   AJS.Version = {
     MAJOR: 1,
-    MINOR: 0,
-    PATCH: 10,
+    MINOR: 1,
+    PATCH: 0,
     BUILD: null,
-    STRING: "1.0.10"
+    STRING: "1.1.0"
   };
 
   AJS._engine = null;
@@ -2074,9 +2012,6 @@ AJS = (function() {
 
   AJS.init = function(ad, width, height, canvasID) {
     var i, lastTimeout, _i;
-    param.required(ad);
-    param.required(width);
-    param.required(height);
     if (AJS._initialized) {
       return this.error("AJS can only be initialized once");
     } else {
@@ -2103,7 +2038,6 @@ AJS = (function() {
   };
 
   AJS.setLogLevel = function(level) {
-    param.required(level, [0, 1, 2, 3, 4]);
     this.info("Setting log level to " + level);
     window.AdefyRE.Engine().setLogLevel(level);
     this._logLevel = level;
@@ -2169,8 +2103,6 @@ AJS = (function() {
   };
 
   AJS.setCameraPosition = function(x, y) {
-    param.required(x);
-    param.required(y);
     this.info("Setting camera position (" + x + ", " + y + ")");
     x *= AJS._scaleX;
     y *= AJS._scaleY;
@@ -2188,9 +2120,6 @@ AJS = (function() {
   };
 
   AJS.setClearColor = function(r, g, b) {
-    param.required(r);
-    param.required(g);
-    param.required(b);
     this.info("Setting clear color to (" + r + ", " + g + ", " + b + ")");
     return window.AdefyRE.Engine().setClearColor(r, g, b);
   };
@@ -2208,11 +2137,8 @@ AJS = (function() {
 
   AJS.animate = function(actor, properties, options, start, fps) {
     var Animations, i, result, timeout, _i, _ref, _registerDelayedMap, _results;
-    param.required(actor);
-    param.required(properties);
-    param.required(options);
-    start = param.optional(start, 0);
-    fps = param.optional(fps, 30);
+    start || (start = 0);
+    fps || (fps = 30);
     Animations = window.AdefyRE.Animations();
     _registerDelayedMap = function(actor, property, options, time) {
       return setTimeout(function() {
@@ -2255,28 +2181,20 @@ AJS = (function() {
   };
 
   AJS.mapAnimation = function(actor, property, options) {
-    param.required(actor);
-    param.required(property);
-    param.required(options);
     return actor.mapAnimation(property, options);
   };
 
   AJS.loadManifest = function(json, cb) {
-    param.required(json);
     if (typeof json !== "string") {
       json = JSON.stringify(json);
     }
-    cb = param.optional(cb, function() {});
+    cb || (cb = function() {});
     this.info("Loading manifest " + (JSON.stringify(json)));
     return window.AdefyRE.Engine().loadManifest(json, cb);
   };
 
   AJS.createRectangleActor = function(x, y, w, h, r, g, b, extraOptions) {
     var key, options, val;
-    param.required(x);
-    param.required(y);
-    param.required(w);
-    param.required(h);
     options = {
       position: {
         x: x,
@@ -2298,17 +2216,11 @@ AJS = (function() {
   };
 
   AJS.createSquareActor = function(x, y, l, r, g, b, extraOptions) {
-    param.required(x);
-    param.required(y);
-    param.required(l);
     return AJS.createRectangleActor(x, y, l, l, r, g, b);
   };
 
   AJS.createCircleActor = function(x, y, radius, r, g, b, extraOptions) {
     var key, options, val;
-    param.required(x);
-    param.required(y);
-    param.required(radius);
     options = {
       position: {
         x: x,
@@ -2330,10 +2242,6 @@ AJS = (function() {
 
   AJS.createPolygonActor = function(x, y, radius, segments, r, g, b, extraOptions) {
     var key, options, val;
-    param.required(x);
-    param.required(y);
-    param.required(radius);
-    param.required(segments);
     options = {
       position: {
         x: x,
@@ -2356,19 +2264,9 @@ AJS = (function() {
 
   AJS.createTriangleActor = function(x, y, base, height, r, g, b, extraOptions) {
     var key, options, val;
-    param.required(x);
-    param.required(y);
-    param.required(base);
-    param.required(height);
-    if (r === void 0) {
-      r = Math.floor(Math.random() * 255);
-    }
-    if (g === void 0) {
-      g = Math.floor(Math.random() * 255);
-    }
-    if (b === void 0) {
-      b = Math.floor(Math.random() * 255);
-    }
+    r || (r = Math.floor(Math.random() * 255));
+    g || (g = Math.floor(Math.random() * 255));
+    b || (b = Math.floor(Math.random() * 255));
     options = {
       position: {
         x: x,
@@ -2390,7 +2288,6 @@ AJS = (function() {
   };
 
   AJS.getTextureSize = function(name) {
-    param.required(name);
     this.info("Fetching texture size by name (" + name + ")");
     return window.AdefyRE.Engine().getTextureSize(name);
   };

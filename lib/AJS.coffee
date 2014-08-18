@@ -16,10 +16,10 @@ class AJS
 
   @Version:
     MAJOR: 1
-    MINOR: 0
-    PATCH: 10
+    MINOR: 1
+    PATCH: 0
     BUILD: null
-    STRING: "1.0.10"
+    STRING: "1.1.0"
 
   # Pointer to the engine, initalized (once) in init()
   # @private
@@ -63,9 +63,6 @@ class AJS
   # @param [Number] height
   # @param [String] canvasID optional canvas ID for WebGL engine
   @init: (ad, width, height, canvasID) ->
-    param.required ad
-    param.required width
-    param.required height
 
     # Should never happen, so don't fail quietly
     if AJS._initialized
@@ -95,7 +92,6 @@ class AJS
   #
   # @param [Number] level 0-4
   @setLogLevel: (level) ->
-    param.required level, [0, 1, 2, 3, 4]
     @info "Setting log level to #{level}"
 
     window.AdefyRE.Engine().setLogLevel level
@@ -169,9 +165,6 @@ class AJS
   # @param [Number] x
   # @param [Number] y
   @setCameraPosition: (x, y) ->
-    param.required x
-    param.required y
-
     @info "Setting camera position (#{x}, #{y})"
 
     x *= AJS._scaleX
@@ -197,9 +190,6 @@ class AJS
   # @param [Number] g
   # @param [Number] b
   @setClearColor: (r, g, b) ->
-    param.required r
-    param.required g
-    param.required b
     @info "Setting clear color to (#{r}, #{g}, #{b})"
 
     window.AdefyRE.Engine().setClearColor r, g, b
@@ -251,11 +241,8 @@ class AJS
   # @param [Number] start optional, animation start time (applies to all)
   # @param [Number] fps optional animation rate, defaults to 30
   @animate: (actor, properties, options, start, fps) ->
-    param.required actor
-    param.required properties
-    param.required options
-    start = param.optional start, 0
-    fps = param.optional fps, 30
+    start ||= 0
+    fps ||= 30
 
     Animations = window.AdefyRE.Animations()
 
@@ -312,9 +299,6 @@ class AJS
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   @mapAnimation: (actor, property, options) ->
-    param.required actor
-    param.required property
-    param.required options
 
     # We actually pass this down to the actor. Evil, eh? Muahahahaha
     actor.mapAnimation property, options
@@ -325,12 +309,11 @@ class AJS
   # @param [String] json valid package.json source (can also be an object)
   # @param [Method] cb callback to call after load (textures)
   @loadManifest: (json, cb) ->
-    param.required json
 
     # If the json is not a string, then stringify it
-    if typeof json != "string" then json = JSON.stringify json
+    json = JSON.stringify json if typeof json != "string"
 
-    cb = param.optional cb, ->
+    cb ||= ->
     @info "Loading manifest #{JSON.stringify json}"
 
     window.AdefyRE.Engine().loadManifest json, cb
@@ -346,10 +329,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createRectangleActor: (x, y, w, h, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required w
-    param.required h
 
     options =
       position: { x: x, y: y }
@@ -372,10 +351,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createSquareActor: (x, y, l, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required l
-
     AJS.createRectangleActor x, y, l, l, r, g, b,
 
   # Create a new circle actor
@@ -388,9 +363,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createCircleActor: (x, y, radius, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required radius
 
     options =
       position: { x: x, y: y }
@@ -413,10 +385,6 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createPolygonActor: (x, y, radius, segments, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required radius
-    param.required segments
 
     options =
       position: { x: x, y: y }
@@ -440,14 +408,10 @@ class AJS
   # @param [Number] b blue color component
   # @param [Object] extraOptions optional options hash to pass to actor
   @createTriangleActor: (x, y, base, height, r, g, b, extraOptions) ->
-    param.required x
-    param.required y
-    param.required base
-    param.required height
 
-    if r == undefined then r = Math.floor (Math.random() * 255)
-    if g == undefined then g = Math.floor (Math.random() * 255)
-    if b == undefined then b = Math.floor (Math.random() * 255)
+    r ||= Math.floor (Math.random() * 255)
+    g ||= Math.floor (Math.random() * 255)
+    b ||= Math.floor (Math.random() * 255)
 
     options =
      position: { x: x, y: y }
@@ -465,7 +429,6 @@ class AJS
   # @param [String] name
   # @return [Object] size
   @getTextureSize: (name) ->
-    param.required name
     @info "Fetching texture size by name (#{name})"
 
     window.AdefyRE.Engine().getTextureSize name

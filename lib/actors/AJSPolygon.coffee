@@ -34,13 +34,12 @@ class AJSPolygon extends AJSBaseActor
   # @option options [Number] rotation rotation in degrees
   # @option options [Boolean] psyx enable/disable physics sim
   constructor: (options) ->
-    param.required options
-    @_radius = param.required options.radius
-    @_segments = param.required options.segments
-    options.psyx = param.optional options.psyx, false
+    @_radius = options.radius
+    @_segments = options.segments
+    options.psyx = !!options.psyx
 
-    if @_radius <= 0 then throw "Radius must be larger than 0"
-    if @_segments < 3 then throw "Shape must consist of at least 3 segments"
+    throw "Radius must be larger than 0" if @_radius <= 0
+    throw "Shape must consist of at least 3 segments" if @_segments < 3
 
     scale = AJS.getAutoScale()
     @radius *= Math.min scale.x, scale.y
@@ -53,12 +52,12 @@ class AJSPolygon extends AJSBaseActor
     # Set attributes if passed in
     if options.color instanceof AJSColor3
       @setColor options.color
-    else if options.color != undefined and options.color.r != undefined
+    else if options.color and options.color.r != undefined
       @setColor new AJSColor3 options.color.r, options.color.g, options.color.b
 
     if options.position instanceof AJSVector2
       @setPosition options.position
-    else if options.position != undefined and options.position.x != undefined
+    else if options.position and options.position.x != undefined
       @setPosition new AJSVector2 options.position.x, options.position.y
 
     if typeof options.rotation == "number"
@@ -84,10 +83,10 @@ class AJSPolygon extends AJSBaseActor
   # @param [Number] segments segment count for simulation
   # @param [Number] radius radius for simulation
   _rebuildVerts: (ignorePsyx, sim, segments, radius) ->
-    ignorePsyx = param.optional ignorePsyx, false
-    sim = param.optional sim, false
-    segments = param.optional segments, @_segments
-    radius = param.optional radius, @_radius
+    ignorePsyx = !!ignorePsyx
+    sim = !!sim
+    segments ||= @_segments
+    radius ||= @_radius
 
     # Build vertices
     # Uses algo from http://slabode.exofire.net/circle_draw.shtml
@@ -142,9 +141,7 @@ class AJSPolygon extends AJSBaseActor
   #
   # @param [Number] radius new radius, > 0
   setRadius: (r) ->
-    param.required r
-
-    if r <= 0 then throw new Error "New radius must be >0 !"
+    throw new Error "New radius must be >0 !" if r <= 0
 
     @_radius = r
     @_rebuildVerts()
@@ -155,9 +152,7 @@ class AJSPolygon extends AJSBaseActor
   #
   # @param [Number] segments new segment count, >= 3
   setSegments: (s) ->
-    param.required s
-
-    if s < 3 then throw new Error "New segment count must be >=3 !"
+    throw new Error "New segment count must be >=3 !" if s < 3
 
     @_segments = s
     @_rebuildVerts()
@@ -186,9 +181,6 @@ class AJSPolygon extends AJSBaseActor
   # @param [Object] options animation options
   # @return [Object] animation object containing "property" and "options" keys
   mapAnimation: (property, options) ->
-    param.required property
-    param.required options
-
     anim = {}
 
     # Grab current vertices
